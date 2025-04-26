@@ -4,7 +4,7 @@ x-postgres-common:
   user: postgres
   restart: always
   healthcheck:
-    test: 'pg_isready -U user --dbname=postgres'
+    test: 'pg_isready -U user --dbname=marketplace_db'
     interval: 10s
     timeout: 5s
     retries: 5
@@ -16,7 +16,7 @@ services:
       - 5432:5432
     environment:
       POSTGRES_USER: user
-      POSTGRES_DB: postgres
+      POSTGRES_DB: marketplace_db
       POSTGRES_PASSWORD: password
       POSTGRES_HOST_AUTH_METHOD: "scram-sha-256\nhost replication all 0.0.0.0/0 md5"
       POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
@@ -28,7 +28,9 @@ services:
       -c max_replication_slots=10 
       -c hot_standby_feedback=on
     volumes:
-      - ./00_init.sql:/docker-entrypoint-initdb.d/00_init.sql
+      - ./sql/00_init.sql:/docker-entrypoint-initdb.d/00_init.sql
+      - ./sql/01_db_schema.sql:/docker-entrypoint-initdb.d/01_db_schema.sql
+      - postgres_primary_data:/var/lib/postgresql/data
 
   postgres_replica:
     <<: *postgres-common
@@ -61,3 +63,6 @@ services:
       - postgres_replica
     env_file:
       - .env
+
+volumes:
+  postgres_primary_data:
