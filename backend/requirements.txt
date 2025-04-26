@@ -1,0 +1,2 @@
+fastapi[standard]
+sqlmodel==0.0.24
