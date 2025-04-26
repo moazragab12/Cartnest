@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">   
+    <link rel="stylesheet" href="./src/css/style.css">
+    <title>welcome page</title>
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">Market Place</a>
+        <nav class="navigation">
+            <a href="#login">Log in</a>
+            <a href="#signup">Sign up</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section class="main">
+        <div>
+            <h2>All You Need,<br><span>Right Here on Market Place</span></h2>
+            <h3>Shop smart. Shop fast.</h3>
+            <a href="#login" class="main-btn">Start Shopping</a>
+        </div>
+    </section>
+
+    <section class="login" id="login">
+        <h2 class="title">Log in</h2>
+        <div class="contant">
+            <div class="container">
+                <label for="login-email" class="text">Email address</label>
+                <input id="login-email" class="name_label" type="email" placeholder="Email address" required>
+                
+                <label for="login-password" class="text">Password</label>
+                <input id="login-password" class="name_label" type="password" placeholder="Password" required>
+                
+                <button class="sign_in">Log in</button>
+                <a class="forget" href="#forget">Forgot Password?</a>
+                <hr>
+                <a href="#signup" class="sign_in create">Create New Account</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="signup" id="signup">
+        <h2 class="title">Sign Up</h2>
+        <div class="contant">
+            <div class="container">
+                <label for="signup-username" class="text">Username</label>
+                <input id="signup-username" class="name_label" type="text" placeholder="Choose a username" required>
+                
+                <label for="signup-email" class="text">Email address</label>
+                <input id="signup-email" class="name_label" type="email" placeholder="Email address" required>
+                
+                <label for="signup-password" class="text">Password</label>
+                <input id="signup-password" class="name_label" type="password" placeholder="Password" required>
+                
+                <button class="sign_in create">Create Account</button>
+                <a href="#login" class="forget">Already have an account?<br> Log in</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="card-contact" id="contact">
+        <h2 class="title">Let's Work Together</h2>
+        <div class="contant">
+            <div class="card"> 
+                <div class="icone">
+                    <i class="fa-solid fa-phone"></i>  
+                </div>
+                <div class="info">
+                    <h3>Phone</h3>
+                    <p>+02 22222222</p>
+                </div>
+            </div>
+            <div class="card"> 
+                <div class="icone">
+                    <i class="fa-solid fa-envelope"></i>   
+                </div>
+                <div class="info">
+                    <h3>Email</h3>
+                    <p>xxxx@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+</body>
+</html>
