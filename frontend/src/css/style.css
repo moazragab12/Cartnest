@@ -9,7 +9,7 @@
 }
 
 header {
-  background-color: rgb(207, 211, 214);
+  background-color: rgb(239, 242, 245);
   width: 100%;
   position: fixed;
   top: 0;
@@ -22,7 +22,7 @@ header {
 
 .logo {
   text-decoration: none;
-  color: #33086d;
+  color: #0077cc;
   /* text-transform: uppercase;*/
   font-weight: 500;
   font-size: 1.8em;
@@ -30,7 +30,7 @@ header {
 
 .navigation a {
   text-decoration: none;
-  color: #33086d;
+  color: #0077cc;
   font-weight: 300;
   font-size: 1.1em;
   padding-top: 18px;
@@ -43,7 +43,7 @@ header {
 
 .navigation a:hover {
   color: #fcf7fc;
-  background-color: #33086d;
+  background-color: #035692;
 }
 
 section {
@@ -56,12 +56,13 @@ section {
   display: flex;
   flex-direction: column;
   margin-top: 2em;
-  align-items: flex-start; /* align content to the left */
-  text-align: left;
+  align-items: center; /* align content to the left */
+  text-align: center;
   padding-left: 40px; /* optional: add space from the left edge */
-  background: url("../../public/resources/images/background2.jpg") no-repeat center center;
+  /*background: url("../../public/resources/images/background2.jpg") no-repeat center center;
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: fixed;*/
+  background: linear-gradient(to bottom right ,  #acb6e5,#01538d, #0169b3, #01538d, #01538d, #01538d, #0169b3, #01538d, #01538d,  #acb6e5);
 }
 
 .main h2 {
@@ -90,7 +91,7 @@ section {
 }
 .main-btn {
   color: aliceblue;
-  background-color: #33086d;
+  background-color: #0077cc;
   text-decoration: none;
   text-align: center;
   font-size: 1.2em;
@@ -104,12 +105,12 @@ section {
   transition: 0.7s ease;
 }
 .main-btn:hover {
-  background-color: #5c447c;
+ opacity: 0.5;
   transform: scale(1.1, 1.1);
 }
 .title {
   text-align: center;
-  color: #33086d;
+  color:#0077cc;
   font-size: 2.2em;
   font-weight: 800;
   margin: 0 0 20px;
@@ -151,16 +152,17 @@ section {
   display: block;
   margin: 15px auto;
   border-radius: 5px;
+  border-style: hidden;
   width: 100%;
   padding: 10px; /* Increased padding */
   font-size: 1em;
-  background-color: #33086d;
+  background-color:#0077cc;
   color: white;
   transition: background-color 0.3s;
 }
 
 .sign_in:hover {
-  background-color: #3d1faa;
+  background-color: #035692;
 }
 
 .create {
@@ -189,6 +191,7 @@ section {
 }
 
 .card-contact {
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -201,7 +204,7 @@ section {
   justify-content: center;
 }
 .card {
-  background-color: rgb(207, 211, 214);
+  background: #f2f4f7;
   width: 250px;
   box-shadow: 0 5px 15px rgba(103, 104, 104, 0.2);
   border-radius: 10px;
@@ -215,7 +218,7 @@ section {
 }
 
 .icone {
-  color: #33086d;
+  color: #0077cc;
   font-size: 3em;
   text-align: center;
 }
@@ -225,7 +228,7 @@ section {
 }
 
 .info h3 {
-  color: #33086d;
+  color: #0077cc;
   font-size: 1.2em;
   font-weight: 500;
   margin: 10px;
@@ -244,7 +247,7 @@ section {
   section {
     padding: 60px 20px;
 
-    background: #f2f4f7;
+  background-color: #fcfcfc;
   }
 
   .main {
