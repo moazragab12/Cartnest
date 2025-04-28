@@ -7,7 +7,9 @@
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
-
+body {
+  background:  #fcfcfc;
+}
 header {
   background-color: rgb(239, 242, 245);
   width: 100%;
@@ -45,75 +47,12 @@ header {
   color: #fcf7fc;
   background-color: #035692;
 }
-
-section {
-  padding: 100px 200px;
-  background: #f2f4f7;
-}
-.main {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  margin-top: 2em;
-  align-items: center; /* align content to the left */
-  text-align: center;
-  padding-left: 40px; /* optional: add space from the left edge */
-  /*background: url("../../public/resources/images/background2.jpg") no-repeat center center;
-  background-size: cover;
-  background-attachment: fixed;*/
-  background: linear-gradient(to bottom right ,  #acb6e5,#01538d, #0169b3, #01538d, #01538d, #01538d, #0169b3, #01538d, #01538d,  #acb6e5);
-}
-
-.main h2 {
-  margin-top: 100px;
-  margin-left: 0;
-  color: aliceblue;
-  font-size: 1.4em;
-  font-weight: 500;
-}
-.main h2 span {
-  display: inline-block;
-  color: #ffffff;
-  margin-top: 10px;
-  font-size: 2em;
-  font-weight: 600;
-  margin-left: 0;
-}
-.main h3 {
-  color: aliceblue;
-  font-size: 1.8em;
-  font-weight: 700;
-  letter-spacing: 1px;
-  margin-top: 10px;
-  margin-bottom: 30px;
-  margin-left: 0;
-}
-.main-btn {
-  color: aliceblue;
-  background-color: #0077cc;
-  text-decoration: none;
-  text-align: center;
-  font-size: 1.2em;
-  font-weight: 400;
-  display: inline-block;
-  padding: 0.9375em 2.1875em;
-  letter-spacing: 1px;
-  border-radius: 15px;
-  margin-bottom: 40px;
-  margin-left: 0;
-  transition: 0.7s ease;
-}
-.main-btn:hover {
- opacity: 0.5;
-  transform: scale(1.1, 1.1);
-}
 .title {
   text-align: center;
   color:#0077cc;
   font-size: 2.2em;
   font-weight: 800;
-  margin: 0 0 20px;
+  margin: 20px;
 }
 
 .contant {
@@ -121,7 +60,7 @@ section {
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  min-height: 50vh;
+
 }
 
 .container {
@@ -191,7 +130,7 @@ section {
 }
 
 .card-contact {
-  background-color: #ffffff;
+  background:  #fcfcfc;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -235,36 +174,6 @@ section {
 }
 
 @media (max-width: 1023px) {
-  header {
-    padding: 12px 20px;
-  }
-
-  .navigation a {
-    margin-left: 15px; /* Adjusted for smaller screens */
-    font-size: 1em;
-  }
-
-  section {
-    padding: 60px 20px;
-
-  background-color: #fcfcfc;
-  }
-
-  .main {
-    margin-top: 25px;
-    flex-direction: row;
-  }
-
-  .main h2 {
-    font-size: 1.5em;
-    text-align: center;
-  }
-
-  .main h3 {
-    font-size: 1.4em;
-    text-align: center;
-    margin-bottom: 20px;
-  }
 
   .card-contact {
     flex-direction: row;

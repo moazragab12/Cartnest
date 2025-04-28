@@ -1,56 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">   
-    <link rel="stylesheet" href="./src/css/style.css">
-    <title>welcome page</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shopify main</title>
+  <link rel="stylesheet" href="./src/css/home.css" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-    <header>
-        <a href="#" class="logo"> Shopify</a>
-        <nav class="navigation">
-            <a href="#login">Log in</a>
-            <a href="#signup">Sign up</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </header>
 
-    <section class="main">
-        <div>
-            <h2>All You Need,<br><span>Right Here on  Shopify</span></h2>
-            <h3>Shop smart. Shop fast.</h3>
-            <a href="#login" class="main-btn">Start Shopping</a>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <p>Welcome to worldwide Megamart!</p>
+    <div class="top-links">
+      <a  href="#"><i class="fas fa-map-marker-alt"></i> Deliver to 423651</a>
+      <a href="#"><i class="fas fa-shipping-fast"></i> Track your order</a>
+      <a href="#"><i class="fas fa-tags"></i> All Offers</a>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="left-section">
+      <i class="fas fa-bars menu-icon"></i>
+      <h1 class="logo"></i> Shopify</h1>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="Search essentials, groceries and more...">
+      <i class="fas fa-search search-icon"></i>
+    </div>
+    <div class="header-links">
+      <a href="#"><i class="fas fa-user"></i> Sign Up/Sign In</a>
+      <a href="#"><i class="fas fa-shopping-cart"></i> Cart</a>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <a href="#">Groceries <i class="fas fa-chevron-down"></i></a>
+    <a href="#">Premium Fruits <i class="fas fa-chevron-down"></i></a>
+    <a href="#">Home & Kitchen <i class="fas fa-chevron-down"></i></a>
+    <a href="#">Fashion <i class="fas fa-chevron-down"></i></a>
+    <a href="#">Electronics <i class="fas fa-chevron-down"></i></a>
+    <a href="#">Beauty <i class="fas fa-chevron-down"></i></a>
+    <a href="#">Home Improvement <i class="fas fa-chevron-down"></i></a>
+    <a href="#">Sports, Toys & Luggage <i class="fas fa-chevron-down"></i></a>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-text">
+      <p>Feel the real quality sound</p>
+      <h2>Headphones<br>ProMax</h2>
+      <button class="hero-button">Shop now <i class="fas fa-arrow-right"></i></button>
+    </div>
+    <div class="hero-image">\resources\images\girl.png
+      <img src="public/resources/images/girl.png" alt="Girl with headphones">
+    </div>
+  </section>
+  <section class="Most Popular Products">
+    <div class="header1">
+      <h2>Featured Products</h2>
+          </div>
+  
+    <div class="products">
+        
+      <div class="product-card">
+        <span class="discount">-13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
         </div>
-    </section>
-
-
-    <section class="card-contact" id="contact">
-        <h2 class="title">Let's Work Together</h2>
-        <div class="contant">
-            <div class="card"> 
-                <div class="icone">
-                    <i class="fa-solid fa-phone"></i>  
-                </div>
-                <div class="info">
-                    <h3>Phone</h3>
-                    <p>+02 22222222</p>
-                </div>
-            </div>
-            <div class="card"> 
-                <div class="icone">
-                    <i class="fa-solid fa-envelope"></i>   
-                </div>
-                <div class="info">
-                    <h3>Email</h3>
-                    <p>xxxx@gmail.com</p>
-                </div>
-            </div>
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>
+  
+      <div class="product-card">
+        <span class="discount">-13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
         </div>
-    </section>
-
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>
+      <div class="product-card">
+        <span class="discount">-13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
+        </div>
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>  
+      <div class="product-card">
+        <span class="discount">-13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
+        </div>
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>
+  
+      
+    </div>
     
+  </section>
+    
+  
+  <section class="Most Popular Products">
+
+   <div class="header1">
+    <h2>View Categories</h2>
+        </div>
+
+  
+    <div class="categories">
+      <div class="category-card" style="background-color: #ffeaa7;">
+        <div class="image-categories">
+            <h3 class="category-title">Grocery</h3>
+            <img src="public/resources/images/Grocery.png" alt="Grocery items">
+        </div> 
+       </div>
+       <div class="category-card" style="background-color:  #fab1a0;">
+        <div class="image-categories">
+            <h3 class="category-title">Electronics</h3>
+            <img src="public/resources/images/Electronics.png" alt="Electronics items">
+        </div> 
+       </div>
+       <div class="category-card" style="background-color: #55efc4;">
+        <div class="image-categories">
+            <h3 class="category-title">Beauty & 
+                Accessories</h3>
+            <img src="public/resources/images/Beauty.png" alt="Beauty items">
+        </div> 
+       </div>
+       <div class="category-card" style="background-color:   #a29bfe;">
+        <div class="image-categories">
+            <h3 class="category-title">Fashion</h3>
+            <img src="public/resources/images/fashion.png" alt="Fashion items">
+        </div> 
+       </div>
+       <div class="category-card" style="background-color:  #a29bfe;">
+        <div class="image-categories">
+            <h3 class="category-title">Premium Fruits</h3>
+            <img src="public/resources/images/Grocery.png" alt="Grocery items">
+        </div> 
+       </div>
+       <div class="category-card" style="background-color: #55efc4;" >
+        <div class="image-categories">
+            <h3 class="category-title">Toys & Luggage</h3>
+            <img src="public/resources/images/Electronics.png" alt="TOYS items">
+        </div> 
+       </div>
+       <div class="category-card" style="background-color:#fab1a0;" >
+        <div class="image-categories">
+            <h3 class="category-title">Home Improvement</h3>
+            <img src="public/resources/images/Beauty.png" alt="Beauty items">
+        </div> 
+       </div>
+       <div class="category-card" style="background-color:  #ffeaa7;" >
+        <div class="image-categories">
+            <h3 class="category-title">Sports, Toys & Luggage</h3>
+            <img src="public/resources/images/fashion.png" alt="Sports items">
+        </div> 
+       </div>
+           </div>
+  </section>
+  <section class="Most Popular Products">
+    <div class="header1">
+      <h2>Most Popular Products</h2>
+          </div>
+  
+    <div class="products">
+        
+      <div class="product-card">
+        <span class="discount">-13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
+        </div>
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>
+  
+      <div class="product-card">
+        <span class="discount">-13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
+        </div>
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>
+      <div class="product-card">
+        <span class="discount">-13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
+        </div>
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>  
+      <div class="product-card">
+        <span class="discount">-13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
+        </div>
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>
+      <div class="product-card">
+        <span class="discount">-13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
+        </div>
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>
+      
+      <div class="product-card">
+        <span class="discount">13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
+        </div>
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>
+  
+      <div class="product-card">
+        <span class="discount">-13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
+        </div>
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>
+      <div class="product-card">
+        <span class="discount">-13%</span>
+        <div class="image-container">
+            <img src="public/resources/images/bedroom.jpg" alt="Double Bed & Side Tables">
+        </div>
+        <h3>Double Bed & Side Tables</h3>
+        <p class="price"><del>$230.00</del> <strong>$200.00</strong></p>
+        <button class="view-button">+</button>
+      </div>
+      
+    </div>
+    
+  </section>
+  <section class="selling-section">
+    <div class="left-side">
+        <h2 class="section-title">Have a Look at Our Marketplace Advantages</h2>
+    </div>
+    <div class="right-side">
+        <p class="description">
+            Our marketplace connects buyers and sellers with unmatched efficiency and trust. 
+            With thousands of successful transactions daily, we provide a secure platform for 
+            businesses of all sizes to thrive in the digital economy.
+        </p>
+        <div class="stats-row">
+            <div class="stat">
+                <div class="stat-value">99%</div>
+                <p class="stat-description">
+                    Customer satisfaction rate across all marketplace transactions, with 
+                    best-in-class dispute resolution and buyer protection policies.
+                </p>
+            </div>
+            <div class="stat">
+                <div class="stat-value">100%</div>
+                <p class="stat-description">
+                    Secure payment processing with full encryption and fraud protection on 
+                    every transaction completed on our platform.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+  
 </body>
 </html>
