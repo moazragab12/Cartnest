@@ -1,0 +1,327 @@
+/* Import Google Fonts for Montserrat and Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap');
+
+/* ====================================
+   FOOTER - NEW SHOPIFY STYLE
+   ==================================== */
+.shopify-footer {
+  background-color: #2d3436;
+  color: #ffffff;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  margin-bottom: 0;
+  padding: 0;
+  margin-top: var(--spacing-xxl);
+  font-family: var(--font-main);
+}
+
+.footer-top {
+  padding: 50px 0 30px;
+}
+
+.footer-top-content {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-info {
+  width: 25%;
+  padding-right: 30px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.footer-logo span {
+  color: #0D99FF;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.footer-description {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #ddd;
+  margin-bottom: 25px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* Social media brand colors */
+.facebook {
+  background-color: #4267B2;
+}
+
+.twitter {
+  background-color: #1DA1F2;
+}
+
+.linkedin {
+  background-color: #0077B5;
+}
+
+.instagram {
+  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80);
+}
+
+.youtube {
+  background-color: #FF0000;
+}
+
+.social-icon i {
+  color: white;
+  font-size: 14px;
+}
+
+.social-icon:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+.footer-links {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.footer-column {
+  min-width: 120px;
+}
+
+.footer-column h4 {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-transform: none;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column li {
+  margin-bottom: 12px;
+}
+
+.footer-column a {
+  color: #ddd;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-column a:hover {
+  color: #0c98ff;
+}
+
+.app-column {
+  min-width: 160px;
+}
+
+.app-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-button {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.app-store {
+  background-color: #000000;
+}
+
+.google-play {
+  background-color: #414141;
+}
+
+.app-button i {
+  font-size: 20px;
+  margin-right: 8px;
+  color: #ffffff;
+}
+
+.app-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-text span:first-child {
+  font-size: 9px;
+  color: #ccc;
+}
+
+.app-text span:last-child {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.app-button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.footer-bottom {
+  background-color: #20292b;
+  padding: 20px 0;
+}
+
+.footer-bottom-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-bottom p {
+  color: #999;
+  font-size: 14px;
+  margin: 0;
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.flag-icon {
+  margin-right: 5px;
+}
+
+.language-selector i {
+  margin-left: 5px;
+  font-size: 12px;
+  color: #999;
+}
+
+/* Make sure the footer stays at the bottom */
+.shopify-footer {
+  margin-top: auto;
+}
+
+/* Shop bag logo container styling for FOOTER */
+.shop-bag-logo-container-footer {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(13, 153, 255, 0.2) 0%, rgba(13, 153, 255, 0.05) 70%);
+  box-shadow: 
+    0 0 0 5px rgba(13, 153, 255, 0.1),
+    0 0 10px rgba(0, 0, 0, 0.15);
+  margin-right: 12px;
+  transition: all 0.3s ease;
+}
+
+.shop-bag-logo-container-footer::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 70%);
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0.6;
+  animation: pulse 3s infinite;
+}
+
+.shop-bag-logo-container-footer:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 0 0 5px rgba(13, 153, 255, 0.2),
+    0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.shop-bag-logo-dark {
+  width: 22px;
+  height: 26px;
+  z-index: 2;
+}
+
+/* Responsive styles for the footer */
+@media screen and (max-width: 992px) {
+  .footer-top-content {
+    flex-direction: column;
+  }
+  
+  .footer-info {
+    width: 100%;
+    margin-bottom: 30px;
+    padding-right: 0;
+  }
+  
+  .footer-links {
+    flex-wrap: wrap;
+  }
+  
+  .footer-column {
+    width: 50%;
+    margin-bottom: 30px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .footer-column {
+    width: 100%;
+  }
+  
+  .footer-bottom-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+/* Animation for the pulsing effect */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+}
