@@ -70,3 +70,65 @@ function updateCartSection() {
         <p><strong>Total Price:</strong> ${totalPrice.toFixed(2)} EGP</p>
     `;
 }
+
+// FAQ Accordion Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all FAQ question elements
+  const faqQuestions = document.querySelectorAll('.faq-question');
+  
+  // Add click event listener to each question
+  faqQuestions.forEach(question => {
+    question.addEventListener('click', function() {
+      // Get the parent FAQ item
+      const faqItem = this.parentElement;
+      
+      // Toggle the active class on the FAQ item
+      faqItem.classList.toggle('active');
+      
+      // Close other FAQ items (optional - for accordion style)
+      const otherFaqItems = document.querySelectorAll('.faq-item');
+      otherFaqItems.forEach(item => {
+        if (item !== faqItem) {
+          item.classList.remove('active');
+        }
+      });
+    });
+  });
+  
+  // Newsletter form submission
+  const newsletterForm = document.querySelector('.newsletter-form');
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const emailInput = this.querySelector('input[type="email"]');
+      if (emailInput.value.trim() !== '') {
+        alert('Thank you for subscribing to our newsletter!');
+        emailInput.value = '';
+      }
+    });
+  }
+
+  // Enhanced Partners section functionality
+  const partnersContainer = document.querySelector('.partners-container');
+  if (partnersContainer) {
+    // Get original partners
+    const originalPartners = Array.from(partnersContainer.children);
+    
+    // Clone partners multiple times to ensure smooth infinite scrolling
+    // regardless of screen width
+    for (let i = 0; i < 3; i++) {
+      originalPartners.forEach(partner => {
+        const clone = partner.cloneNode(true);
+        partnersContainer.appendChild(clone);
+      });
+    }
+    
+    // Ensure equal width for all partner logos
+    const allPartnerLogos = partnersContainer.querySelectorAll('.partner-logo');
+    const fixedWidth = 140; // Fixed width for each partner logo
+    
+    allPartnerLogos.forEach(logo => {
+      logo.style.width = `${fixedWidth}px`;
+    });
+  }
+});
