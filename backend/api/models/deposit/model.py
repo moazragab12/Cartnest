@@ -23,7 +23,7 @@ class Deposit(SQLModel, table = True):
     
     # User_id, foreign_key users(user_id), not null
     user_id: int = Field(
-        sql_column = Column(
+        sa_column = Column(
             Integer,
             ForeignKey("users.user_id", ondelete="CASCADE"),
             nullable = False
@@ -40,8 +40,9 @@ class Deposit(SQLModel, table = True):
     
     # Deposit_time, timestamp, default now()
     deposit_time: datetime = Field(
-        sql_column = Column(
+        default=None,
+        sa_column = Column(
             DateTime(timezone = True),
-            default_server = func.now()
+            server_default = func.now()
         )
     )

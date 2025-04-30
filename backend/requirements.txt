@@ -1,2 +1,6 @@
 fastapi[standard]
 sqlmodel==0.0.24
+faker
+sqlalchemy
+asyncpg
+python-dotenv

@@ -1,8 +1,17 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional
-from backend.api.models.enums import UserRole
-from sqlalchemy import Column, DateTime, func
+from sqlalchemy import Column, DateTime, func, Enum as SQLAlchemyEnum
 from datetime import datetime
+from enum import Enum
+
+
+class UserRole(str, Enum):
+    admin = "admin"
+    user = "user"
+
+
+# Create SQLAlchemy Enum type with the same name as in the database
+UserRoleEnum = SQLAlchemyEnum(UserRole, name="user_role", create_constraint=False, native_enum=True)
 
 
 class User(SQLModel, table=True):
@@ -50,7 +59,7 @@ class User(SQLModel, table=True):
     # role, (user, admin), not null
     role: UserRole = Field(
         default=UserRole.user,
-        nullable = False
+        sa_column=Column(UserRoleEnum, nullable=False, default=UserRole.user)
     )
     
     # cash_balance, (12,2), cash_balance >= 0, not null
@@ -64,18 +73,13 @@ class User(SQLModel, table=True):
     
     # created_at, nullable, timestamp.
     created_at: datetime = Field(
-        sql_column = Column(
-            DateTime(timezone = True),
-            default_server = func.now()
-        )
+        default=None,
+        sa_column=Column(DateTime(timezone=True), server_default=func.now())
     )
     
     
     # updated_at, nullable, timestamp.
     updated_at: datetime = Field(
-        sql_column = Column(
-            DateTime(timezone = True),
-            default_server = func.now(),
-            onupdate = func.now()
-        )
-    ) 
+        default=None,
+        sa_column=Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    )

@@ -1,8 +1,19 @@
 from sqlmodel import SQLModel, Field
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, func
-from backend.api.models.enums import ItemStatus
+from sqlalchemy import Column, Integer, ForeignKey, DateTime, func, Enum as SQLAlchemyEnum
 from typing import Optional
 from datetime import datetime
+from enum import Enum
+
+
+class ItemStatus(str, Enum):
+    for_sale = "for_sale"
+    sold = "sold"
+    removed = "removed"
+    draft = "draft"
+
+
+# Create SQLAlchemy Enum type with the same name as in the database
+ItemStatusEnum = SQLAlchemyEnum(ItemStatus, name="item_status", create_constraint=False, native_enum=True)
 
 
 class Item(SQLModel, table=True):
@@ -30,7 +41,7 @@ class Item(SQLModel, table=True):
     
     # Seller_user_id, Foreign Key, not null
     seller_user_id: int = Field(
-        sql_column = Column(
+        sa_column = Column(
             Integer,
             ForeignKey("users.user_id", ondelete="CASCADE"),
             nullable=False
@@ -57,7 +68,7 @@ class Item(SQLModel, table=True):
     )
     
     # Price, (10, 2), price > 0, not null
-    price: int = Field(
+    price: float = Field(
         max_digits = 10,
         decimal_places = 2,
         gt = 0,
@@ -65,7 +76,7 @@ class Item(SQLModel, table=True):
     )
     
     # Quantity, default 1, quantity >= 0, not null
-    qunatity: int = Field(
+    quantity: int = Field(
         default = 1,
         gt = 0,
         nullable = False
@@ -73,13 +84,14 @@ class Item(SQLModel, table=True):
     
     # Status, not null
     status: ItemStatus = Field(
-        default = ItemStatus.for_sale,
-        nullable = False
+        default=ItemStatus.for_sale,
+        sa_column=Column(ItemStatusEnum, nullable=False, default=ItemStatus.for_sale)
     )
     
     # Listed_at, timestamp
     listed_at: datetime = Field(
-        sql_column = Column(
+        default=None,
+        sa_column = Column(
             DateTime(timezone = True),
             server_default = func.now()
         )
@@ -87,7 +99,8 @@ class Item(SQLModel, table=True):
     
     # Updated_at, timestamp
     updated_at: datetime = Field(
-        sql_column = Column(
+        default=None,
+        sa_column = Column(
             DateTime(timezone = True),
             server_default = func.now(),
             onupdate = func.now()
