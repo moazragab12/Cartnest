@@ -4,6 +4,9 @@ from database.factories.item_factory import create_fake_item
 from database.factories.transaction_factory import create_fake_transaction
 from database.factories.deposit_factory import create_fake_deposit
 import random
+from sqlalchemy.orm import Session
+from api.db import engine, Base
+from .user_seeder import seed_users
 
 user_seed_count = 10
 item_seed_count = 30
@@ -149,3 +152,33 @@ async def seed_transactions(count=transaction_seed_count, users=None, items=None
             
             print(f"Successfully created {count} transactions!")
             return transactions
+
+def seed_all():
+    """Seed all data"""
+    # Create all tables
+    Base.metadata.create_all(bind=engine)
+    
+    # Create a new session
+    db = Session(engine)
+    
+    try:
+        # Seed users
+        seed_users(db)
+        
+        # Add other seeders here as needed
+        
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        print(f"Error seeding database: {e}")
+        raise
+    finally:
+        db.close()
+
+def refresh_db():
+    """Drop all tables and recreate them with seed data"""
+    # Drop all tables
+    Base.metadata.drop_all(bind=engine)
+    
+    # Seed all data
+    seed_all()

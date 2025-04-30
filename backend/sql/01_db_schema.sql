@@ -21,6 +21,10 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE INDEX IF NOT EXISTS idx_users_username ON users (username);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users (email);
+CREATE INDEX IF NOT EXISTS idx_users_role ON users (role);
+
 CREATE TABLE IF NOT EXISTS items (
     item_id SERIAL PRIMARY KEY,
     seller_user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
@@ -52,6 +56,15 @@ CREATE TABLE IF NOT EXISTS deposits (
     deposit_time TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS user_tokens (
+    token_id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    token TEXT NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 CREATE INDEX IF NOT EXISTS idx_items_seller_user_id ON items (seller_user_id);
 CREATE INDEX IF NOT EXISTS idx_items_name ON items (name);
 CREATE INDEX IF NOT EXISTS idx_items_category ON items (category);
@@ -60,6 +73,9 @@ CREATE INDEX IF NOT EXISTS idx_transactions_item_id ON transactions (item_id);
 CREATE INDEX IF NOT EXISTS idx_transactions_buyer_user_id ON transactions (buyer_user_id);
 CREATE INDEX IF NOT EXISTS idx_transactions_seller_user_id ON transactions (seller_user_id);
 CREATE INDEX IF NOT EXISTS idx_deposits_user_id ON deposits (user_id);
+CREATE INDEX IF NOT EXISTS idx_user_tokens_user_id ON user_tokens (user_id);
+CREATE INDEX IF NOT EXISTS idx_user_tokens_token ON user_tokens (token);
+CREATE INDEX IF NOT EXISTS idx_user_tokens_expires_at ON user_tokens (expires_at);
 
 -- Function for updating the updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -102,6 +118,12 @@ END $$;
 
 DO $$ BEGIN
     CREATE TRIGGER update_items_updated_at BEFORE UPDATE ON items FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+    CREATE TRIGGER update_user_tokens_updated_at BEFORE UPDATE ON user_tokens FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 EXCEPTION
     WHEN duplicate_object THEN null;
 END $$;

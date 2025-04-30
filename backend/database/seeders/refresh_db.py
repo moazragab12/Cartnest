@@ -19,7 +19,7 @@ from sqlalchemy import text
 from sqlmodel import SQLModel
 
 # Import all models to ensure they're registered with SQLAlchemy/SQLModel
-from api.models.user.model import User
+from api.models.user.model import User, UserToken
 from api.models.item.model import Item
 from api.models.deposit.model import Deposit
 from api.models.transaction.model import Transaction
@@ -30,7 +30,7 @@ from database.seeders.seeder import seed_users, seed_items, seed_deposits, seed_
 # Get database credentials from environment variables
 DB_USER = os.getenv("DB_USER", "user")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "password")
-DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_HOST = os.getenv("DB_HOST", "postgres_primary")
 DB_PORT = os.getenv("DB_PORT", "5432")
 DB_NAME = os.getenv("DB_NAME", "marketplace_db")
 

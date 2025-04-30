@@ -1,10 +1,10 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
+from sqlmodel import Session
 from passlib.context import CryptContext
 from jose import JWTError, jwt
-from api.db import SessionLocal
-from api.models import User
+from api.db import get_db  # This is your new db.py import
+from api.models.user.model import User, UserToken
 from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
@@ -18,13 +18,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 def get_password_hash(password: str):
     return pwd_context.hash(password)
 
@@ -35,13 +28,49 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM), expire
+
+def store_token(db: Session, user_id: int, token: str, expires_at: datetime):
+    # Delete any existing tokens for this user
+    db.query(UserToken).filter(UserToken.user_id == user_id).delete()
+    
+    # Create new token
+    new_token = UserToken(
+        user_id=user_id,
+        token=token,
+        expires_at=expires_at
+    )
+    db.add(new_token)
+    db.commit()
+    db.refresh(new_token)
+    return new_token
+
+def get_valid_token(db: Session, user_id: int):
+    token = db.query(UserToken).filter(
+        UserToken.user_id == user_id,
+        UserToken.expires_at > datetime.utcnow()
+    ).first()
+    return token
 
 def authenticate_user(db: Session, username: str, password: str):
-    user = db.query(User).filter(User.username == username).first()
-    if not user or not verify_password(password, user.hashed_password):
+    try:
+        user = db.query(User).filter(User.username == username).first()
+        if not user:
+            return None
+        if not verify_password(password, user.password_hash):
+            return None
+
+        # Check for existing valid token
+        existing_token = get_valid_token(db, user.user_id)
+        if existing_token:
+            return user, existing_token.token
+
+        # Create new token
+        token, expires_at = create_access_token(data={"sub": user.username})
+        store_token(db, user.user_id, token, expires_at)
+        return user, token
+    except Exception as e:
         return None
-    return user
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
@@ -56,7 +85,14 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
             raise credentials_exception
     except JWTError:
         raise credentials_exception
+    
     user = db.query(User).filter(User.username == username).first()
     if user is None:
         raise credentials_exception
+    
+    # Verify token exists in the database and is not expired
+    stored_token = get_valid_token(db, user.user_id)
+    if not stored_token or stored_token.token != token:
+        raise credentials_exception
+    
     return user
