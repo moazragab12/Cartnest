@@ -1,6 +1,11 @@
 fastapi[standard]
 sqlmodel==0.0.24
+uvicorn
+passlib[bcrypt]
+python-jose
+python-multipart
 faker
 sqlalchemy
 asyncpg
 python-dotenv
+
