@@ -6,3 +6,4 @@ __pycache
 *.pyd
 .vscode
 .idea
+*.log

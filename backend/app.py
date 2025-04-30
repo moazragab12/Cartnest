@@ -1,19 +1,30 @@
-# app.py
-from fastapi import FastAPI
-from api.routers.auth import auth_router
-app = FastAPI(title="Market Place", version="0.0")
+from fastapi import FastAPI, Request, Depends
+from fastapi.responses import JSONResponse
+from sqlmodel import Session, select
+from .api.db import get_db
+from .api.models.item.model import Item
+from .api.routers.profile_management import router as profile_router
 
-@app.get("/")
-async def read_root():
-    return {"message": "Welcome to the API!"}
+version = "0.0"  # Define the API version
+# Create the FastAPI application with metadata
+app = FastAPI(
+    title="Market Place",
+    version=version,
+    description="API for the Market Place application",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
+)
 
-@app.post("/login")
-async def login(user: dict):
-    # Implement your authentication logic here
-    return {"message": "Login successful"}
+# Include the profile_management router with explicit documentation settings
+app.include_router(
+    profile_router,
+    prefix="/api/v"+ version[0],
+    tags=["profile"],
+    responses={404: {"description": "Not found"}}
+)
 
-@app.get("/favicon.ico", include_in_schema=False)
-async def favicon():
-    return {"message": "No favicon available"}
-
-app.include_router(auth_router, prefix="/auth")
+@app.get("/", tags=["root"])
+async def root():
+    """Root endpoint to check if the API is running."""
+    return {"message": "Welcome to the Market Place API"}
