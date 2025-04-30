@@ -1,6 +1,29 @@
 # MarketPlace
 
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.95.0-009688.svg?style=flat&logo=FastAPI&logoColor=white)](https://fastapi.tiangolo.com)
+[![Python](https://img.shields.io/badge/Python-3.13-blue.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14-336791.svg?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![SQLModel](https://img.shields.io/badge/SQLModel-0.0.24-red.svg?style=flat&logo=sqlmodel&logoColor=white)](https://sqlmodel.tiangolo.com/)
+[![Docker](https://img.shields.io/badge/Docker-24.0+-2496ED.svg?style=flat&logo=docker&logoColor=white)](https://www.docker.com)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 A marketplace application with FastAPI backend.
+
+## Table of Contents
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Clone the repository](#clone-the-repository)
+  - [Backend Setup](#backend-setup)
+- [Running the Application](#running-the-application)
+- [Project Architecture](#project-architecture)
+- [Coding Conventions](#coding-conventions)
+- [Database](#database)
+- [Database Management Commands](#database-management-commands)
+- [Contributing](#contributing)
+  - [Adding a New Feature](#adding-a-new-feature)
+  - [Testing](#testing)
+- [License](#license)
 
 ## Project Structure
 
@@ -83,6 +106,7 @@ cp .env.example .env
 # - algorithm: JWT encoding algorithm (e.g., HS256)
 ```
 
+
 ### Running the Application
 
 1. Start the FastAPI development server
@@ -134,6 +158,103 @@ class UserModel:
 - **Docstrings**:
   - Include docstrings for all functions, classes, and methods
   - Follow Google-style docstring format
+## Database
+
+The MarketPlace application uses a PostgreSQL database with a primary-replica setup for high availability. The database schema includes several key tables:
+
+### Database Structure
+
+1. **Users Table**
+   - Stores user information including username, password hash, email, role, and cash balance
+   - Supports two user roles: regular users and administrators
+   - Tracks created and updated timestamps
+
+2. **Items Table**
+   - Contains products listed for sale with details like name, description, price, quantity
+   - Linked to sellers through a foreign key relationship
+   - Includes status tracking (for_sale, sold, removed, draft)
+   - Records when items were listed and updated
+
+3. **Transactions Table**
+   - Records purchases between buyers and sellers
+   - Tracks which items were bought, quantities, and prices
+   - Maintains relationships to both buyer and seller accounts
+   - Includes timestamps for when transactions occurred
+
+4. **Deposits Table**
+   - Records cash deposits made by users
+   - Tracks deposit amounts and timestamps
+   - Connected to user accounts through foreign keys
+
+### High Availability Setup
+
+The database uses a PostgreSQL primary-replica architecture:
+- **Primary Node**: Handles write operations and serves as the source of truth
+- **Replica Node**: Provides read scalability and failover capability
+
+This setup is configured in the docker-compose.yml file, with both database instances running as separate containers.
+
+## Database Management Commands
+
+The project includes Laravel-style database management commands to make development easier:
+
+### On Windows (PowerShell)
+
+Navigate to the backend directory and run the following commands:
+
+```powershell
+# Create all database tables based on the models
+.\scripts\db.ps1 migrate
+
+# Seed the database with test data
+.\scripts\db.ps1 seed
+
+# Drop all tables, recreate them, and seed with fresh data
+.\scripts\db.ps1 refresh
+
+# Empty all tables (without dropping them) and seed with fresh data
+.\scripts\db.ps1 fresh
+
+# Just empty all tables without adding any data
+.\scripts\db.ps1 truncate
+```
+
+### On Unix/Linux/Mac
+
+```bash
+# Create all database tables based on the models
+./scripts/db.sh migrate
+
+# Seed the database with test data
+./scripts/db.sh seed
+
+# Drop all tables, recreate them, and seed with fresh data
+./scripts/db.sh refresh
+
+# Empty all tables (without dropping them) and seed with fresh data
+./scripts/db.sh fresh
+
+# Just empty all tables without adding any data
+./scripts/db.sh truncate
+```
+
+These commands simplify database management during development and will automatically:
+
+- Create database tables using SQLModel definitions
+- Populate the database with test data. You can configure seeding size in seeder.py:
+    ```python
+    # Configure seed counts in backend/seeds/seeder.py
+    user_seed_count = 10      # Number of test users to create
+    item_seed_count = 30      # Number of items to generate
+    deposit_seed_count = 20   # Number of deposit records
+    transaction_seed_count = 15 # Number of transactions
+    ```
+
+Default seeding will create:
+    - Test users with realistic usernames and emails
+    - Items with descriptions and prices
+    - Deposit records with varying amounts
+    - Transaction records between users
 
 ## Contributing
 
