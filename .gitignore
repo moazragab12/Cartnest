@@ -6,6 +6,3 @@ __pycache
 *.pyd
 .vscode
 .idea
-
-# Windows PowerShell scripts
-*.ps1
