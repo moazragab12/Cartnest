@@ -83,6 +83,3 @@ def get_db() -> Generator[Session, None, None]:
         raise
     finally:
         db.close()
-
-# Import models to register with SQLAlchemy
-from api.models.user.model import User, UserToken

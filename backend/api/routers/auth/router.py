@@ -3,8 +3,8 @@ from sqlmodel import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr
 
-from api.dependencies import get_db, get_password_hash, authenticate_user, create_access_token, get_current_user
-from api.models.user.model import User, UserRole
+from ....api.dependencies import get_db, get_password_hash, authenticate_user, create_access_token, get_current_user
+from ....api.models.user.model import User, UserRole
 
 # Request/Response Models
 class UserCreate(BaseModel):

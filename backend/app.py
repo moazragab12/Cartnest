@@ -5,11 +5,11 @@ from fastapi.responses import JSONResponse
 from jose import JWTError, jwt
 from dotenv import load_dotenv
 
-from api.db import Base, engine, get_db
-from api.dependencies import get_current_user
-from api.models.user.model import User
-from api.routers.auth import auth_router
-from api.routers.profile_management import router as profile_router
+from .api.db import Base, engine, get_db
+from .api.dependencies import get_current_user
+from .api.models.user.model import User
+from .api.routers.auth import auth_router
+from .api.routers.profile_management import router as profile_router
 
 # Load .env variables
 load_dotenv()
@@ -22,7 +22,7 @@ version = "0.0"
 app = FastAPI(
     title="Market Place",
     version=version,
-    description="API for the Market Place application with authentication and profile management",
+    description="API for the Market Place application",
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json"
@@ -64,9 +64,7 @@ async def protected_route(current_user: User = Depends(get_current_user)):
 
 # Routers
 app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
+
 app.include_router(
     profile_router,
-    prefix=f"/api/v{version[0]}",  # e.g., /api/v0
-    tags=["Profile Management"],
-    responses={404: {"description": "Not found"}}
 )

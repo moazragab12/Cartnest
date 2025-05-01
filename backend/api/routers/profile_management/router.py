@@ -2,41 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlmodel import Session
 from typing import List, Optional
 import logging
-
-logger = logging.getLogger("profile_management")
-
-# ==================== TEMPORARY AUTHENTICATION CODE - DELETE WHEN REAL AUTH IS IMPLEMENTED ====================
-# This section contains temporary authentication code that should be replaced
-# with the real authentication from dependencies.py when it's implemented by the team
-
-# Very simple temporary auth without token validation - just for testing
-async def get_current_user_temporary():
-    """
-    Temporary placeholder for authentication that bypasses token validation.
-    This will be replaced with the actual authentication from dependencies.py.
-    
-    Returns a mock user for testing purposes.
-    """
-    # For testing, just return a mock user with ID=1
-    # Use relative imports
-    from ...models.user.model import User, UserRole
-    return User(
-        user_id=23, 
-        username="temp_user", 
-        password_hash="not_a_real_hash", 
-        email="temp@example.com", 
-        role=UserRole.user,
-        cash_balance=1000.0
-    )
-# ==================== END TEMPORARY AUTHENTICATION CODE ====================
-
-# ==================== FUTURE AUTHENTICATION IMPLEMENTATION - UNCOMMENT WHEN AVAILABLE ====================
-# from ...dependencies import get_current_user
-# ==================== END FUTURE AUTHENTICATION IMPLEMENTATION ====================
-
-# Import database dependency
+from ...dependencies import get_current_user
 from ...db import get_db
-# Import models from the central api.models directory using relative paths
 from ...models.user.model import User
 from ...models.item.model import Item, ItemStatus
 from ...models.transaction.model import Transaction
@@ -64,9 +31,14 @@ from .crud import (
     get_profile_overview
 )
 
+logger = logging.getLogger("profile_management")
+
+version = "0.0"
+
 router = APIRouter(
-    prefix="/profile",
-    tags=["profile"]
+    prefix=f"/api/v{version[0]}",  # e.g., /api/v0
+    tags=["Profile"],
+    responses={404: {"description": "Not found"}}
 )
 
 # Item Management (CRUD) Endpoints
@@ -74,10 +46,7 @@ router = APIRouter(
 @router.post("/items", response_model=ItemResponse, status_code=status.HTTP_201_CREATED)
 async def create_item_endpoint(
     item_data: ItemCreate,
-    # TEMPORARY - Replace with real auth when available
-    current_user: User = Depends(get_current_user_temporary),
-    # FUTURE - Uncomment when real auth is available
-    # current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Create a new item for sale."""
@@ -89,10 +58,7 @@ async def create_item_endpoint(
 async def get_user_items(
     skip: int = 0,
     limit: int = 100,
-    # TEMPORARY - Replace with real auth when available
-    current_user: User = Depends(get_current_user_temporary),
-    # FUTURE - Uncomment when real auth is available
-    # current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get all items by current user."""
@@ -103,10 +69,7 @@ async def get_user_items(
 @router.get("/items/{item_id}", response_model=ItemResponse)
 async def get_item_endpoint(
     item_id: int,
-    # TEMPORARY - Replace with real auth when available
-    current_user: User = Depends(get_current_user_temporary),
-    # FUTURE - Uncomment when real auth is available
-    # current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get specific item by ID."""
@@ -122,19 +85,12 @@ async def get_item_endpoint(
             )
         
         logger.debug(f"Item found. Seller ID: {db_item.seller_user_id}, Current user ID: {current_user.user_id}")
-        
-        # Comment out the authorization check for now, for testing purposes
-        # If the item exists but belongs to another user, we'll still allow access for testing
-        # Once authentication is properly implemented, uncomment this block
-        """
         if db_item.seller_user_id != current_user.user_id:
             logger.warning(f"Authorization failed: User {current_user.user_id} attempted to access item {item_id} owned by user {db_item.seller_user_id}")
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Not authorized to access this item"
             )
-        """
-        
         logger.info(f"Successfully retrieved item: {item_id}")
         return db_item
         
@@ -154,10 +110,7 @@ async def get_item_endpoint(
 async def update_item_endpoint(
     item_id: int,
     item_data: ItemUpdate,
-    # TEMPORARY - Replace with real auth when available
-    current_user: User = Depends(get_current_user_temporary),
-    # FUTURE - Uncomment when real auth is available
-    # current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Update an item."""
@@ -189,10 +142,7 @@ async def update_item_endpoint(
 @router.delete("/items/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_item_endpoint(
     item_id: int,
-    # TEMPORARY - Replace with real auth when available
-    current_user: User = Depends(get_current_user_temporary),
-    # FUTURE - Uncomment when real auth is available
-    # current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Delete (mark as removed) an item."""
@@ -233,10 +183,7 @@ async def delete_item_endpoint(
 @router.post("/wallet/deposit", response_model=TransactionResponse)
 async def deposit_to_wallet_endpoint(
     deposit_data: WalletDeposit,
-    # TEMPORARY - Replace with real auth when available
-    current_user: User = Depends(get_current_user_temporary),
-    # FUTURE - Uncomment when real auth is available
-    # current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Deposit cash to user wallet."""
@@ -257,10 +204,7 @@ async def deposit_to_wallet_endpoint(
 
 @router.get("/wallet/balance", response_model=float)
 async def get_wallet_balance_endpoint(
-    # TEMPORARY - Replace with real auth when available
-    current_user: User = Depends(get_current_user_temporary),
-    # FUTURE - Uncomment when real auth is available
-    # current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get current user's wallet balance."""
@@ -272,10 +216,7 @@ async def get_wallet_balance_endpoint(
 async def get_user_transactions_endpoint(
     skip: int = 0,
     limit: int = 100,
-    # TEMPORARY - Replace with real auth when available
-    current_user: User = Depends(get_current_user_temporary),
-    # FUTURE - Uncomment when real auth is available
-    # current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get current user's transactions."""
@@ -287,10 +228,7 @@ async def get_user_transactions_endpoint(
 
 @router.get("/overview", response_model=ProfileOverview)
 async def get_profile_overview_endpoint(
-    # TEMPORARY - Replace with real auth when available
-    current_user: User = Depends(get_current_user_temporary),
-    # FUTURE - Uncomment when real auth is available
-    # current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Get current user's profile overview."""

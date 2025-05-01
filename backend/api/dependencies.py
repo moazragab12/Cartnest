@@ -3,8 +3,9 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session
 from passlib.context import CryptContext
 from jose import JWTError, jwt
-from api.db import get_db  # This is your new db.py import
-from api.models.user.model import User, UserToken
+from ..api.db import get_db
+from ..api.models.user.model import User
+from ..api.models.user_token.model import UserToken
 from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
