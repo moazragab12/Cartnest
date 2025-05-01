@@ -67,9 +67,8 @@ class Transaction(SQLModel, table = True):
     
     # Transaction_time, timestamp, default now()
     transaction_time: datetime = Field(
-        default=None,
         sa_column = Column(
             DateTime(timezone = True),
-            server_default = func.now()
+            default_server = func.now()
         )
     )

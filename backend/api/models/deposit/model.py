@@ -40,9 +40,8 @@ class Deposit(SQLModel, table = True):
     
     # Deposit_time, timestamp, default now()
     deposit_time: datetime = Field(
-        default=None,
         sa_column = Column(
             DateTime(timezone = True),
-            server_default = func.now()
+            default_server = func.now()
         )
     )

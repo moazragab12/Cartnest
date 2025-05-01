@@ -1,8 +1,8 @@
 from sqlmodel import SQLModel, Field
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, func, Enum as SQLAlchemyEnum
+from sqlalchemy import Column, Integer, ForeignKey, DateTime, func
+from enum import Enum
 from typing import Optional
 from datetime import datetime
-from enum import Enum
 
 
 class ItemStatus(str, Enum):
@@ -10,11 +10,6 @@ class ItemStatus(str, Enum):
     sold = "sold"
     removed = "removed"
     draft = "draft"
-
-
-# Create SQLAlchemy Enum type with the same name as in the database
-ItemStatusEnum = SQLAlchemyEnum(ItemStatus, name="item_status", create_constraint=False, native_enum=True)
-
 
 class Item(SQLModel, table=True):
     """ Represents an item inside the database
@@ -84,13 +79,12 @@ class Item(SQLModel, table=True):
     
     # Status, not null
     status: ItemStatus = Field(
-        default=ItemStatus.for_sale,
-        sa_column=Column(ItemStatusEnum, nullable=False, default=ItemStatus.for_sale)
+        default = ItemStatus.for_sale,
+        nullable = False
     )
     
     # Listed_at, timestamp
     listed_at: datetime = Field(
-        default=None,
         sa_column = Column(
             DateTime(timezone = True),
             server_default = func.now()
@@ -99,7 +93,6 @@ class Item(SQLModel, table=True):
     
     # Updated_at, timestamp
     updated_at: datetime = Field(
-        default=None,
         sa_column = Column(
             DateTime(timezone = True),
             server_default = func.now(),
