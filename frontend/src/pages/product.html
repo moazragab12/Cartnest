@@ -15,8 +15,8 @@
   </head>
   <body>
     <header class="header">
-      <div class="left-section">
-        <div class="logo-container">
+      <div class="logo-container">
+        <a href="../../index.html" class="logo-link">
           <div class="shop-bag-logo-container">
             <svg
               class="shop-bag-logo"
@@ -30,12 +30,12 @@
                 fill-rule="evenodd"
                 clip-rule="evenodd"
                 d="M9.20327 0.978271C11.9153 0.978271 14.1164 3.1796 14.1164 5.88906L15.0969 5.89138C16.1834 5.89138 17.1192 6.77035 17.1867 7.85079L17.9244 19.6539C17.992 20.7361 17.1698 21.6133 16.0865 21.6133H2.32009C1.23738 21.6133 0.414609 20.7344 0.482136 19.6539L1.21983 7.85079C1.28747 6.76864 2.22126 5.89138 3.30963 5.89138H4.29016C4.29016 3.17813 6.49303 0.978271 9.20327 0.978271ZM12.1511 5.89149C12.1511 4.26503 10.8299 2.94362 9.20327 2.94362C7.5778 2.94362 6.2554 4.26421 6.2554 5.88917L12.1511 5.89149ZM4.29016 7.85657H3.30963C3.25909 7.85657 3.18415 7.92687 3.18125 7.97332L2.4589 19.648L15.9548 19.6455L15.2253 7.97332C15.2225 7.92864 15.1457 7.85657 15.0969 7.85657H14.1164V9.82181C14.1164 10.3645 13.6765 10.8044 13.1338 10.8044C12.5911 10.8044 12.1511 10.3645 12.1511 9.82181V7.85657L6.25541 7.85657L6.25541 9.82181C6.25541 10.3645 5.81547 10.8044 5.27279 10.8044C4.7301 10.8044 4.29016 10.3645 4.29016 9.82181V7.85657Z"
-                fill="white"
+                fill="currentColor"
               />
             </svg>
           </div>
-          <h1 class="logo">Shopify</h1>
-        </div>
+          <span class="logo">Shopify</span>
+        </a>
       </div>
 
       <div class="search-box">
@@ -45,26 +45,43 @@
           placeholder="Search essentials, groceries and more..."
         />
       </div>
+
       <div class="header-links">
-        <a href="./src/pages/Sign_in.html" class="sign-in-link">
-          <img
-            src="../../public/resources/images/svg/user-icon.svg"
-            alt="User"
-            class="icon-svg"
-          />
-          <span>Sign Up/Sign In</span>
+        <a href="../pages/Sign_in.html" class="header-link">
+          <i class="fas fa-user"></i>
+          <span>Sign In</span>
         </a>
-        <span class="header-divider">|</span>
-        <a href="#" class="cart-link">
-          <img
-            src="../../public/resources//images/svg/cart-icon.svg"
-            alt="Cart"
-            class="icon-svg"
-          />
+        <div class="header-divider"></div>
+        <a href="../pages/cart.html" class="header-link cart-link">
+          <i class="fas fa-shopping-cart"></i>
           <span>Cart</span>
+          <span class="cart-count">0</span>
         </a>
       </div>
     </header>
+
+    <nav class="navbar">
+      <a href="#" class="active"
+        >Groceries <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+      <a href="#"
+        >Premium Fruits <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+      <a href="#"
+        >Home & Kitchen <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+      <a href="#">Fashion <i class="fas fa-chevron-down dropdown-icon"></i></a>
+      <a href="#"
+        >Electronics <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+      <a href="#">Beauty <i class="fas fa-chevron-down dropdown-icon"></i></a>
+      <a href="#"
+        >Home Improvement <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+      <a href="#"
+        >Sports & Outdoors <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+    </nav>
 
     <nav class="breadcrumb">
       <a href="#" class="breadcrumb__link">Home</a>
