@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopify Product Page</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">   
     <link rel="stylesheet" href="../css/header.css">
-    <link rel="stylesheet" href="../css/product_list.css">
+        <title>Shopify Product Page</title>
+    <link rel="stylesheet" href="../css/header.css">
+ 
     <link rel="stylesheet" href="../css/footer.css">
-    <link rel="stylesheet" href="../css/home.css">
+
+    <link rel="stylesheet" href="../css/product_list.css">
 </head>
 <body>
      <!-- Header -->
-   <!-- Header -->
-   <header class="header">
+  
+  <!-- Header -->
+  <header class="header">
     <div class="left-section">
       <div class="logo-container">
         <div class="shop-bag-logo-container">
@@ -23,22 +29,24 @@
         <h1 class="logo">Shopify</h1>
       </div>
     </div>
+
     <div class="search-box">
       <i class="fas fa-search search-icon"></i>
       <input type="text" placeholder="Search essentials, groceries and more...">
     </div>
     <div class="header-links">
       <a href="./src/pages/Sign_in.html" class="sign-in-link">
-        <img src="./public/resources/images/svg/user-icon.svg" alt="User" class="icon-svg">
+        <img src="../../public/resources/images/svg/user-icon.svg" alt="User" class="icon-svg">
         <span>Sign Up/Sign In</span>
       </a>
       <span class="header-divider">|</span>
       <a href="#" class="cart-link">
-        <img src="./public/resources/images/svg/cart-icon.svg" alt="Cart" class="icon-svg">
+        <img src="../../public/resources//images/svg/cart-icon.svg" alt="Cart" class="icon-svg">
         <span>Cart</span>
       </a>
     </div>
   </header>
+
 
   <!-- Navigation -->
   <nav class="navbar">
@@ -53,6 +61,7 @@
   </nav>
   <main class="container">
     <aside class="sidebar">
+        <hr>
         <details open>
           <summary>Category</summary>
           <ul>
@@ -108,10 +117,23 @@
           <summary>Manufacturer</summary>
         </details>
       </aside>
-    <section class="products">
-        <h2>12,911 items in Mobile accessory</h2>
+    <div class="products">
+        <h2>
+            <p>12,911 items in Mobile accessory</p>
+            <li><input type="checkbox" checked> Verified only</li>
+            
+            <select class="feature-box">
+            <option value="1">Featured</option>
+            <option value="2">Plastic cover</option>
+            <option value="3">8GB Ram</option>
+            <option value="4">Super power</option>
+            <option value="5" >Metallic</option>
+        </select>
+           
+    </h2>
         <div class="product-grid">
             <!-- Product Card -->
+           
             <div class="product-card">
                 <img src="../../public/resources/images/watch.png" alt="Smart Watch">
                 <div class="product-info">
@@ -141,6 +163,7 @@
                     
                 </div>
             </div>
+            
             <div class="product-card">
                 <img src="../../public/resources/images/watch.png" alt="Smart Watch">
                 <div class="product-info">
@@ -170,6 +193,7 @@
                     
                 </div>
             </div>
+            
             <div class="product-card">
                 <img src="../../public/resources/images/watch.png" alt="Smart Watch">
                 <div class="product-info">
@@ -199,6 +223,7 @@
                     
                 </div>
             </div>
+            
             <div class="product-card">
                 <img src="../../public/resources/images/watch.png" alt="Smart Watch">
                 <div class="product-info">
@@ -228,6 +253,7 @@
                     
                 </div>
             </div>
+            
             <div class="product-card">
                 <img src="../../public/resources/images/watch.png" alt="Smart Watch">
                 <div class="product-info">
@@ -347,7 +373,7 @@
             </div>
         </div>
     
-    </section>
+    </div>
 </main>
 </body>
 </html>
