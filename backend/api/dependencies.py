@@ -3,14 +3,22 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session
 from passlib.context import CryptContext
 from jose import JWTError, jwt
-from ..api.db import get_db
-from ..api.models.user.model import User
-from ..api.models.user_token.model import UserToken
-from datetime import datetime, timedelta
+import sys
 import os
+
+# Get the absolute path to the project root directory
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(ROOT_DIR)
+
+from api.db import get_db
+from api.models.user.model import User
+from api.models.user_token.model import UserToken
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load environment variables from the .env file in the project root
+dotenv_path = os.path.join(ROOT_DIR, '.env')
+load_dotenv(dotenv_path)
 
 SECRET_KEY = os.getenv("SECRET_KEY", "defaultsecret")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")

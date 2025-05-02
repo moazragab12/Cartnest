@@ -2,11 +2,18 @@ import logging
 from sqlmodel import Session, select, or_, and_
 from typing import List, Optional, Dict, Any
 from datetime import datetime
+import sys
+import os
+from pathlib import Path
 
-from ...models.user.model import User
-from ...models.item.model import Item, ItemStatus
-from ...models.transaction.model import Transaction
-from ...models.deposit.model import Deposit
+# Get the absolute path to the project root
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.append(str(ROOT_DIR))
+
+from api.models.user.model import User
+from api.models.item.model import Item, ItemStatus
+from api.models.transaction.model import Transaction
+from api.models.deposit.model import Deposit
 
 from .schemas import ItemCreate, ItemUpdate, WalletDeposit
 

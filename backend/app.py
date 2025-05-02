@@ -3,16 +3,25 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import JSONResponse
 from jose import JWTError, jwt
+import os
 from dotenv import load_dotenv
+import sys
 
-from .api.db import Base, engine, get_db
-from .api.dependencies import get_current_user
-from .api.models.user.model import User
-from .api.routers.auth import auth_router
-from .api.routers.profile_management import router as profile_router
+# Get the absolute path to the project root directory
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(ROOT_DIR)
 
-# Load .env variables
-load_dotenv()
+# Load environment variables from absolute path
+dotenv_path = os.path.join(ROOT_DIR, '.env')
+load_dotenv(dotenv_path)
+
+# Change from relative imports to absolute imports
+from api.db import Base, engine, get_db
+from api.dependencies import get_current_user
+from api.models.user.model import User
+# Import the correctly named auth_router directly
+from api.routers.auth.router import auth_router
+from api.routers.profile_management.router import router as profile_router
 
 # Create all tables at startup
 Base.metadata.create_all(bind=engine)

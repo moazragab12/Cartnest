@@ -3,11 +3,11 @@ sqlmodel==0.0.24
 uvicorn
 passlib[bcrypt]
 bcrypt==4.1.2
+python-dotenv==1.1.0
 python-jose
 python-multipart
-faker
+Faker==37.1.0
 sqlalchemy
 asyncpg
-python-dotenv
 psycopg2-binary
 

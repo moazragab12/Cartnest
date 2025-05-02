@@ -2,11 +2,19 @@ from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlmodel import Session
 from typing import List, Optional
 import logging
-from ...dependencies import get_current_user
-from ...db import get_db
-from ...models.user.model import User
-from ...models.item.model import Item, ItemStatus
-from ...models.transaction.model import Transaction
+import sys
+import os
+from pathlib import Path
+
+# Get the absolute path to the project root
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.append(str(ROOT_DIR))
+
+from api.dependencies import get_current_user
+from api.db import get_db
+from api.models.user.model import User
+from api.models.item.model import Item, ItemStatus
+from api.models.transaction.model import Transaction
 
 # Import schemas
 from .schemas import (

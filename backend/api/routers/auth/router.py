@@ -2,9 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr
+import sys
+import os
+from pathlib import Path
 
-from ....api.dependencies import get_db, get_password_hash, authenticate_user, create_access_token, get_current_user
-from ....api.models.user.model import User, UserRole
+# Get the absolute path to the project root
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.append(str(ROOT_DIR))
+
+from api.dependencies import get_db, get_password_hash, authenticate_user, create_access_token, get_current_user
+from api.models.user.model import User, UserRole
 
 # Request/Response Models
 class UserCreate(BaseModel):

@@ -1,13 +1,16 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional
 from enum import Enum
-from sqlalchemy import Column, DateTime, func
+from sqlalchemy import Column, DateTime, func, Enum as SQLAEnum
 from datetime import datetime
 
 
 class UserRole(str, Enum):
     admin = "admin"
     user = "user"
+
+# Need to add SQLAlchemy Enum type name to match database
+user_role_enum = SQLAEnum(UserRole, name='user_role', create_constraint=True, validate_strings=True)
     
 class User(SQLModel, table=True):
     """
@@ -54,7 +57,7 @@ class User(SQLModel, table=True):
     # role, (user, admin), not null
     role: UserRole = Field(
         default=UserRole.user,
-        nullable = False
+        sa_column=Column(user_role_enum, nullable=False)
     )
     
     # cash_balance, (12,2), cash_balance >= 0, not null
@@ -70,7 +73,7 @@ class User(SQLModel, table=True):
     created_at: datetime = Field(
         sa_column = Column(
             DateTime(timezone = True),
-            default_server = func.now()
+            server_default = func.now()
         )
     )
     

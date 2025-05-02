@@ -16,18 +16,21 @@ if ($args.Count -eq 0) {
 # Get the command
 $command = $args[0]
 
-# Get the directory of the current script
-$scriptDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
-# Move to the backend directory
-Set-Location -Path (Join-Path -Path $scriptDir -ChildPath "..")
+# Get the absolute path of the script directory
+$scriptDir = $PSScriptRoot
+# Get the absolute path of the backend directory (parent of script dir)
+$backendDir = Split-Path -Path $scriptDir -Parent
+
+# Move to the backend directory using absolute path
+Set-Location -Path $backendDir
 
 # Valid commands
 $validCommands = @("migrate", "seed", "refresh", "fresh", "truncate")
 
 # Check if the command is valid
 if ($validCommands -contains $command) {
-    # Run the appropriate command
-    python database/seeders/refresh_db.py $command
+    # Run the appropriate command with Python using absolute path
+    python "$backendDir\database\seeders\refresh_db.py" $command
 }
 else {
     Write-Host "Unknown command: $command"

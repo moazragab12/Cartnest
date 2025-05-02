@@ -42,6 +42,6 @@ class Deposit(SQLModel, table = True):
     deposit_time: datetime = Field(
         sa_column = Column(
             DateTime(timezone = True),
-            default_server = func.now()
+            server_default = func.now()
         )
     )
