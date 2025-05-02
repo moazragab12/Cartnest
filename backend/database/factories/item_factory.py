@@ -1,6 +1,7 @@
 from faker import Faker
 from api.models.item.model import Item, ItemStatus
 import random
+from datetime import datetime, timedelta
 
 fake = Faker()
 
@@ -11,12 +12,14 @@ CATEGORIES = [
     "Garden", "Jewelry", "Art", "Office Supplies", "Musical Instruments"
 ]
 
-def create_fake_item(seller_user_id=None):
+def create_fake_item(seller_user_id=None, listed_at=None, updated_at=None):
     """
     Create a fake item for seeding the database.
     
     Args:
         seller_user_id: Optional user ID to assign as the seller. If None, this must be set later.
+        listed_at: Optional timestamp for when the item was listed. If None, a random timestamp will be generated.
+        updated_at: Optional timestamp for when the item was updated. If None, will be same as listed_at or slightly later.
     
     Returns:
         Item: A new Item object with fake data
@@ -43,6 +46,26 @@ def create_fake_item(seller_user_id=None):
         weights=status_weights
     )[0]
     
+    # Generate a random timestamp within the last 90 days if not provided
+    if listed_at is None:
+        days_ago = random.randint(0, 90)
+        listed_at = datetime.now() - timedelta(days=days_ago, 
+                                            hours=random.randint(0, 23), 
+                                            minutes=random.randint(0, 59),
+                                            seconds=random.randint(0, 59))
+    
+    # Updated time should be either the same as listing time or slightly later
+    if updated_at is None:
+        # 30% chance the item was updated after listing
+        if random.random() < 0.3:
+            update_days_later = random.randint(0, min(30, days_ago))
+            updated_at = listed_at + timedelta(days=update_days_later,
+                                             hours=random.randint(0, 23),
+                                             minutes=random.randint(0, 59),
+                                             seconds=random.randint(0, 59))
+        else:
+            updated_at = listed_at
+    
     return Item(
         seller_user_id=seller_user_id,
         name=name,
@@ -50,5 +73,7 @@ def create_fake_item(seller_user_id=None):
         category=category,
         price=price,
         quantity=quantity,
-        status=status
+        status=status,
+        listed_at=listed_at,
+        updated_at=updated_at
     )

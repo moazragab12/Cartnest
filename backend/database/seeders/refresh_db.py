@@ -138,8 +138,8 @@ async def run_seeders():
     # 3. Create items (requires users as sellers)
     items = await seed_items(40, users)
     
-    # 4. Create deposits (requires users)
-    deposits = await seed_deposits(25, users)
+    # 4. Create deposits (requires users) - Fix: pass count and users separately
+    deposits = await seed_deposits(count=20, users=users)
     
     # 5. Finally, create transactions (requires users and items)
     transactions = await seed_transactions(20, users, items)
@@ -151,7 +151,7 @@ async def run_seeders():
     print(f"- {len(users) if users else 0} users")
     print(f"- {len(tokens) if tokens else 0} user tokens")
     print(f"- {len(items) if items else 0} items")
-    print(f"- {len(deposits) if deposits else 0} deposits")
+    print(f"- {len(deposits) if deposits else 0} deposits ")
     print(f"- {len(transactions) if transactions else 0} transactions")
     print()
 

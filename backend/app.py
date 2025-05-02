@@ -22,6 +22,7 @@ from api.models.user.model import User
 # Import the correctly named auth_router directly
 from api.routers.auth.router import auth_router
 from api.routers.profile_management.router import router as profile_router
+from api.routers.transactions.router import router as transaction_router
 
 # Create all tables at startup
 Base.metadata.create_all(bind=engine)
@@ -47,33 +48,53 @@ app.add_middleware(
 )
 
 # OAuth2 token scheme
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
-
-# Root route
-@app.get("/", tags=["Root"])
-async def read_root():
-    return {
-        "message": "Welcome to the Market Place API!",
-        "auth_endpoints": {
-            "register": "/auth/register",
-            "login": "/auth/token",
-            "get_user": "/auth/me"
-        }
-    }
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v0/auth/token")
 
 # Favicon fallback
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
     return {"message": "No favicon available"}
 
-# Protected example route
-@app.get("/protected", tags=["Protected"])
-async def protected_route(current_user: User = Depends(get_current_user)):
-    return {"message": f"Hello, {current_user.username}! This is a protected route."}
+# Root route - Keeping this as it provides a helpful API overview
+@app.get("/", tags=["Root"])
+async def read_root():
+    return {
+        "message": "Welcome to the Market Place API!",
+        "api_version": f"v{version[0]}",
+        "endpoints": {
+            "auth": {
+                "register": "/api/v0/auth/register",
+                "login": "/api/v0/auth/token",
+                "get_user": "/api/v0/auth/me"
+            },
+            "profile": {
+                "overview": "/api/v0/overview",
+                "items": {
+                    "create_item": "/api/v0/items",
+                    "get_items": "/api/v0/items",
+                    "get_item": "/api/v0/items/{item_id}",
+                    "update_item": "/api/v0/items/{item_id}",
+                    "delete_item": "/api/v0/items/{item_id}"
+                },
+                "wallet": {
+                    "deposit": "/api/v0/wallet/deposit",
+                    "balance": "/api/v0/wallet/balance",
+                    "transactions": "/api/v0/wallet/transactions"
+                }
+            },
+            "transactions": {
+                "purchase": "/api/v0/transactions/purchase",
+                "list_transactions": "/api/v0/transactions/",
+                "get_transaction": "/api/v0/transactions/{transaction_id}",
+                "transfer_balance": "/api/v0/transactions/transfer"
+            }
+        }
+    }
 
-# Routers
-app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
+# Create API prefix
+api_prefix = f"/api/v{version[0]}"
 
-app.include_router(
-    profile_router,
-)
+# Routers with consistent prefix
+app.include_router(auth_router, prefix=f"{api_prefix}/auth", tags=["Authentication"])
+app.include_router(profile_router, prefix=f"{api_prefix}", tags=["Profile"])
+app.include_router(transaction_router, prefix=f"{api_prefix}/transactions", tags=["Transactions"])

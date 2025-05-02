@@ -89,6 +89,7 @@ async def seed_users(count=user_seed_count):
 async def seed_items(count=item_seed_count, users=None):
     """Seed the database with fake items"""
     from database.seeders.run_seeders import async_session
+    from sqlalchemy import text
     
     print(divider_line())
     
@@ -96,7 +97,7 @@ async def seed_items(count=item_seed_count, users=None):
         # If no users provided, we'll need to get existing users from the database
         async with async_session() as session:
             from api.models.user.model import User
-            result = await session.execute("SELECT user_id FROM users")
+            result = await session.execute(text("SELECT user_id FROM users"))
             user_ids = [row[0] for row in result]
             if not user_ids:
                 print(f"{WARNING}⚠ No users found in database. Please seed users first.{RESET}")
@@ -122,8 +123,15 @@ async def seed_items(count=item_seed_count, users=None):
             return items
 
 async def seed_deposits(count=deposit_seed_count, users=None):
-    """Seed the database with fake deposits"""
+    """
+    Seed the database with fake deposits - multiple deposits per user are allowed
+    
+    Args:
+        count: Number of deposits to create (integer)
+        users: Optional list of user objects to assign deposits to
+    """
     from database.seeders.run_seeders import async_session
+    from sqlalchemy import text
     
     print(divider_line())
     
@@ -131,7 +139,7 @@ async def seed_deposits(count=deposit_seed_count, users=None):
         # If no users provided, we'll need to get existing users from the database
         async with async_session() as session:
             from api.models.user.model import User
-            result = await session.execute("SELECT user_id FROM users")
+            result = await session.execute(text("SELECT user_id FROM users"))
             user_ids = [row[0] for row in result]
             if not user_ids:
                 print(f"{WARNING}⚠ No users found in database. Please seed users first.{RESET}")
@@ -139,18 +147,22 @@ async def seed_deposits(count=deposit_seed_count, users=None):
     else:
         user_ids = [user.user_id for user in users]
     
+    if not user_ids:
+        print(f"{WARNING}⚠ No users available for deposits.{RESET}")
+        return []
+    
     async with async_session() as session:
         async with session.begin():
             deposits = []
             
             async def create_deposit():
-                # Randomly select a user to make the deposit
+                # Randomly select a user to make a deposit
                 user_id = random.choice(user_ids)
                 deposit = create_fake_deposit(user_id=user_id)
                 session.add(deposit)
                 deposits.append(deposit)
             
-            # Use simple spinner animation
+            # Use simple spinner animation with the integer count
             await show_spinner("deposits", count, create_deposit)
             
             return deposits
@@ -158,6 +170,7 @@ async def seed_deposits(count=deposit_seed_count, users=None):
 async def seed_transactions(count=transaction_seed_count, users=None, items=None):
     """Seed the database with fake transactions"""
     from database.seeders.run_seeders import async_session
+    from sqlalchemy import text
     
     print(divider_line())
     
@@ -165,7 +178,7 @@ async def seed_transactions(count=transaction_seed_count, users=None, items=None
     if not users:
         async with async_session() as session:
             from api.models.user.model import User
-            result = await session.execute("SELECT user_id FROM users")
+            result = await session.execute(text("SELECT user_id FROM users"))
             user_ids = [row[0] for row in result]
             if not user_ids:
                 print(f"{WARNING}⚠ No users found in database. Please seed users first.{RESET}")
@@ -177,7 +190,7 @@ async def seed_transactions(count=transaction_seed_count, users=None, items=None
     if not items:
         async with async_session() as session:
             from api.models.item.model import Item
-            result = await session.execute("SELECT item_id, seller_user_id, price FROM items")
+            result = await session.execute(text("SELECT item_id, seller_user_id, price FROM items"))
             item_data = [(row[0], row[1], row[2]) for row in result]  # item_id, seller_id, price
             if not item_data:
                 print(f"{WARNING}⚠ No items found in database. Please seed items first.{RESET}")
@@ -234,7 +247,7 @@ async def seed_user_tokens(users=None):
         # If no users provided, we'll need to get existing users from the database
         async with async_session() as session:
             from api.models.user.model import User
-            result = await session.execute("SELECT user_id, username FROM users")
+            result = await session.execute(text("SELECT user_id, username FROM users"))
             users_data = [(row[0], row[1]) for row in result]  # user_id, username
             if not users_data:
                 print(f"{WARNING}⚠ No users found in database. Please seed users first.{RESET}")
@@ -268,32 +281,48 @@ async def seed_user_tokens(users=None):
             
             return tokens
 
-def seed_all():
-    """Seed all data"""
+async def seed_all():
+    """Seed all data asynchronously with the specified counts"""
+    print(f"{PRIMARY}⚡ Starting database seeding process...{RESET}")
+    print(divider_line())
+    
     # Create all tables
     Base.metadata.create_all(bind=engine)
     
-    # Create a new session
-    db = Session(engine)
-    
     try:
-        # Seed users
-        seed_users(db)
+        # Seed users first
+        users = await seed_users(user_seed_count)
         
-        # Add other seeders here as needed
+        # Seed multiple deposits (allowing multiple deposits per user)
+        deposits = await seed_deposits(count=deposit_seed_count, users=users)
         
-        db.commit()
+        # Seed items
+        items = await seed_items(item_seed_count, users=users)
+        
+        # Seed transactions
+        transactions = await seed_transactions(transaction_seed_count, users=users, items=items)
+        
+        # Seed user tokens
+        tokens = await seed_user_tokens(users=users)
+        
+        print(divider_line())
+        print(f"{SUCCESS}✅ Seeding completed successfully!{RESET}")
+        print(f"{PRIMARY}→ Created:{RESET}")
+        print(f"   {PRIMARY}•{RESET} {len(users)} users")
+        print(f"   {PRIMARY}•{RESET} {len(deposits)} deposits (randomly distributed among users)")
+        print(f"   {PRIMARY}•{RESET} {len(items)} items")
+        print(f"   {PRIMARY}•{RESET} {len(transactions)} transactions")
+        print(f"   {PRIMARY}•{RESET} {len(tokens)} user tokens")
+        
     except Exception as e:
-        db.rollback()
-        print(f"{WARNING}Error seeding database: {e}{RESET}")
+        print(f"{WARNING}⚠ Error during seeding: {str(e)}{RESET}")
         raise
-    finally:
-        db.close()
 
-def refresh_db():
+async def refresh_db():
     """Drop all tables and recreate them with seed data"""
     # Drop all tables
     Base.metadata.drop_all(bind=engine)
+    print(f"{WARNING}🗑️  All tables dropped{RESET}")
     
     # Seed all data
-    seed_all()
+    await seed_all()

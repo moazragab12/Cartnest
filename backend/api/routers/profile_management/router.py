@@ -44,7 +44,6 @@ logger = logging.getLogger("profile_management")
 version = "0.0"
 
 router = APIRouter(
-    prefix=f"/api/v{version[0]}",  # e.g., /api/v0
     tags=["Profile"],
     responses={404: {"description": "Not found"}}
 )
