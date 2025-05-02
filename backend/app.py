@@ -23,6 +23,7 @@ from api.models.user.model import User
 from api.routers.auth.router import auth_router
 from api.routers.profile_management.router import router as profile_router
 from api.routers.transactions.router import router as transaction_router
+from api.routers.search.router import search_router
 
 # Create all tables at startup
 Base.metadata.create_all(bind=engine)
@@ -95,6 +96,7 @@ async def read_root():
 api_prefix = f"/api/v{version[0]}"
 
 # Routers with consistent prefix
+app.include_router(search_router)
 app.include_router(auth_router, prefix=f"{api_prefix}/auth", tags=["Authentication"])
 app.include_router(profile_router, prefix=f"{api_prefix}", tags=["Profile"])
 app.include_router(transaction_router, prefix=f"{api_prefix}/transactions", tags=["Transactions"])
