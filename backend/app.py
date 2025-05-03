@@ -48,8 +48,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# OAuth2 token scheme
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v0/auth/token")
+# Create API prefix
+api_prefix = f"/api/v{version[0]}"
+
+# OAuth2 token scheme - Fix to use the correct tokenUrl that matches actual endpoint path
+oauth2_scheme = OAuth2PasswordBearer(
+    # This is the endpoint path WITHOUT the api prefix, as FastAPI will prepend the API path automatically
+    tokenUrl=f"{api_prefix}/auth/login"
+)
 
 # Favicon fallback
 @app.get("/favicon.ico", include_in_schema=False)
@@ -65,8 +71,10 @@ async def read_root():
         "endpoints": {
             "auth": {
                 "register": "/api/v0/auth/register",
-                "login": "/api/v0/auth/token",
-                "get_user": "/api/v0/auth/me"
+                "login": "/api/v0/auth/login",
+                "refresh_token": "/api/v0/auth/refresh-token",
+                "profile": "/api/v0/auth/profile",
+                "token_status": "/api/v0/auth/token-status"
             },
             "profile": {
                 "overview": "/api/v0/overview",
@@ -91,9 +99,6 @@ async def read_root():
             }
         }
     }
-
-# Create API prefix
-api_prefix = f"/api/v{version[0]}"
 
 # Routers with consistent prefix
 app.include_router(search_router)
