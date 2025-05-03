@@ -29,20 +29,14 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
-    // Form submission with loading animation
-    const forms = document.querySelectorAll("form");
-    forms.forEach((form) => {
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const button = this.querySelector(".btn");
-        button.classList.add("loading");
-
-        // Simulate form submission
-        setTimeout(() => {
-          button.classList.remove("loading");
-          const formBox = this.closest(".form-box");
-          formBox.classList.add("success");
-        }, 1500);
-      });
-    });
-  });
+    // Close button functionality for error message container
+    const errorContainer = document.getElementById('error-message');
+    if (errorContainer) {
+        const closeBtn = errorContainer.querySelector('.close-error');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                errorContainer.classList.remove('show');
+            });
+        }
+    }
+});
