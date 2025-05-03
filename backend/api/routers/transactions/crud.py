@@ -5,7 +5,7 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime
 
 from api.models.transaction.model import Transaction
-from api.models.item.model import Item, ItemStatus
+from api.models.item.model import Item, item_status
 from api.models.user.model import User
 from .schemas import TransactionCreate, BalanceTransfer
 
@@ -40,7 +40,7 @@ def create_transaction(
         )
     
     # Check item status
-    if item.status != ItemStatus.for_sale:
+    if item.status != item_status.for_sale:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Item with ID {transaction_data.item_id} is not available for sale"
@@ -106,7 +106,7 @@ def create_transaction(
     
     # Update item quantity or status
     if transaction_data.quantity == item.quantity:
-        item.status = ItemStatus.sold
+        item.status = item_status.sold
         item.quantity = 0
     else:
         item.quantity -= transaction_data.quantity

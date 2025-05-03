@@ -1,5 +1,5 @@
 from faker import Faker
-from api.models.item.model import Item, ItemStatus
+from api.models.item.model import Item, item_status
 import random
 from datetime import datetime, timedelta
 
@@ -42,7 +42,7 @@ def create_fake_item(seller_user_id=None, listed_at=None, updated_at=None):
     # Usually items start as "for_sale", but occasionally might be in other states
     status_weights = [0.85, 0.05, 0.05, 0.05]  # for_sale, sold, removed, draft
     status = random.choices(
-        [ItemStatus.for_sale, ItemStatus.sold, ItemStatus.removed, ItemStatus.draft], 
+        [item_status.for_sale, item_status.sold, item_status.removed, item_status.draft], 
         weights=status_weights
     )[0]
     

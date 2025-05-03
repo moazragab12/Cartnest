@@ -2,7 +2,7 @@ from typing import List, Optional
 from pydantic import BaseModel, Field, validator
 from datetime import datetime
 from decimal import Decimal
-from ...models.item.model import ItemStatus
+from ...models.item.model import item_status
 
 
 class TransactionType(str):
@@ -19,7 +19,7 @@ class ItemCreate(BaseModel):
     price: Decimal
     category: Optional[str] = None
     quantity: int = 1
-    status: ItemStatus = ItemStatus.for_sale
+    status: item_status = item_status.for_sale
 
 
 class ItemUpdate(BaseModel):
@@ -28,7 +28,7 @@ class ItemUpdate(BaseModel):
     price: Optional[Decimal] = None
     category: Optional[str] = None
     quantity: Optional[int] = None
-    status: Optional[ItemStatus] = None
+    status: Optional[item_status] = None
 
 # For when we want to return an item to the user
 class ItemResponse(ItemCreate):
