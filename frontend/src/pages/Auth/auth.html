@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login/Signup Form</title>
-    <link rel="stylesheet" href="style.css" />
     <link
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../../css/Auth/style.css" />
     <link rel="stylesheet" href="../../css/Auth/checkbox.css" />
-    <!-- Added cyber checkbox CSS -->
+    <link rel="stylesheet" href="../../css/Auth/notification.css" />
+    <!-- Added new notification CSS -->
   </head>
 
   <body>
@@ -225,6 +225,20 @@
       </div>
     </div>
 
+    <!-- Add notification overlay for background blur when messages appear -->
+    <div id="notification-overlay" class="notification-overlay"></div>
+
+    <!-- Error message container -->
+    <div id="error-message" class="error-container">
+      <p></p>
+      <button class="close-error">&times;</button>
+    </div>
+
+    <!-- Import JavaScript modules -->
+    <script type="module" src="../../js/auth/api.js"></script>
+    <script type="module" src="../../js/auth/login.js"></script>
+    <script type="module" src="../../js/auth/register.js"></script>
+    <script type="module" src="../../js/auth/auth.js"></script>
     <script src="../../js/auth/script.js"></script>
   </body>
 </html>

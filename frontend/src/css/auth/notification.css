@@ -1,0 +1,271 @@
+/* 
+ * notification.css
+ * Enhanced notification system for authentication pages
+ */
+
+/* Overlay backdrop for notifications */
+.notification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.notification-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Base notification container - appears at bottom of screen */
+.error-container {
+  position: fixed;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(145deg, #ff3333, #ff6666);
+  color: white;
+  padding: 18px 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(255, 51, 51, 0.4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  max-width: 400px;
+  z-index: 1000;
+  transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-left: 5px solid #ff0000;
+  opacity: 0.98;
+}
+
+.error-container.show {
+  bottom: 30px;
+  animation: bounce-in 0.7s ease-out;
+}
+
+@keyframes bounce-in {
+  0% { transform: translateX(-50%) translateY(20px); opacity: 0; }
+  50% { transform: translateX(-50%) translateY(-10px); }
+  70% { transform: translateX(-50%) translateY(5px); }
+  100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+.error-container p {
+  margin: 0;
+  font-size: 1rem;
+  color: white;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.close-error {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 15px;
+  transition: transform 0.3s ease;
+}
+
+.close-error:hover {
+  transform: scale(1.2);
+  color: #ffeeee;
+}
+
+/* Centered message styles - both success and error */
+.message-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Success message styles */
+.success-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(240, 249, 255, 0.95));
+  padding: 35px 45px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(12, 152, 255, 0.5);
+  text-align: center;
+  z-index: 1001; /* Above the overlay */
+  animation: successPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  border: 2px solid rgba(12, 152, 255, 0.5);
+  min-width: 320px;
+  max-width: 90%;
+}
+
+.success-message p {
+  margin: 0;
+  color: #0c98ff;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.4;
+}
+
+.success-message::before {
+  content: "✓";
+  display: block;
+  font-size: 70px;
+  color: #47d147;
+  margin-bottom: 20px;
+  animation: checkmarkAnimation 0.6s ease-in-out forwards;
+}
+
+@keyframes successPop {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  70% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes checkmarkAnimation {
+  0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(10deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+/* Error message styles - centered */
+.error-message-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 240, 240, 0.95));
+  padding: 30px 45px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(255, 51, 51, 0.4);
+  text-align: center;
+  z-index: 1001; /* Above the overlay */
+  animation: errorPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  border: 2px solid rgba(255, 51, 51, 0.5);
+  min-width: 320px;
+  max-width: 90%;
+}
+
+.error-message-center p {
+  margin: 15px 0 5px;
+  color: #e73535;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.error-message-center .error-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 10px;
+  background: rgba(255, 51, 51, 0.1);
+  border-radius: 50%;
+  font-size: 45px;
+  color: #ff3333;
+  animation: errorIconAnimation 0.5s ease-in-out forwards;
+}
+
+.error-message-center .close-message {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #ff3333;
+  font-size: 26px;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+  padding: 5px;
+}
+
+.error-message-center .close-message:hover {
+  transform: scale(1.1);
+  color: #ff0000;
+}
+
+@keyframes errorPop {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  70% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes errorIconAnimation {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Processing state - subtle indication without hiding the form */
+.form-box.processing {
+  position: relative;
+}
+
+.form-box.processing::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(3px);
+  border-radius: 30px;
+  z-index: 1;
+  pointer-events: none;
+  animation: processPulse 2s infinite;
+}
+
+@keyframes processPulse {
+  0% { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(2px); }
+  50% { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(4px); }
+  100% { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(2px); }
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 480px) {
+  .success-message,
+  .error-message-center {
+    padding: 25px 30px;
+    min-width: 280px;
+  }
+  
+  .success-message::before {
+    font-size: 50px;
+    margin-bottom: 15px;
+  }
+  
+  .error-message-center .error-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 35px;
+  }
+  
+  .success-message p,
+  .error-message-center p {
+    font-size: 16px;
+  }
+}
