@@ -58,9 +58,9 @@ def search_items(
     if status:
         query = query.filter(Item.status == status)
     if name:
-        query = query.filter(Item.name.contains(name))
+        query = query.filter(Item.name.ilike(f"%{name.lower()}%"))
     if category:
-        query = query.filter(Item.category == category)
+        query = query.filter(Item.category.ilike(f"%{category.lower()}%"))
     if min_price is not None:
         query = query.filter(Item.price >= min_price)
     if max_price is not None:
