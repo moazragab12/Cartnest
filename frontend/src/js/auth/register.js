@@ -1,9 +1,4 @@
-import { registerUser } from './api.js';
-
-// Token storage keys
-const TOKEN_KEY = 'authToken';
-const TOKEN_EXPIRY_KEY = 'tokenExpiry';
-const USER_DATA_KEY = 'userData';
+import { authService, tokenManager } from '../core/api/index.js';
 
 // DOM Elements
 let registerForm;
@@ -11,6 +6,7 @@ let registerUsername;
 let registerEmail;
 let registerPassword;
 let termsCheckbox;
+let notificationOverlay;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Get form elements
@@ -19,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     registerEmail = document.getElementById('register-email');
     registerPassword = document.getElementById('register-password');
     termsCheckbox = document.getElementById('terms');
+    notificationOverlay = document.getElementById('notification-overlay');
 
     // Attach event listener to the registration form
     if (registerForm) {
@@ -54,9 +51,21 @@ async function handleRegistration(event) {
         const email = registerEmail.value.trim();
         const password = registerPassword.value.trim();
         
-        // Form validation
-        if (!username || !email || !password) {
-            showNotification('Please fill in all fields.');
+        // Form validation with specific messages
+        if (!username && !email && !password) {
+            showNotification('Please fill in all required fields.');
+            resetFormState();
+            return;
+        } else if (!username) {
+            showNotification('Please enter a username.');
+            resetFormState();
+            return;
+        } else if (!email) {
+            showNotification('Please enter your email address.');
+            resetFormState();
+            return;
+        } else if (!password) {
+            showNotification('Please create a password.');
             resetFormState();
             return;
         }
@@ -68,34 +77,35 @@ async function handleRegistration(event) {
             return;
         }
         
-        // Check if terms are accepted
-        if (!termsCheckbox.checked) {
-            showNotification('Please accept the terms and conditions.');
+        // Validate password strength
+        if (password.length < 6) {
+            showNotification('Password must be at least 6 characters long.');
             resetFormState();
             return;
         }
         
-        // Call the registration API
-        const response = await registerUser(username, email, password);
+        // Check if terms are accepted
+        if (!termsCheckbox.checked) {
+            showNotification('Please accept the terms and conditions to continue.');
+            resetFormState();
+            return;
+        }
+        
+        // Call the registration API using our authService
+        const response = await authService.register(username, email, password);
         
         // Debug logging - log the entire response structure
         console.log('Registration API Response:', response);
         
-        // Save authentication data from registration response
-        // Always save with remember me as true for new registrations
-        const saved = saveAuthData(response, true);
-        console.log('Auth data saved successfully:', saved);
-        
         // CRITICAL FIX: After successful registration, perform a login to ensure cookies are properly set
         try {
             console.log('Performing auto-login after registration to set cookies properly');
-            // Import the loginUser function directly to avoid circular dependencies
-            const { loginUser } = await import('./api.js');
-            const loginResponse = await loginUser(username, password);
+            // Use the authService to login
+            const loginResponse = await authService.login(username, password);
             console.log('Auto-login successful, cookies should now be set properly');
             
-            // Save auth data from login response which should properly set cookies
-            saveAuthData(loginResponse, true);
+            // Save auth cookies for backward compatibility
+            saveAuthCookies(loginResponse, true);
             
         } catch (loginError) {
             // Even if auto-login fails, we can still continue as the local storage auth is set
@@ -103,22 +113,113 @@ async function handleRegistration(event) {
             // No need to show this error to the user as registration was successful
         }
         
-        // Show success message overlay (not affecting the form visibility)
-        showMessage('Registration successful! Redirecting...', 'success');
+        // Show success message overlay with blur effect
+        showMessage('Registration successful! Your account has been created.', 'success');
         
-        // Redirect after successful registration (faster redirection)
+        // Redirect after successful registration (after showing success animation)
         setTimeout(() => {
             window.location.href = '../../../index.html';
-        }, 800);
+        }, 1200);
         
     } catch (error) {
-        // Show error as a notification (not affecting the form visibility)
         console.error('Registration error details:', error);
-        showMessage(error.message || 'Registration failed. Please try again.', 'error');
+        
+        // Convert technical error messages to user-friendly ones
+        let userFriendlyMessage = getUserFriendlyErrorMessage(error);
+        
+        // Show error as a notification with blur effect
+        showMessage(userFriendlyMessage, 'error');
     } finally {
         // Always reset form state
         resetFormState();
     }
+}
+
+// Convert technical error messages to user-friendly ones
+function getUserFriendlyErrorMessage(error) {
+    // Extract actual error message from different error object structures
+    let errorMessage = '';
+    
+    if (typeof error === 'string') {
+        errorMessage = error;
+    } else if (error.message) {
+        errorMessage = error.message;
+    } else if (error.error) {
+        errorMessage = error.error;
+    } else if (error.detail) {
+        errorMessage = error.detail;
+    } else if (error.response && error.response.data) {
+        errorMessage = typeof error.response.data === 'string' 
+            ? error.response.data 
+            : JSON.stringify(error.response.data);
+    } else {
+        errorMessage = JSON.stringify(error);
+    }
+    
+    // Log the full error for debugging
+    console.debug('Registration error message:', errorMessage);
+    
+    // Check for specific registration errors with simple messages
+    if (errorMessage.includes('email already registered') || 
+        errorMessage.includes('email already exists') || 
+        errorMessage.includes('already taken') && errorMessage.includes('email')) {
+        return 'Email already exists';
+    }
+    
+    if (errorMessage.includes('username already registered') || 
+        errorMessage.includes('username already exists') || 
+        errorMessage.includes('already taken') && errorMessage.includes('username')) {
+        return 'Username already exists';
+    }
+    
+    if (errorMessage.includes('both username and email') || 
+        errorMessage.includes('username and email already') ||
+        errorMessage.includes('duplicate') || 
+        errorMessage.includes('409') || 
+        errorMessage.includes('conflict')) {
+        return 'Account already exists';
+    }
+    
+    if (errorMessage.includes('password') && 
+        (errorMessage.includes('weak') || 
+         errorMessage.includes('simple') || 
+         errorMessage.includes('common') || 
+         errorMessage.includes('requirements'))) {
+        return 'Password too weak';
+    }
+    
+    if (errorMessage.includes('validation') || 
+        errorMessage.includes('invalid')) {
+        if (errorMessage.includes('email')) {
+            return 'Invalid email';
+        } else if (errorMessage.includes('password')) {
+            return 'Invalid password';
+        } else if (errorMessage.includes('username')) {
+            return 'Invalid username';
+        } else {
+            return 'Invalid information';
+        }
+    }
+    
+    if (errorMessage.includes('Failed to fetch') || 
+        errorMessage.includes('NetworkError') || 
+        errorMessage.includes('network') ||
+        errorMessage.includes('connection')) {
+        return 'Connection error';
+    }
+    
+    if (errorMessage.includes('already read') || 
+        errorMessage.includes('body stream')) {
+        return 'Registration failed';
+    }
+    
+    if (errorMessage.includes('too many') || 
+        errorMessage.includes('rate limit')) {
+        return 'Too many attempts';
+    }
+    
+    // Default simple message
+    return 'Registration failed';
 }
 
 // Reset form to interactive state
@@ -133,8 +234,8 @@ function resetFormState() {
     formBox.classList.remove('processing');
 }
 
-// Save authentication data to storage and set cookies
-function saveAuthData(authData, rememberMe = true) {
+// Save authentication cookies for backward compatibility
+function saveAuthCookies(authData, rememberMe = true) {
     // Debug the authData to see what's actually coming from the API
     console.log('Auth data to save:', authData);
     
@@ -156,24 +257,16 @@ function saveAuthData(authData, rememberMe = true) {
         expiryTime = expiryDate.getTime();
     }
     
-    // Store in localStorage or sessionStorage based on rememberMe flag
-    const storage = rememberMe ? localStorage : sessionStorage;
-    
-    // Store in browser storage
-    storage.setItem(TOKEN_KEY, token);
-    storage.setItem(TOKEN_EXPIRY_KEY, expiryTime);
-    
-    // Optionally store user info if available
-    if (authData.user) {
-        storage.setItem(USER_DATA_KEY, JSON.stringify(authData.user));
-    }
-    
-    // Set cookies using a more direct approach for maximum compatibility
+    // Set cookies using a more direct approach
     // Convert date to proper format for cookies
     const expires = expiryDate.toUTCString();
     
     // Get current domain for cookie consistency
     const currentDomain = window.location.hostname;
+    
+    // Use the same keys as tokenManager for consistency
+    const TOKEN_KEY = tokenManager.TOKEN_STORAGE.ACCESS_TOKEN;
+    const TOKEN_EXPIRY_KEY = tokenManager.TOKEN_STORAGE.TOKEN_EXPIRY;
     
     // Set cookies with domain and path for maximum compatibility
     // Don't specify domain for localhost to ensure it works in development
@@ -203,6 +296,9 @@ function showNotification(message) {
     const errorText = errorContainer.querySelector('p');
     
     if (errorContainer && errorText) {
+        // Remove blur effect for validation notifications
+        // Don't activate the overlay for simple validation errors
+        
         errorText.textContent = message;
         errorContainer.classList.add('show');
         
@@ -210,6 +306,14 @@ function showNotification(message) {
         setTimeout(() => {
             errorContainer.classList.remove('show');
         }, 5000);
+        
+        // Add click handler to close button
+        const closeBtn = errorContainer.querySelector('.close-error');
+        if (closeBtn) {
+            closeBtn.onclick = () => {
+                errorContainer.classList.remove('show');
+            };
+        }
     } else {
         // Fallback to alert if container not found
         alert(message);
@@ -220,6 +324,11 @@ function showNotification(message) {
 function showMessage(message, type = 'error') {
     // Remove any existing messages first
     removeMessages();
+    
+    // Create message overlay (for background blur)
+    const overlay = document.createElement('div');
+    overlay.className = 'message-overlay';
+    document.body.appendChild(overlay);
     
     // Create message element
     const messageEl = document.createElement('div');
@@ -245,22 +354,37 @@ function showMessage(message, type = 'error') {
         if (closeBtn) {
             closeBtn.onclick = () => {
                 messageEl.remove();
+                overlay.remove();
             };
         }
+        
+        // Also close on overlay click for error messages
+        overlay.addEventListener('click', () => {
+            messageEl.remove();
+            overlay.remove();
+        });
         
         // Auto-hide error messages after 5 seconds
         setTimeout(() => {
             if (document.body.contains(messageEl)) {
                 messageEl.remove();
+                overlay.remove();
             }
         }, 5000);
+    } else {
+        // For success messages, just let the redirect handle cleanup
     }
 }
 
 // Remove any existing messages
 function removeMessages() {
-    const existingMessages = document.querySelectorAll('.success-message, .error-message-center');
+    const existingMessages = document.querySelectorAll('.success-message, .error-message-center, .message-overlay');
     existingMessages.forEach(msg => msg.remove());
+    
+    // Also remove active class from notification overlay
+    if (notificationOverlay) {
+        notificationOverlay.classList.remove('active');
+    }
 }
 
 // Export functions for potential use in other modules

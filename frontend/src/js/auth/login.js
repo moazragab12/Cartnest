@@ -1,15 +1,11 @@
-import { loginUser } from './api.js';
-
-// Token storage keys
-const TOKEN_KEY = 'authToken';
-const TOKEN_EXPIRY_KEY = 'tokenExpiry';
-const USER_DATA_KEY = 'userData';
+import { authService, tokenManager } from '../core/api/index.js';
 
 // DOM Elements
 let loginForm;
 let loginUsername;
 let loginPassword;
 let rememberMeCheckbox;
+let notificationOverlay;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Get form elements
@@ -17,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loginUsername = document.getElementById('login-username');
     loginPassword = document.getElementById('login-password');
     rememberMeCheckbox = document.getElementById('remember-me');
+    notificationOverlay = document.getElementById('notification-overlay');
 
     // Attach event listener to the login form
     if (loginForm) {
@@ -55,34 +52,114 @@ async function handleLogin(event) {
         const password = loginPassword.value.trim();
         
         // Form validation
-        if (!username || !password) {
-            showNotification('Please enter both username and password.');
+        if (!username && !password) {
+            showNotification('Please enter your username and password.');
+            resetFormState();
+            return;
+        } else if (!username) {
+            showNotification('Please enter your username.');
+            resetFormState();
+            return;
+        } else if (!password) {
+            showNotification('Please enter your password.');
             resetFormState();
             return;
         }
         
-        // Call the login API
-        const response = await loginUser(username, password);
+        // Call the login API using our authService
+        const response = await authService.login(username, password);
         
-        // Store authentication data
-        saveAuthData(response, rememberMeCheckbox.checked);
+        // The token is already saved by the authService.login method
+        // But we still need to handle cookies for backward compatibility
+        saveAuthCookies(response, rememberMeCheckbox.checked);
         
-        // Show success message overlay (not affecting the form visibility)
-        showMessage('Login successful! Redirecting...', 'success');
+        // Show success message overlay with blur effect
+        showMessage('Login successful! Welcome back.', 'success');
         
         // Redirect after successful login (after showing success animation)
-        // Reduced timeout for faster redirection
         setTimeout(() => {
             window.location.href = '../../../index.html';
-        }, 800);
+        }, 1200);
         
     } catch (error) {
-        // Show error as a notification (not affecting the form visibility)
-        showMessage(error.message || 'Login failed. Please check your credentials.', 'error');
+        console.error('Login error:', error);
+        
+        // Convert technical error messages to user-friendly ones
+        let userFriendlyMessage = getUserFriendlyErrorMessage(error);
+        
+        // Show error as a notification with blur effect
+        showMessage(userFriendlyMessage, 'error');
     } finally {
         // Always reset form state
         resetFormState();
     }
+}
+
+// Convert technical error messages to user-friendly ones
+function getUserFriendlyErrorMessage(error) {
+    // Extract actual error message from different error object structures
+    let errorMessage = '';
+    
+    if (typeof error === 'string') {
+        errorMessage = error;
+    } else if (error.message) {
+        errorMessage = error.message;
+    } else if (error.error) {
+        errorMessage = error.error;
+    } else if (error.detail) {
+        errorMessage = error.detail;
+    } else if (error.response && error.response.data) {
+        errorMessage = typeof error.response.data === 'string' 
+            ? error.response.data 
+            : JSON.stringify(error.response.data);
+    } else {
+        errorMessage = JSON.stringify(error);
+    }
+    
+    // Common login error patterns and their simple user-friendly equivalents
+    if (errorMessage.includes('401') || 
+        errorMessage.includes('Unauthorized') || 
+        errorMessage.includes('invalid_credentials')) {
+        return 'Invalid username or password';
+    }
+    
+    if (errorMessage.includes('not found') || 
+        errorMessage.includes('404') || 
+        errorMessage.includes('user not found')) {
+        return 'Account not found';
+    }
+    
+    if (errorMessage.includes('inactive') || 
+        errorMessage.includes('disabled') || 
+        errorMessage.includes('locked')) {
+        return 'Account is locked';
+    }
+
+    if (errorMessage.includes('token') || 
+        errorMessage.includes('session')) {
+        return 'Session expired';
+    }
+    
+    if (errorMessage.includes('too many') || 
+        errorMessage.includes('rate limit') ||
+        errorMessage.includes('try again later')) {
+        return 'Too many attempts';
+    }
+    
+    if (errorMessage.includes('Failed to fetch') || 
+        errorMessage.includes('NetworkError') || 
+        errorMessage.includes('network') ||
+        errorMessage.includes('connection')) {
+        return 'Connection error';
+    }
+    
+    if (errorMessage.includes('already read') || 
+        errorMessage.includes('body stream')) {
+        return 'Login failed';
+    }
+    
+    // Default simple message
+    return 'Login failed';
 }
 
 // Reset form to interactive state
@@ -97,8 +174,8 @@ function resetFormState() {
     formBox.classList.remove('processing');
 }
 
-// Save authentication data to storage and set cookies
-function saveAuthData(authData, rememberMe) {
+// Save authentication cookies for backward compatibility
+function saveAuthCookies(authData, rememberMe) {
     // Debug the authData
     console.log('Login - Auth data to save:', authData);
     
@@ -119,17 +196,6 @@ function saveAuthData(authData, rememberMe) {
         expiryTime = expiryDate.getTime();
     }
     
-    const storage = rememberMe ? localStorage : sessionStorage;
-    
-    // Store in browser storage
-    storage.setItem(TOKEN_KEY, token);
-    storage.setItem(TOKEN_EXPIRY_KEY, expiryTime);
-    
-    // Optionally store user info if available
-    if (authData.user) {
-        storage.setItem(USER_DATA_KEY, JSON.stringify(authData.user));
-    }
-    
     // Set cookies using a more direct approach
     // Convert date to proper format for cookies
     const expires = expiryDate.toUTCString();
@@ -137,8 +203,11 @@ function saveAuthData(authData, rememberMe) {
     // Get current domain for cookie consistency
     const currentDomain = window.location.hostname;
     
+    // Use the same keys as tokenManager for consistency
+    const TOKEN_KEY = tokenManager.TOKEN_STORAGE.ACCESS_TOKEN;
+    const TOKEN_EXPIRY_KEY = tokenManager.TOKEN_STORAGE.TOKEN_EXPIRY;
+    
     // Set cookies with domain and path for maximum compatibility
-    // Don't specify domain for localhost to ensure it works in development
     if (currentDomain === 'localhost' || currentDomain === '127.0.0.1') {
         document.cookie = `${TOKEN_KEY}=${encodeURIComponent(token)}; expires=${expires}; path=/; SameSite=Lax`;
         document.cookie = `${TOKEN_EXPIRY_KEY}=${expiryTime}; expires=${expires}; path=/; SameSite=Lax`;
@@ -155,7 +224,15 @@ function saveAuthData(authData, rememberMe) {
 
 // Check if user is already authenticated
 function checkExistingAuth() {
-    // First check cookies
+    // First check if token exists in our token manager
+    const token = tokenManager.getAccessToken();
+    
+    if (token && !tokenManager.isTokenExpired()) {
+        // Valid token exists, redirect to homepage
+        window.location.href = '../../../index.html';
+    }
+    
+    // Backward compatibility - check cookies
     const cookies = document.cookie.split(';')
         .map(cookie => cookie.trim().split('='))
         .reduce((acc, [key, value]) => {
@@ -163,21 +240,20 @@ function checkExistingAuth() {
             return acc;
         }, {});
     
+    const TOKEN_KEY = tokenManager.TOKEN_STORAGE.ACCESS_TOKEN;
+    const TOKEN_EXPIRY_KEY = tokenManager.TOKEN_STORAGE.TOKEN_EXPIRY;
+    
     const cookieToken = cookies[TOKEN_KEY];
     const cookieExpiry = cookies[TOKEN_EXPIRY_KEY];
     
-    // Then check storage
-    const storageToken = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
-    const storageExpiry = localStorage.getItem(TOKEN_EXPIRY_KEY) || sessionStorage.getItem(TOKEN_EXPIRY_KEY);
-    
-    // Use cookie values or fall back to storage values
-    const token = cookieToken || storageToken;
-    const expiryTime = cookieExpiry || storageExpiry;
-    
-    if (token && expiryTime) {
+    if (cookieToken && cookieExpiry) {
         // Check if token is still valid (not expired)
         const now = new Date().getTime();
-        if (now < parseInt(expiryTime)) {
+        if (now < parseInt(cookieExpiry)) {
+            // Save token to our new token manager system
+            localStorage.setItem(TOKEN_KEY, cookieToken);
+            localStorage.setItem(TOKEN_EXPIRY_KEY, cookieExpiry);
+            
             // Valid token exists, redirect to homepage
             window.location.href = '../../../index.html';
         } else {
@@ -189,16 +265,15 @@ function checkExistingAuth() {
 
 // Clear all auth data (cookies and storage)
 function clearAuthData() {
-    // Clear localStorage and sessionStorage
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(TOKEN_EXPIRY_KEY);
-    localStorage.removeItem(USER_DATA_KEY);
-    sessionStorage.removeItem(TOKEN_KEY);
-    sessionStorage.removeItem(TOKEN_EXPIRY_KEY);
-    sessionStorage.removeItem(USER_DATA_KEY);
+    // Use our tokenManager to clear tokens
+    tokenManager.clearTokens();
     
+    // Also clear cookies for backward compatibility
     // Get current domain for cookie consistency
     const currentDomain = window.location.hostname;
+    
+    const TOKEN_KEY = tokenManager.TOKEN_STORAGE.ACCESS_TOKEN;
+    const TOKEN_EXPIRY_KEY = tokenManager.TOKEN_STORAGE.TOKEN_EXPIRY;
     
     // Clear cookies by setting expiration in the past
     // For localhost
@@ -220,6 +295,9 @@ function showNotification(message) {
     const errorText = errorContainer.querySelector('p');
     
     if (errorContainer && errorText) {
+        // Remove blur effect for validation notifications
+        // Don't activate the overlay for simple validation errors
+        
         errorText.textContent = message;
         errorContainer.classList.add('show');
         
@@ -227,6 +305,14 @@ function showNotification(message) {
         setTimeout(() => {
             errorContainer.classList.remove('show');
         }, 5000);
+        
+        // Add click handler to close button
+        const closeBtn = errorContainer.querySelector('.close-error');
+        if (closeBtn) {
+            closeBtn.onclick = () => {
+                errorContainer.classList.remove('show');
+            };
+        }
     } else {
         // Fallback to alert if container not found
         alert(message);
@@ -237,6 +323,11 @@ function showNotification(message) {
 function showMessage(message, type = 'error') {
     // Remove any existing messages first
     removeMessages();
+    
+    // Create message overlay (for background blur)
+    const overlay = document.createElement('div');
+    overlay.className = 'message-overlay';
+    document.body.appendChild(overlay);
     
     // Create message element
     const messageEl = document.createElement('div');
@@ -262,22 +353,37 @@ function showMessage(message, type = 'error') {
         if (closeBtn) {
             closeBtn.onclick = () => {
                 messageEl.remove();
+                overlay.remove();
             };
         }
+        
+        // Also close on overlay click for error messages
+        overlay.addEventListener('click', () => {
+            messageEl.remove();
+            overlay.remove();
+        });
         
         // Auto-hide error messages after 5 seconds
         setTimeout(() => {
             if (document.body.contains(messageEl)) {
                 messageEl.remove();
+                overlay.remove();
             }
         }, 5000);
+    } else {
+        // For success messages, just let the redirect handle cleanup
     }
 }
 
 // Remove any existing messages
 function removeMessages() {
-    const existingMessages = document.querySelectorAll('.success-message, .error-message-center');
+    const existingMessages = document.querySelectorAll('.success-message, .error-message-center, .message-overlay');
     existingMessages.forEach(msg => msg.remove());
+    
+    // Also remove active class from notification overlay
+    if (notificationOverlay) {
+        notificationOverlay.classList.remove('active');
+    }
 }
 
 // Export functions for potential use in other modules

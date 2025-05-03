@@ -1,12 +1,7 @@
 // Main authentication module - imports and initializes all auth functionality
 
-import { checkTokenStatus, refreshToken, getUserProfile } from './api.js';
+import { authService, tokenManager } from '../core/api/index.js';
 import { clearAuthData } from './login.js';
-
-// Token management constants
-const TOKEN_KEY = 'authToken';
-const TOKEN_EXPIRY_KEY = 'tokenExpiry';
-const USER_DATA_KEY = 'userData';
 
 // Helper function to parse cookies
 function getCookieValue(name) {
@@ -24,36 +19,55 @@ function getCookieValue(name) {
 const Auth = {
     // Check if user is authenticated
     isAuthenticated: () => {
-        // Check cookies first
+        // First check our token manager
+        const token = tokenManager.getAccessToken();
+        if (token && !tokenManager.isTokenExpired()) {
+            return true;
+        }
+        
+        // Backward compatibility - check cookies
+        const TOKEN_KEY = tokenManager.TOKEN_STORAGE.ACCESS_TOKEN;
+        const TOKEN_EXPIRY_KEY = tokenManager.TOKEN_STORAGE.TOKEN_EXPIRY;
+        const USER_DATA_KEY = 'userData'; // Legacy key
+        
         const cookieToken = getCookieValue(TOKEN_KEY);
         const cookieExpiry = getCookieValue(TOKEN_EXPIRY_KEY);
         
-        // Then check localStorage/sessionStorage
-        const storageToken = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
-        const storageExpiry = localStorage.getItem(TOKEN_EXPIRY_KEY) || sessionStorage.getItem(TOKEN_EXPIRY_KEY);
-        
-        // Use cookie values or fall back to storage values
-        const token = cookieToken || storageToken;
-        const expiryTime = cookieExpiry || storageExpiry;
-        
-        if (!token || !expiryTime) {
+        if (!cookieToken || !cookieExpiry) {
             return false;
         }
         
         // Check if token is expired
         const now = new Date().getTime();
-        return now < parseInt(expiryTime);
+        const isValid = now < parseInt(cookieExpiry);
+        
+        // If token is valid in cookies but not in our token manager,
+        // let's migrate it to our new system
+        if (isValid && !token) {
+            localStorage.setItem(TOKEN_KEY, cookieToken);
+            localStorage.setItem(TOKEN_EXPIRY_KEY, cookieExpiry);
+        }
+        
+        return isValid;
     },
     
     // Get the stored auth token
     getToken: () => {
-        // Check cookies first, then fall back to storage
-        return getCookieValue(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+        // Primarily use tokenManager, but fall back to cookies for backward compatibility
+        const token = tokenManager.getAccessToken();
+        
+        if (token) {
+            return token;
+        }
+        
+        const TOKEN_KEY = tokenManager.TOKEN_STORAGE.ACCESS_TOKEN;
+        return getCookieValue(TOKEN_KEY);
     },
     
     // Get user data
     getUserData: async () => {
         // Try to get from storage first
+        const USER_DATA_KEY = 'userData'; // Legacy key
         const userData = localStorage.getItem(USER_DATA_KEY) || sessionStorage.getItem(USER_DATA_KEY);
         
         if (userData) {
@@ -62,17 +76,13 @@ const Auth = {
         
         // If not in storage, fetch from API
         try {
-            const token = Auth.getToken();
-            if (!token) return null;
+            if (!Auth.isAuthenticated()) return null;
             
-            const user = await getUserProfile(token);
+            // Use the authService to get user profile
+            const user = await authService.getUserProfile();
             
             // Update storage with user data
-            if (localStorage.getItem(TOKEN_KEY)) {
-                localStorage.setItem(USER_DATA_KEY, JSON.stringify(user));
-            } else {
-                sessionStorage.setItem(USER_DATA_KEY, JSON.stringify(user));
-            }
+            localStorage.setItem(USER_DATA_KEY, JSON.stringify(user));
             
             return user;
         } catch (error) {
@@ -84,40 +94,34 @@ const Auth = {
     // Check if token needs refresh and refresh if needed
     checkAndRefreshToken: async () => {
         try {
-            const token = Auth.getToken();
-            if (!token) return false;
-            
-            // Check token status
-            const statusResult = await checkTokenStatus(token);
-            
-            if (statusResult.about_to_expire) {
-                // Token is about to expire, refresh it
-                const refreshResult = await refreshToken(token);
-                
-                // Calculate expiry date for cookies
-                const expiryDate = new Date(refreshResult.expires_at);
-                
-                // Update token in storage
-                if (localStorage.getItem(TOKEN_KEY)) {
-                    localStorage.setItem(TOKEN_KEY, refreshResult.access_token);
-                    localStorage.setItem(TOKEN_EXPIRY_KEY, new Date(refreshResult.expires_at).getTime());
-                    
-                    // Also update cookies with expiration
-                    document.cookie = `${TOKEN_KEY}=${refreshResult.access_token}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
-                    document.cookie = `${TOKEN_EXPIRY_KEY}=${expiryDate.getTime()}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
-                } else {
-                    sessionStorage.setItem(TOKEN_KEY, refreshResult.access_token);
-                    sessionStorage.setItem(TOKEN_EXPIRY_KEY, new Date(refreshResult.expires_at).getTime());
-                    
-                    // Also update cookies (session cookies without expiration)
-                    document.cookie = `${TOKEN_KEY}=${refreshResult.access_token}; path=/; SameSite=Strict`;
-                    document.cookie = `${TOKEN_EXPIRY_KEY}=${expiryDate.getTime()}; path=/; SameSite=Strict`;
-                }
-                
-                return true;
+            // Use tokenManager to check if token is expiring
+            if (!tokenManager.getAccessToken()) {
+                return false;
             }
             
-            return statusResult.valid;
+            // If token is expired or about to expire, refresh it
+            if (tokenManager.isTokenExpired(300)) { // 5 minutes buffer
+                const refreshed = await tokenManager.refreshAccessToken();
+                
+                // Also update cookies for backward compatibility
+                if (refreshed) {
+                    const token = tokenManager.getAccessToken();
+                    const expiryTime = localStorage.getItem(tokenManager.TOKEN_STORAGE.TOKEN_EXPIRY);
+                    const expiryDate = new Date(parseInt(expiryTime));
+                    
+                    // Set cookies
+                    const TOKEN_KEY = tokenManager.TOKEN_STORAGE.ACCESS_TOKEN;
+                    const TOKEN_EXPIRY_KEY = tokenManager.TOKEN_STORAGE.TOKEN_EXPIRY;
+                    
+                    document.cookie = `${TOKEN_KEY}=${token}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Lax`;
+                    document.cookie = `${TOKEN_EXPIRY_KEY}=${expiryTime}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Lax`;
+                }
+                
+                return refreshed;
+            }
+            
+            // Validate token with backend
+            return await tokenManager.validateToken();
         } catch (error) {
             console.error('Error checking/refreshing token:', error);
             return false;
@@ -126,7 +130,10 @@ const Auth = {
     
     // Logout the current user
     logout: () => {
-        // Use the centralized function to clear all auth data
+        // Use the authService to logout
+        authService.logout();
+        
+        // Also use the legacy function to clear cookies
         clearAuthData();
         
         // Redirect to login page
