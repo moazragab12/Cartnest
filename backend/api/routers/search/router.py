@@ -124,13 +124,12 @@ def search_transactions(
 def search_users(
     username: Optional[str] = Query(None, description="Search by username"),
     email: Optional[str] = Query(None, description="Search by email"),
-    role: Optional[str] = Query(None, description="Search by role"),
     min_cash_balance: Optional[float] = Query(None, description="Minimum cash balance"),
     max_cash_balance: Optional[float] = Query(None, description="Maximum cash balance"),
     db: Session = Depends(get_db)
 ):
     """
-    Search users based on username, email, role, and cash balance range.
+    Search users based on username, email and cash balance range.
     """
     query = db.query(User)
 
