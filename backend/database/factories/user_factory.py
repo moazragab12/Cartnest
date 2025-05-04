@@ -3,6 +3,15 @@ from api.models.user.model import User, UserRole
 import random
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
+import warnings
+import logging
+
+# Set up a null handler to suppress warnings from passlib
+logging.getLogger("passlib").setLevel(logging.ERROR)
+
+# Suppress all warnings related to bcrypt version
+warnings.filterwarnings("ignore", ".*error reading bcrypt version.*")
+warnings.filterwarnings("ignore", ".*about__.*")
 
 fake = Faker()
 
