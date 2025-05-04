@@ -142,8 +142,8 @@ const Auth = {
     // Also use the legacy function to clear cookies
     clearAuthData();
 
-    // Redirect to login page with correct path
-    window.location.href = "../pages/Auth/auth.html";
+    // Redirect to login page with absolute path
+    window.location.href = "/frontend/src/pages/auth/auth.html";
   },
 };
 
@@ -153,10 +153,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentPath = window.location.pathname;
 
   // This will only run on non-auth pages
-  if (!currentPath.includes("/pages/Auth/")) {
+  if (!currentPath.includes("/pages/auth/") && !currentPath.includes("/pages/Auth/")) {
     if (!Auth.isAuthenticated()) {
-      // Redirect to login page if not authenticated
-      window.location.href = "../pages/Auth/auth.html";
+      // Redirect to login page if not authenticated using absolute path
+      window.location.href = "/frontend/src/pages/auth/auth.html";
     } else {
       // If authenticated, periodically check if token needs refresh
       setInterval(Auth.checkAndRefreshToken, 300000); // Check every 5 minutes

@@ -78,7 +78,8 @@ async function handleLogin(event) {
 
     // Redirect after successful login (after showing success animation)
     setTimeout(() => {
-      window.location.href = "../../index.html"; // Redirect to home page
+      // Use absolute path instead of relative path
+      window.location.href = "/frontend/index.html"; 
     }, 1200);
   } catch (error) {
     console.error("Login error:", error);
@@ -243,8 +244,8 @@ function checkExistingAuth() {
   const token = tokenManager.getAccessToken();
 
   if (token && !tokenManager.isTokenExpired()) {
-    // Valid token exists, redirect to homepage
-    window.location.href = "../../index.html";
+    // Valid token exists, redirect to homepage using absolute path
+    window.location.href = "/frontend/index.html";
   }
 
   // Backward compatibility - check cookies
@@ -270,8 +271,8 @@ function checkExistingAuth() {
       localStorage.setItem(TOKEN_KEY, cookieToken);
       localStorage.setItem(TOKEN_EXPIRY_KEY, cookieExpiry);
 
-      // Valid token exists, redirect to homepage
-      window.location.href = "../../index.html";
+      // Valid token exists, redirect to homepage using absolute path
+      window.location.href = "/frontend/index.html";
     } else {
       // Token expired, clear it
       clearAuthData();

@@ -119,7 +119,8 @@ async function handleRegistration(event) {
 
     // Redirect after successful registration (after showing success animation)
     setTimeout(() => {
-      window.location.href = "../../index.html";
+      // Use absolute path instead of relative path
+      window.location.href = "/frontend/index.html";
     }, 1200);
   } catch (error) {
     console.error("Registration error details:", error);

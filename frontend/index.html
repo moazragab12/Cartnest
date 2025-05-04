@@ -16,6 +16,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
   <!-- Custom JS -->
   <script src="../../src/js/index/script.js" defer></script>
+  <!-- Auth Header JS -->
+  <script src="./src/js/index/auth-header.js" defer></script>
 </head>
 
 <body>
@@ -37,12 +39,12 @@
       <input type="text" placeholder="Search essentials, groceries and more...">
     </div>
     <div class="header-links">
-      <a href="./src/pages/Sign_in.html" class="sign-in-link">
+      <a href="./src/pages/auth/auth.html" class="sign-in-link" id="auth-link">
         <img src="./public/resources/images/svg/user-icon.svg" alt="User" class="icon-svg">
-        <span>Sign Up/Sign In</span>
+        <span id="auth-text">Sign Up/Sign In</span>
       </a>
       <span class="header-divider">|</span>
-      <a href="#" class="cart-link">
+      <a href="./src/pages/cart/cart.html" class="cart-link">
         <img src="./public/resources/images/svg/cart-icon.svg" alt="Cart" class="icon-svg">
         <span>Cart</span>
       </a>

@@ -1,23 +1,20 @@
-let Orders = [
+const Orders = [
     {
-        transaction_id: 'ORD-85743',
-        transaction_time: 'May 1, 2025',
-        item_id: 'HTML crash course',
-        total_amount: '$999.00',
+        productName: 'HTML crash course',
+        productNumber: '85743',
+        paymentStatus: 'Due',
         status: 'Pending'
     },
     {
-        transaction_id: 'ORD-97245',
-        transaction_time: 'Apr 28, 2025',
-        item_id: 'CSS Full Course',
-        total_amount: '$229.99',
+        productName: 'CSS Full Course',
+        productNumber: '97245',
+        paymentStatus: 'Refunded',
         status: 'Declined'
     },
     {
-        transaction_id: 'ORD-36452',
-        transaction_time: 'Apr 20, 2025',
-        item_id: 'JavaScript Tutorial',
-        total_amount: '$129.50',
+        productName: 'JavaScript Tutorial',
+        productNumber: '36452',
+        paymentStatus: 'Paid',
         status: 'Active'
     },
 ]

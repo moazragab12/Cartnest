@@ -1,10 +1,9 @@
-import { getTransactions } from '../core/api/services/transactionsService.js';
 // Tab navigation
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', function() {
   // Sidebar navigation
   const navItems = document.querySelectorAll('.nav-item');
   const contentSections = document.querySelectorAll('.content-section');
-  Orders = await getTransactions();
+  
   navItems.forEach(item => {
     item.addEventListener('click', function() {
       const target = this.getAttribute('data-target');
