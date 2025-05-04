@@ -24,7 +24,8 @@ from api.routers.auth.router import auth_router
 from api.routers.profile_management.router import router as profile_router
 from api.routers.transactions.router import router as transaction_router
 from api.routers.search.router import search_router
-from api.routers.products.router import products_router
+from api.routers.items.router import router as items_router
+from api.routers.dashboard.router import router as dashboard_router
 
 # Create all tables at startup
 Base.metadata.create_all(bind=engine)
@@ -70,20 +71,17 @@ async def read_root():
         "message": "Welcome to the Market Place API!",
         "api_version": f"v{version[0]}",
         "endpoints": {
-            # Public API endpoints (no authentication required)
-            "products": {
-                "get_all_products": "/api/v0/products/",
-                "get_by_category": "/api/v0/products/category/{category}",
-                "get_best_sellers": "/api/v0/products/best-sellers",
-                "get_featured": "/api/v0/products/featured",
-                "get_categories": "/api/v0/products/categories",
-                "get_product": "/api/v0/products/{item_id}"
-            },
             "search": {
                 "search_items": "/api/v0/search/items/search_item",
                 "get_item": "/api/v0/search/items/{item_id}"
             },
-            # Authentication endpoints
+            "items": {
+                "list_all": "/api/v0/items/",
+                "featured": "/api/v0/items/featured",
+                "recent": "/api/v0/items/recent",
+                "categories": "/api/v0/items/categories",
+                "by_category": "/api/v0/items/categories/{category}"
+            },
             "auth": {
                 "register": "/api/v0/auth/register",
                 "login": "/api/v0/auth/login",
@@ -91,37 +89,38 @@ async def read_root():
                 "profile": "/api/v0/auth/profile",
                 "token_status": "/api/v0/auth/token-status"
             },
-            # Protected endpoints (require authentication)
-            "profile": {
-                "overview": "/api/v0/overview",
-                "items": {
-                    "create_item": "/api/v0/items",
-                    "get_items": "/api/v0/items",
-                    "get_item": "/api/v0/items/{item_id}",
-                    "update_item": "/api/v0/items/{item_id}",
-                    "delete_item": "/api/v0/items/{item_id}"
-                },
-                "wallet": {
-                    "deposit": "/api/v0/wallet/deposit",
-                    "balance": "/api/v0/wallet/balance",
-                    "transactions": "/api/v0/wallet/transactions"
-                }
-            },
             "transactions": {
                 "purchase": "/api/v0/transactions/purchase",
                 "list_transactions": "/api/v0/transactions/",
                 "get_transaction": "/api/v0/transactions/{transaction_id}",
                 "transfer_balance": "/api/v0/transactions/transfer"
+            },
+            "profile": {
+                "overview": "/api/v0/profile/overview",
+                "items": {
+                    "create_item": "/api/v0/profile/items",
+                    "get_items": "/api/v0/profile/items",
+                    "get_item": "/api/v0/profile/items/{item_id}",
+                    "update_item": "/api/v0/profile/items/{item_id}",
+                    "delete_item": "/api/v0/profile/items/{item_id}"
+                },
+                "wallet": {
+                    "deposit": "/api/v0/profile/wallet/deposit",
+                    "balance": "/api/v0/profile/wallet/balance",
+                    "transactions": "/api/v0/profile/wallet/transactions"
+                }
             }
         }
     }
 
 # Include routers with consistent organization
+
 # Public API endpoints (no authentication required)
-app.include_router(products_router)  # Public product endpoints
-app.include_router(search_router)    # Public search endpoints
+app.include_router(items_router, prefix=f"{api_prefix}/items", tags=["Items"])
+app.include_router(search_router , prefix=f"{api_prefix}/search", tags=["Search"])
 
 # Authentication and protected endpoints
 app.include_router(auth_router, prefix=f"{api_prefix}/auth", tags=["Authentication"])
-app.include_router(profile_router, prefix=f"{api_prefix}", tags=["Profile"])
+app.include_router(profile_router, prefix=f"{api_prefix}/profile", tags=["Profile"])
 app.include_router(transaction_router, prefix=f"{api_prefix}/transactions", tags=["Transactions"])
+app.include_router(dashboard_router, prefix=f"{api_prefix}/dashboard", tags=["Dashboard"])

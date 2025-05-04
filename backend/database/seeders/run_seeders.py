@@ -103,8 +103,8 @@ async def main():
     # 3. Create items (requires users as sellers)
     items = await seed_items(40, users)
     
-    # 4. Create deposits (requires users) - one deposit per user
-    deposits = await seed_deposits(users)
+    # 4. Create deposits (requires users) - Fixed: explicitly pass count parameter
+    deposits = await seed_deposits(count=20, users=users)
     
     # 5. Finally, create transactions (requires users and items)
     transactions = await seed_transactions(20, users, items)

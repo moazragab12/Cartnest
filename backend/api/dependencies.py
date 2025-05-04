@@ -13,7 +13,7 @@ sys.path.append(ROOT_DIR)
 from api.db import get_db
 from api.models.user.model import User
 from api.models.user_token.model import UserToken
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
 # Load environment variables from the .env file in the project root
@@ -36,25 +36,33 @@ def verify_password(plain_password: str, hashed_password: str):
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
-    to_encode.update({"exp": expire})
+    current_time = datetime.now(timezone.utc)
+    # Use exactly 30 minutes for token expiration
+    expire = current_time + timedelta(minutes=30)
+    # Store expiration as a UTC timestamp to avoid timezone confusion
+    to_encode.update({"exp": expire.timestamp()})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM), expire
 
 def store_token(db: Session, user_id: int, token: str, expires_at: datetime):
+    """Store or update a user token with proper timezone handling"""
     # Check if a token already exists for this user
     existing_token = db.query(UserToken).filter(UserToken.user_id == user_id).first()
     
+    # Ensure the datetime objects include timezone info
+    expires_at = expires_at.replace(tzinfo=timezone.utc) if expires_at.tzinfo is None else expires_at
+    
     if existing_token:
-        # Update existing token
+        # Update existing token and expiration time, but preserve created_at
         existing_token.token = token
         existing_token.expires_at = expires_at
-        existing_token.updated_at = datetime.utcnow()
+        # updated_at will be automatically set by SQLAlchemy's onupdate trigger
     else:
         # Create new token
         existing_token = UserToken(
             user_id=user_id,
             token=token,
             expires_at=expires_at
+            # created_at and updated_at will be automatically set
         )
         db.add(existing_token)
         
@@ -63,16 +71,42 @@ def store_token(db: Session, user_id: int, token: str, expires_at: datetime):
     return existing_token
 
 def get_valid_token(db: Session, user_id: int):
+    """Get a valid token for a user with proper timezone handling"""
+    current_time = datetime.now(timezone.utc)
     token = db.query(UserToken).filter(
         UserToken.user_id == user_id,
-        UserToken.expires_at > datetime.utcnow()
+        UserToken.expires_at > current_time
     ).first()
     return token
 
 def refresh_user_token(db: Session, user: User):
     """Creates a new token for an existing user and updates it in the database"""
     token, expires_at = create_access_token(data={"sub": user.username})
-    store_token(db, user.user_id, token, expires_at)
+    
+    # Update directly in the database to ensure changes are saved
+    existing_token = db.query(UserToken).filter(UserToken.user_id == user.user_id).first()
+    
+    # Ensure timezone awareness
+    current_time = datetime.now(timezone.utc)
+    expires_at = expires_at.replace(tzinfo=timezone.utc) if expires_at.tzinfo is None else expires_at
+    
+    if existing_token:
+        existing_token.token = token
+        existing_token.expires_at = expires_at
+        existing_token.updated_at = current_time
+    else:
+        # Create new token if it doesn't exist
+        existing_token = UserToken(
+            user_id=user.user_id,
+            token=token,
+            expires_at=expires_at,
+            created_at=current_time,
+            updated_at=current_time
+        )
+        db.add(existing_token)
+    
+    db.commit()
+    db.refresh(existing_token)
     return token
 
 def authenticate_user(db: Session, username: str, password: str):
@@ -121,8 +155,10 @@ def is_token_about_to_expire(token: str, threshold_minutes: int = 5):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         exp = payload.get("exp")
         if exp:
-            expiration = datetime.fromtimestamp(exp)
-            about_to_expire = (expiration - datetime.utcnow()).total_seconds() < (threshold_minutes * 60)
+            # Convert timestamp to timezone-aware datetime
+            expiration = datetime.fromtimestamp(exp, tz=timezone.utc)
+            current_time = datetime.now(timezone.utc)
+            about_to_expire = (expiration - current_time).total_seconds() < (threshold_minutes * 60)
             return about_to_expire
         return True
     except JWTError:

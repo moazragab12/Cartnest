@@ -20,8 +20,8 @@ from api.models.item.model import Item, item_status
 from pydantic import BaseModel
 
 search_router = APIRouter(
-    prefix="/api/v0/search",  # e.g., /api/v0/search
     tags=["Search"],  # Tags for OpenAPI documentation  
+    responses={404: {"description": "Not found"}}  # Default response for 404 errors
 )
 
  

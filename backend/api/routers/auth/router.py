@@ -5,7 +5,7 @@ from pydantic import BaseModel, EmailStr
 import sys
 import os
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 # Get the absolute path to the project root
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent
@@ -19,7 +19,8 @@ from api.dependencies import (
     get_current_user, 
     refresh_user_token, 
     get_valid_token,
-    is_token_about_to_expire
+    is_token_about_to_expire,
+    ACCESS_TOKEN_EXPIRE_MINUTES
 )
 from api.models.user.model import User, UserRole
 from api.models.user_token.model import UserToken
@@ -106,7 +107,29 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
         )
     user, token = auth_result
     
-    # Get token expiration time from database
+    # Calculate new expiration time
+    expires_at = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    
+    # Update or create the token - updated_at will be automatically updated by SQLAlchemy
+    existing_token = db.query(UserToken).filter(UserToken.user_id == user.user_id).first()
+    if existing_token:
+        # Update token and expiration while preserving the created_at timestamp
+        existing_token.token = token
+        existing_token.expires_at = expires_at
+        # updated_at will be automatically set by SQLAlchemy's onupdate trigger
+    else:
+        # Create new token if it doesn't exist
+        user_token = UserToken(
+            user_id=user.user_id,
+            token=token,
+            expires_at=expires_at
+            # created_at and updated_at will be automatically set
+        )
+        db.add(user_token)
+    
+    db.commit()
+    
+    # Get token from database to return updated information
     stored_token = get_valid_token(db, user.user_id)
     if not stored_token:
         raise HTTPException(status_code=500, detail="Failed to create token")
@@ -118,7 +141,30 @@ def refresh_token(current_user: User = Depends(get_current_user), db: Session = 
     """
     Generate a new authentication token, refreshing the existing one
     """
-    token = refresh_user_token(db, current_user)
+    # Generate new token
+    token, expires_at = create_access_token(data={"sub": current_user.username})
+    
+    # Ensure timezone awareness for expires_at
+    expires_at = expires_at.replace(tzinfo=timezone.utc) if expires_at.tzinfo is None else expires_at
+    
+    # Update the token in the database
+    existing_token = db.query(UserToken).filter(UserToken.user_id == current_user.user_id).first()
+    if existing_token:
+        # Update token and expiration time only, keep created_at as is
+        existing_token.token = token
+        existing_token.expires_at = expires_at
+        # updated_at will be automatically set by SQLAlchemy's onupdate trigger
+    else:
+        # Create new token if it doesn't exist (shouldn't happen normally)
+        user_token = UserToken(
+            user_id=current_user.user_id,
+            token=token,
+            expires_at=expires_at
+            # created_at and updated_at will be automatically set
+        )
+        db.add(user_token)
+    
+    db.commit()
     
     # Get updated token from database
     stored_token = get_valid_token(db, current_user.user_id)
@@ -126,13 +172,6 @@ def refresh_token(current_user: User = Depends(get_current_user), db: Session = 
         raise HTTPException(status_code=500, detail="Failed to refresh token")
     
     return {"access_token": token, "token_type": "bearer", "expires_at": stored_token.expires_at}
-
-@auth_router.get("/profile", response_model=UserOut, tags=["Authentication"])
-def get_user_profile(current_user: User = Depends(get_current_user)):
-    """
-    Get the current authenticated user's profile information
-    """
-    return current_user
 
 @auth_router.get("/token-status", tags=["Authentication"])
 def check_token_status(current_user: User = Depends(get_current_user), token: str = Depends(OAuth2PasswordRequestForm), db: Session = Depends(get_db)):
