@@ -5,7 +5,7 @@ from typing import Optional
 from datetime import datetime
 
 
-class ItemStatus(str, Enum):
+class item_status(str, Enum):
     for_sale = "for_sale"
     sold = "sold"
     removed = "removed"
@@ -78,8 +78,8 @@ class Item(SQLModel, table=True):
     )
     
     # Status, not null
-    status: ItemStatus = Field(
-        default = ItemStatus.for_sale,
+    status: item_status = Field(
+        default = item_status.for_sale,
         nullable = False
     )
     

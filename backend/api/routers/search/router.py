@@ -14,7 +14,7 @@ from api.dependencies import get_db, get_password_hash, authenticate_user, creat
 from api.models.user.model import User, UserRole
 
 from api.dependencies import get_db, get_current_user
-from api.models.item.model import Item, ItemStatus
+from api.models.item.model import Item, item_status
 
 
 from pydantic import BaseModel
@@ -46,7 +46,7 @@ def search_items(
     category: Optional[str] = Query(None, description="Filter by category"),
     min_price: Optional[float] = Query(None, description="Minimum price"),
     max_price: Optional[float] = Query(None, description="Maximum price"),
-    status: Optional[ItemStatus] = Query(ItemStatus.for_sale, description="Filter by status"),
+    status: Optional[item_status] = Query(item_status.for_sale, description="Filter by status"),
     seller_id: Optional[int] = Query(None, description="Filter by seller ID"),
     db: Session = Depends(get_db)
 ):

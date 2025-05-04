@@ -13,7 +13,7 @@ sys.path.append(str(ROOT_DIR))
 from api.dependencies import get_current_user
 from api.db import get_db
 from api.models.user.model import User
-from api.models.item.model import Item, ItemStatus
+from api.models.item.model import Item, item_status
 from api.models.transaction.model import Transaction
 
 # Import schemas
@@ -136,7 +136,7 @@ async def update_item_endpoint(
         )
         
     # Check if the item is already sold
-    if db_item.status == ItemStatus.sold:
+    if db_item.status == item_status.sold:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cannot update a sold item"
@@ -169,7 +169,7 @@ async def delete_item_endpoint(
         )
         
     # Check if the item is already sold
-    if db_item.status == ItemStatus.sold:
+    if db_item.status == item_status.sold:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cannot delete a sold item"

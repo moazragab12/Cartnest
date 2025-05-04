@@ -11,7 +11,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.append(str(ROOT_DIR))
 
 from api.models.user.model import User
-from api.models.item.model import Item, ItemStatus
+from api.models.item.model import Item, item_status
 from api.models.transaction.model import Transaction
 from api.models.deposit.model import Deposit
 
@@ -39,7 +39,7 @@ def create_item(db: Session, item_data: ItemCreate, seller_id: int) -> Item:
         price=item_data.price,
         quantity=item_data.quantity if item_data.quantity is not None else 1,
         seller_user_id=seller_id,
-        status=ItemStatus.for_sale
+        status=item_status.for_sale
     )
     db.add(db_item)
     db.commit()
@@ -95,7 +95,7 @@ def get_items_for_sale_by_seller(db: Session, seller_id: int) -> List[Item]:
     """
     return db.exec(
         select(Item)
-        .where(and_(Item.seller_user_id == seller_id, Item.status == ItemStatus.for_sale))
+        .where(and_(Item.seller_user_id == seller_id, Item.status == item_status.for_sale))
     ).all()
 
 
@@ -112,7 +112,7 @@ def get_sold_items_by_seller(db: Session, seller_id: int) -> List[Item]:
     """
     return db.exec(
         select(Item)
-        .where(and_(Item.seller_user_id == seller_id, Item.status == ItemStatus.sold))
+        .where(and_(Item.seller_user_id == seller_id, Item.status == item_status.sold))
     ).all()
 
 
@@ -184,10 +184,10 @@ def delete_item(db: Session, item_id: int, seller_id: int) -> bool:
         .where(and_(Item.item_id == item_id, Item.seller_user_id == seller_id))
     ).first()
     
-    if not db_item or db_item.status == ItemStatus.sold:
+    if not db_item or db_item.status == item_status.sold:
         return False
         
-    db_item.status = ItemStatus.removed
+    db_item.status = item_status.removed
     db_item.updated_at = datetime.utcnow()
     
     db.add(db_item)

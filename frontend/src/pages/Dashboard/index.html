@@ -249,72 +249,30 @@
             </div>
           </div>
 
-          <!-- Recent Orders -->
-          <div class="dashboard-card">
-            <div class="card-header">
-              <h3 class="card-title">
-                <i class="fas fa-shopping-cart"></i> Recent Orders
-              </h3>
-              <a
-                href="#"
-                class="btn btn-outline"
-                onclick="showTab('orders-tab')"
-                >View All</a
-              >
-            </div>
-            <div class="card-content">
-              <table class="orders-table">
-                <thead>
-                  <tr>
-                    <th>Order ID</th>
-                    <th>Date</th>
-                    <th>Items</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="order-id">#ORD-7352</td>
-                    <td>May 1, 2025</td>
-                    <td>iPhone 15 Pro Max</td>
-                    <td>$999.00</td>
-                    <td>
-                      <span class="order-status status-delivered"
-                        >Delivered</span
-                      >
-                    </td>
-                    <td><a href="#" class="order-action">View</a></td>
-                  </tr>
-                  <tr>
-                    <td class="order-id">#ORD-7320</td>
-                    <td>Apr 28, 2025</td>
-                    <td>Smart Watch, Hoodie</td>
-                    <td>$229.99</td>
-                    <td>
-                      <span class="order-status status-processing"
-                        >Processing</span
-                      >
-                    </td>
-                    <td><a href="#" class="order-action">Track</a></td>
-                  </tr>
-                  <tr>
-                    <td class="order-id">#ORD-7291</td>
-                    <td>Apr 20, 2025</td>
-                    <td>Leather Bag</td>
-                    <td>$129.50</td>
-                    <td>
-                      <span class="order-status status-cancelled"
-                        >Cancelled</span
-                      >
-                    </td>
-                    <td><a href="#" class="order-action">View</a></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        <!-- Recent Orders -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <i class="fas fa-shopping-cart"></i> Recent Orders
+            </h3>
+            <a href="#" class="btn btn-outline" onclick="showTab('orders-tab')">View All</a>
           </div>
+          <div class="card-content">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>Transaction ID</th>
+                  <th>Date</th>
+                  <th>Item ID</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
 
           <!-- Recent Activity -->
           <div class="dashboard-card">
@@ -526,95 +484,80 @@
           </div>
         </div>
 
-        <!-- Wishlist Tab -->
-        <div class="content-section" id="wishlist-tab">
-          <div class="dashboard-header">
-            <h2 class="dashboard-title">My Wishlist</h2>
-          </div>
+      <!-- Wishlist Tab -->
+      <!-- <div class="content-section" id="wishlist-tab">
+        <div class="dashboard-header">
+          <h2 class="dashboard-title">My Wishlist</h2>
+        </div>
 
-          <div class="wishlist-grid">
-            <div class="wishlist-item">
-              <div class="wishlist-image">
-                <img
-                  src="../../public/resources/images/iphone.png"
-                  alt="iPhone"
-                />
-              </div>
-              <div class="wishlist-details">
-                <h4 class="wishlist-title">iPhone 15 Pro 256GB</h4>
-                <div class="wishlist-price">$1,099.00</div>
-                <div class="wishlist-actions">
-                  <div class="wishlist-btn add-to-cart">Add to Cart</div>
-                  <div class="wishlist-btn remove-wishlist">Remove</div>
-                </div>
+        <div class="wishlist-grid">
+          <div class="wishlist-item">
+            <div class="wishlist-image">
+              <img src="../../public/resources/images/iphone.png" alt="iPhone">
+            </div>
+            <div class="wishlist-details">
+              <h4 class="wishlist-title">iPhone 15 Pro 256GB</h4>
+              <div class="wishlist-price">$1,099.00</div>
+              <div class="wishlist-actions">
+                <div class="wishlist-btn add-to-cart">Add to Cart</div>
+                <div class="wishlist-btn remove-wishlist">Remove</div>
               </div>
             </div>
-            <div class="wishlist-item">
-              <div class="wishlist-image">
-                <img
-                  src="../../public/resources/images/watch.png"
-                  alt="Smart Watch"
-                />
-              </div>
-              <div class="wishlist-details">
-                <h4 class="wishlist-title">Smart Watch Series 9</h4>
-                <div class="wishlist-price">$399.00</div>
-                <div class="wishlist-actions">
-                  <div class="wishlist-btn add-to-cart">Add to Cart</div>
-                  <div class="wishlist-btn remove-wishlist">Remove</div>
-                </div>
+          </div>
+          <div class="wishlist-item">
+            <div class="wishlist-image">
+              <img src="../../public/resources/images/watch.png" alt="Smart Watch">
+            </div>
+            <div class="wishlist-details">
+              <h4 class="wishlist-title">Smart Watch Series 9</h4>
+              <div class="wishlist-price">$399.00</div>
+              <div class="wishlist-actions">
+                <div class="wishlist-btn add-to-cart">Add to Cart</div>
+                <div class="wishlist-btn remove-wishlist">Remove</div>
               </div>
             </div>
-            <div class="wishlist-item">
-              <div class="wishlist-image">
-                <img
-                  src="../../public/resources/images/Hoodie.jpg"
-                  alt="Classic Hoodie"
-                />
-              </div>
-              <div class="wishlist-details">
-                <h4 class="wishlist-title">Classic Cotton Hoodie</h4>
-                <div class="wishlist-price">$59.99</div>
-                <div class="wishlist-actions">
-                  <div class="wishlist-btn add-to-cart">Add to Cart</div>
-                  <div class="wishlist-btn remove-wishlist">Remove</div>
-                </div>
+          </div>
+          <div class="wishlist-item">
+            <div class="wishlist-image">
+              <img src="../../public/resources/images/Hoodie.jpg" alt="Classic Hoodie">
+            </div>
+            <div class="wishlist-details">
+              <h4 class="wishlist-title">Classic Cotton Hoodie</h4>
+              <div class="wishlist-price">$59.99</div>
+              <div class="wishlist-actions">
+                <div class="wishlist-btn add-to-cart">Add to Cart</div>
+                <div class="wishlist-btn remove-wishlist">Remove</div>
               </div>
             </div>
-            <div class="wishlist-item">
-              <div class="wishlist-image">
-                <img
-                  src="../../public/resources/images/bag1.jpg"
-                  alt="Leather Bag"
-                />
-              </div>
-              <div class="wishlist-details">
-                <h4 class="wishlist-title">Premium Leather Bag</h4>
-                <div class="wishlist-price">$129.50</div>
-                <div class="wishlist-actions">
-                  <div class="wishlist-btn add-to-cart">Add to Cart</div>
-                  <div class="wishlist-btn remove-wishlist">Remove</div>
-                </div>
+          </div>
+          <div class="wishlist-item">
+            <div class="wishlist-image">
+              <img src="../../public/resources/images/bag1.jpg" alt="Leather Bag">
+            </div>
+            <div class="wishlist-details">
+              <h4 class="wishlist-title">Premium Leather Bag</h4>
+              <div class="wishlist-price">$129.50</div>
+              <div class="wishlist-actions">
+                <div class="wishlist-btn add-to-cart">Add to Cart</div>
+                <div class="wishlist-btn remove-wishlist">Remove</div>
               </div>
             </div>
-            <div class="wishlist-item">
-              <div class="wishlist-image">
-                <img
-                  src="../../public/resources/images/tshirt.jpg"
-                  alt="Cotton T-Shirt"
-                />
-              </div>
-              <div class="wishlist-details">
-                <h4 class="wishlist-title">Organic Cotton T-Shirt</h4>
-                <div class="wishlist-price">$24.99</div>
-                <div class="wishlist-actions">
-                  <div class="wishlist-btn add-to-cart">Add to Cart</div>
-                  <div class="wishlist-btn remove-wishlist">Remove</div>
-                </div>
+          </div>
+          <div class="wishlist-item">
+            <div class="wishlist-image">
+              <img src="../../public/resources/images/tshirt.jpg" alt="Cotton T-Shirt">
+            </div>
+            <div class="wishlist-details">
+              <h4 class="wishlist-title">Organic Cotton T-Shirt</h4>
+              <div class="wishlist-price">$24.99</div>
+              <div class="wishlist-actions">
+                <div class="wishlist-btn add-to-cart">Add to Cart</div>
+                <div class="wishlist-btn remove-wishlist">Remove</div>
               </div>
             </div>
           </div>
         </div>
+      </div> -->
 
         <!-- Seller Dashboard Tab -->
         <div class="content-section" id="seller-dashboard-tab">
@@ -2306,8 +2249,8 @@
       </div>
     </div>
 
-    <script src="../../js/dashboard/script.js"></script>
-    <script src="../../js/dashboard/index.js"></script>
-    <script src="../../js/dashboard/orders.js"></script>
-  </body>
+  <script src="../../js/dashboard/orders.js"></script>
+  <script type="module" src="../../js/dashboard/script.js"></script>
+  <script src="../../js/dashboard/index.js"></script>
+</body>
 </html>

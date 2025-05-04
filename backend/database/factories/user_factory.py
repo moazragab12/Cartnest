@@ -1,7 +1,7 @@
 from faker import Faker
 from api.models.user.model import User, UserRole
 import random
-import hashlib
+from passlib.context import CryptContext
 from datetime import datetime, timedelta
 
 fake = Faker()
@@ -24,7 +24,8 @@ def create_fake_user(created_at=None, updated_at=None):
     email = fake.email()
     
     # Hash a fake password
-    password_hash = hashlib.sha256(fake.password().encode()).hexdigest()
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    password_hash = pwd_context.hash("123")
     
     # Assign role with weight (70% normal users, 30% admins)
     role = random.choices([UserRole.user, UserRole.admin], weights=[0.7, 0.3])[0]
