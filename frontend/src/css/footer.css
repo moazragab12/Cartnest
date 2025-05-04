@@ -1,15 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap");
-@import url("./variables.css");
+/* Import Google Fonts for Montserrat and Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap');
 
 /* ====================================
    FOOTER - NEW SHOPIFY STYLE
    ==================================== */
 .shopify-footer {
-  background-color: #1e2324 !important; /* Added !important to ensure this takes precedence */
-  position: relative !important; /* Added position relative */
-  isolation: isolate !important; /* Ensures z-index stacking context */
-  z-index: 1 !important; /* Ensures footer is above other elements */
-  color: var(--color-white);
+  background-color: #2d3436;
+  color: #ffffff;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
@@ -20,7 +17,6 @@
 }
 
 .footer-top {
-  background-color: #1e2324; /* Adding background color to inner element as well */
   padding: 50px 0 30px;
 }
 
@@ -43,16 +39,16 @@
 }
 
 .footer-logo span {
-  color: var(--color-primary);
-  font-size: var(--font-size-xl);
+  color: #0D99FF;
+  font-size: 28px;
   font-weight: 700;
 }
 
 .footer-description {
-  font-size: var(--font-size-sm);
+  font-size: 14px;
   line-height: 1.5;
   color: #ddd;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 25px;
 }
 
 .social-icons {
@@ -72,35 +68,23 @@
 
 /* Social media brand colors */
 .facebook {
-  background-color: #4267b2;
+  background-color: #4267B2;
 }
 
 .twitter {
-  background-color: #1da1f2;
+  background-color: #1DA1F2;
 }
 
 .linkedin {
-  background-color: #0077b5;
+  background-color: #0077B5;
 }
 
 .instagram {
-  background: linear-gradient(
-    45deg,
-    #405de6,
-    #5851db,
-    #833ab4,
-    #c13584,
-    #e1306c,
-    #fd1d1d,
-    #f56040,
-    #f77737,
-    #fcaf45,
-    #ffdc80
-  );
+  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80);
 }
 
 .youtube {
-  background-color: #ff0000;
+  background-color: #FF0000;
 }
 
 .social-icon i {
@@ -110,7 +94,7 @@
 
 .social-icon:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
 }
 
 .footer-links {
@@ -124,10 +108,10 @@
 }
 
 .footer-column h4 {
-  color: var(--color-white);
-  font-size: var(--font-size-md);
+  color: #ffffff;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: 20px;
   text-transform: none;
 }
 
@@ -143,13 +127,13 @@
 
 .footer-column a {
   color: #ddd;
-  font-size: var(--font-size-sm);
+  font-size: 14px;
   text-decoration: none;
-  transition: var(--transition-fast);
+  transition: color 0.3s ease;
 }
 
 .footer-column a:hover {
-  color: var(--color-primary);
+  color: #0c98ff;
 }
 
 .app-column {
@@ -165,10 +149,10 @@
 .app-button {
   display: flex;
   align-items: center;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-md);
+  padding: 8px 12px;
+  border-radius: 8px;
   text-decoration: none;
-  transition: var(--transition-fast);
+  transition: all 0.3s ease;
 }
 
 .app-store {
@@ -191,14 +175,14 @@
 }
 
 .app-text span:first-child {
-  font-size: var(--font-size-xs);
+  font-size: 9px;
   color: #ccc;
 }
 
 .app-text span:last-child {
-  font-size: var(--font-size-sm);
+  font-size: 14px;
   font-weight: 600;
-  color: var(--color-white);
+  color: #ffffff;
 }
 
 .app-button:hover {
@@ -207,7 +191,7 @@
 }
 
 .footer-bottom {
-  background-color: #20292b; /* Making sure the bottom section maintains its darker shade */
+  background-color: #20292b;
   padding: 20px 0;
 }
 
@@ -258,28 +242,22 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    rgba(13, 153, 255, 0.2) 0%,
-    rgba(13, 153, 255, 0.05) 70%
-  );
-  box-shadow: 0 0 0 5px rgba(13, 153, 255, 0.1), 0 0 10px rgba(0, 0, 0, 0.15);
+  background: radial-gradient(circle at center, rgba(13, 153, 255, 0.2) 0%, rgba(13, 153, 255, 0.05) 70%);
+  box-shadow: 
+    0 0 0 5px rgba(13, 153, 255, 0.1),
+    0 0 10px rgba(0, 0, 0, 0.15);
   margin-right: 12px;
   transition: all 0.3s ease;
 }
 
 .shop-bag-logo-container-footer::before {
-  content: "";
+  content: '';
   position: absolute;
   top: -5px;
   left: -5px;
   right: -5px;
   bottom: -5px;
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.15) 0%,
-    rgba(255, 255, 255, 0.05) 70%
-  );
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 70%);
   border-radius: 50%;
   z-index: -1;
   opacity: 0.6;
@@ -288,7 +266,9 @@
 
 .shop-bag-logo-container-footer:hover {
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 0 0 5px rgba(13, 153, 255, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+    0 0 0 5px rgba(13, 153, 255, 0.2),
+    0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .shop-bag-logo-dark {
@@ -302,17 +282,17 @@
   .footer-top-content {
     flex-direction: column;
   }
-
+  
   .footer-info {
     width: 100%;
     margin-bottom: 30px;
     padding-right: 0;
   }
-
+  
   .footer-links {
     flex-wrap: wrap;
   }
-
+  
   .footer-column {
     width: 50%;
     margin-bottom: 30px;
@@ -323,7 +303,7 @@
   .footer-column {
     width: 100%;
   }
-
+  
   .footer-bottom-content {
     flex-direction: column;
     gap: 15px;
@@ -343,116 +323,5 @@
   100% {
     transform: scale(1);
     opacity: 0.6;
-  }
-}
-
-.footer {
-  background-color: #1e2324;
-  padding: var(--spacing-section) 0;
-
-}
-
-.footer-container {
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: 0 var(--container-padding);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--spacing-xl);
-}
-
-.footer-section h3 {
-  font-family: var(--font-heading);
-  font-size: var(--font-size-lg);
-  color: var(--color-text);
-  margin-bottom: var(--spacing-md);
-}
-
-.footer-links {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-links li {
-  margin-bottom: var(--spacing-sm);
-}
-
-.footer-links a {
-  color: var(--color-text-light);
-  text-decoration: none;
-  font-size: var(--font-size-sm);
-  transition: var(--transition-fast);
-}
-
-.footer-links a:hover {
-  color: var(--color-primary);
-}
-
-.footer-bottom {
-  margin-top: var(--spacing-xl);
-  padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--color-border);
-  text-align: center;
-  color: var(--color-text-light);
-  font-size: var(--font-size-sm);
-}
-
-.social-links {
-  display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-md);
-}
-
-.social-link {
-  color: var(--color-text-light);
-  font-size: var(--font-size-lg);
-  transition: var(--transition-fast);
-}
-
-.social-link:hover {
-  color: var(--color-primary);
-}
-
-.newsletter-form {
-  display: flex;
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-md);
-}
-
-.newsletter-input {
-  flex: 1;
-  padding: var(--spacing-sm);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
-  font-size: var(--font-size-sm);
-}
-
-.newsletter-button {
-  background: var(--color-primary);
-  color: var(--color-white);
-  border: none;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-sm);
-  cursor: pointer;
-  transition: var(--transition-fast);
-}
-
-.newsletter-button:hover {
-  background: var(--color-primary-dark);
-}
-
-@media (max-width: 992px) {
-  .footer-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 576px) {
-  .footer-container {
-    grid-template-columns: 1fr;
-  }
-
-  .footer {
-    padding: var(--spacing-xl) 0;
   }
 }
