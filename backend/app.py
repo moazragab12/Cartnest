@@ -19,11 +19,12 @@ load_dotenv(dotenv_path)
 from api.db import Base, engine, get_db
 from api.dependencies import get_current_user
 from api.models.user.model import User
-# Import the correctly named auth_router directly
+# Import routers
 from api.routers.auth.router import auth_router
 from api.routers.profile_management.router import router as profile_router
 from api.routers.transactions.router import router as transaction_router
 from api.routers.search.router import search_router
+from api.routers.products.router import products_router
 
 # Create all tables at startup
 Base.metadata.create_all(bind=engine)
@@ -69,6 +70,20 @@ async def read_root():
         "message": "Welcome to the Market Place API!",
         "api_version": f"v{version[0]}",
         "endpoints": {
+            # Public API endpoints (no authentication required)
+            "products": {
+                "get_all_products": "/api/v0/products/",
+                "get_by_category": "/api/v0/products/category/{category}",
+                "get_best_sellers": "/api/v0/products/best-sellers",
+                "get_featured": "/api/v0/products/featured",
+                "get_categories": "/api/v0/products/categories",
+                "get_product": "/api/v0/products/{item_id}"
+            },
+            "search": {
+                "search_items": "/api/v0/search/items/search_item",
+                "get_item": "/api/v0/search/items/{item_id}"
+            },
+            # Authentication endpoints
             "auth": {
                 "register": "/api/v0/auth/register",
                 "login": "/api/v0/auth/login",
@@ -76,6 +91,7 @@ async def read_root():
                 "profile": "/api/v0/auth/profile",
                 "token_status": "/api/v0/auth/token-status"
             },
+            # Protected endpoints (require authentication)
             "profile": {
                 "overview": "/api/v0/overview",
                 "items": {
@@ -100,8 +116,12 @@ async def read_root():
         }
     }
 
-# Routers with consistent prefix
-app.include_router(search_router)
+# Include routers with consistent organization
+# Public API endpoints (no authentication required)
+app.include_router(products_router)  # Public product endpoints
+app.include_router(search_router)    # Public search endpoints
+
+# Authentication and protected endpoints
 app.include_router(auth_router, prefix=f"{api_prefix}/auth", tags=["Authentication"])
 app.include_router(profile_router, prefix=f"{api_prefix}", tags=["Profile"])
 app.include_router(transaction_router, prefix=f"{api_prefix}/transactions", tags=["Transactions"])
