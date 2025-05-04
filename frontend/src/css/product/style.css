@@ -1,8 +1,6 @@
 /* Base styles and custom properties */
 :root {
-  --color-primary: #0d6efd;
-  --color-primary-light: #e3e8ef;
-  --color-primary-dark: #0b5ed7;
+ 
   --color-secondary: #8b96a5;
   --color-text: #1c1c1c;
   --color-text-light: #787a80;
@@ -25,6 +23,7 @@
   --font-family: "Inter", sans-serif;
   --transition-base: all 0.2s ease;
 }
+
 
 /* Reset */
 * {
@@ -89,6 +88,7 @@ body {
 .product__title {
   font-size: 24px;
   margin-bottom: var(--spacing-lg);
+  margin-top: var(--spacing-xxl);
 }
 
 /* Product Gallery */

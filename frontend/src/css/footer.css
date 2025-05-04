@@ -1,5 +1,5 @@
-/* Import Google Fonts for Montserrat and Inter */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap");
+@import url("./variables.css");
 
 /* ====================================
    FOOTER - NEW SHOPIFY STYLE
@@ -9,7 +9,7 @@
   position: relative !important; /* Added position relative */
   isolation: isolate !important; /* Ensures z-index stacking context */
   z-index: 1 !important; /* Ensures footer is above other elements */
-  color: #ffffff;
+  color: var(--color-white);
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
@@ -43,16 +43,16 @@
 }
 
 .footer-logo span {
-  color: #0d99ff;
-  font-size: 28px;
+  color: var(--color-primary);
+  font-size: var(--font-size-xl);
   font-weight: 700;
 }
 
 .footer-description {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   line-height: 1.5;
   color: #ddd;
-  margin-bottom: 25px;
+  margin-bottom: var(--spacing-xl);
 }
 
 .social-icons {
@@ -124,10 +124,10 @@
 }
 
 .footer-column h4 {
-  color: #ffffff;
-  font-size: 16px;
+  color: var(--color-white);
+  font-size: var(--font-size-md);
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-lg);
   text-transform: none;
 }
 
@@ -143,13 +143,13 @@
 
 .footer-column a {
   color: #ddd;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: var(--transition-fast);
 }
 
 .footer-column a:hover {
-  color: #0c98ff;
+  color: var(--color-primary);
 }
 
 .app-column {
@@ -165,10 +165,10 @@
 .app-button {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: var(--transition-fast);
 }
 
 .app-store {
@@ -191,14 +191,14 @@
 }
 
 .app-text span:first-child {
-  font-size: 9px;
+  font-size: var(--font-size-xs);
   color: #ccc;
 }
 
 .app-text span:last-child {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
-  color: #ffffff;
+  color: var(--color-white);
 }
 
 .app-button:hover {
@@ -343,5 +343,116 @@
   100% {
     transform: scale(1);
     opacity: 0.6;
+  }
+}
+
+.footer {
+  background-color: #1e2324;
+  padding: var(--spacing-section) 0;
+
+}
+
+.footer-container {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-xl);
+}
+
+.footer-section h3 {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-lg);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-md);
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-links a {
+  color: var(--color-text-light);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  transition: var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--color-primary);
+}
+
+.footer-bottom {
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+}
+
+.social-links {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.social-link {
+  color: var(--color-text-light);
+  font-size: var(--font-size-lg);
+  transition: var(--transition-fast);
+}
+
+.social-link:hover {
+  color: var(--color-primary);
+}
+
+.newsletter-form {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+.newsletter-button {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.newsletter-button:hover {
+  background: var(--color-primary-dark);
+}
+
+@media (max-width: 992px) {
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+  }
+
+  .footer {
+    padding: var(--spacing-xl) 0;
   }
 }

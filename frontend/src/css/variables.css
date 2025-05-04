@@ -1,0 +1,159 @@
+/* Import Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&family=Roboto:wght@400;500;700&family=Oxygen:wght@400;700&display=swap");
+
+:root {
+  /* Color System */
+  /* Primary Colors */
+  --color-primary: #0d6efd;
+  --color-primary-light: #e3e8ef;
+  --color-primary-dark: #0b5ed7;
+  --color-secondary: #8b96a5;
+  --color-text: #1c1c1c;
+  --color-text-light: #787a80;
+  --color-border: #dee2e7;
+  --color-success: #00b517;
+  --color-background: #f9f9f9;
+  --color-white: #ffffff;
+
+
+  /* Text Colors */
+  --color-text: #1c1c1c;
+  --color-text-light: #787a80;
+  --color-text-lighter: #9c9c9c;
+
+  /* Background Colors */
+  --color-background: #f9f9f9;
+  --color-background-light: #f5f7fa;
+  --color-background-dark: #f8fafc;
+
+  /* Status Colors */
+  --color-success: #00b517;
+  --color-success-light: #e8f5e9;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fff3e0;
+  --color-error: #ef4444;
+  --color-error-light: #ffebee;
+
+  /* Neutral Colors */
+  --color-white: #ffffff;
+  --color-black: #414141;
+  --color-border: #dee2e7;
+  --color-tag: #f5f7f6;
+
+  /* Typography */
+  /* Font Families */
+  --font-main: "Inter", sans-serif;
+  --font-heading: "Montserrat", sans-serif;
+  --font-body: "Roboto", sans-serif;
+  --font-special: "Oxygen", sans-serif;
+
+  /* Font Sizes */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-xxl: 32px;
+  --font-size-title: 40px;
+  --font-size-display: 64px;
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.6;
+  --line-height-loose: 2;
+
+  /* Spacing System */
+  --spacing-base: 8px;
+  --spacing-xs: 5px;
+  --spacing-sm: 10px;
+  --spacing-md: 15px;
+  --spacing-lg: 20px;
+  --spacing-xl: 30px;
+  --spacing-xxl: 40px;
+  --spacing-section: 60px;
+  --spacing-page: 80px;
+
+  /* Container Related */
+  --container-padding: calc(var(--spacing-base) * 5);
+  --content-width: 1400px;
+  --sidebar-width: 250px;
+
+  /* Header Related */
+  --header-height: 74px;
+  --nav-height: 52px;
+  --header-offset: calc(var(--header-height) + var(--nav-height));
+
+  /* Layout */
+  --z-index-header: 1000;
+  --z-index-modal: 2000;
+  --z-index-dropdown: 1500;
+  --z-index-tooltip: 2500;
+
+  /* Borders & Shadows */
+  /* Border Radius */
+  --border-radius-xs: 2px;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 15px;
+  --border-radius-xl: 20px;
+  --border-radius-round: 50%;
+
+  /* Border Widths */
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+  --border-width-thick: 3px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.15);
+
+  /* Colored Shadows */
+  --shadow-primary: 0 4px 12px rgba(13, 153, 255, 0.2);
+  --shadow-success: 0 4px 12px rgba(0, 181, 23, 0.2);
+  --shadow-warning: 0 4px 12px rgba(245, 158, 11, 0.2);
+  --shadow-error: 0 4px 12px rgba(239, 68, 68, 0.2);
+
+  /* Transitions */
+  --transition-fast: 0.3s ease;
+  --transition-normal: 0.5s ease;
+  --transition-slow: 0.7s ease;
+  --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  );
+  --gradient-hero: linear-gradient(90deg, #accbee 0%, #e7f0fd 100%);
+  --gradient-card: linear-gradient(45deg, #e7f0fd, #accbee);
+
+  /* Grid System */
+  --grid-gap-sm: 12px;
+  --grid-gap-md: 20px;
+  --grid-gap-lg: 30px;
+  --grid-columns-desktop: 12;
+  --grid-columns-tablet: 8;
+  --grid-columns-mobile: 4;
+
+  /* Product Card */
+  --product-card-width: 286px;
+  --product-card-height: 432px;
+  --product-image-height: 360px;
+
+  /* Form Elements */
+  --input-height: 40px;
+  --input-padding: 12px;
+  --button-height: 48px;
+  --button-padding: 16px 24px;
+}

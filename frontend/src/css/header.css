@@ -2,12 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
-  --color-primary: #0d99ff;
-  --color-primary-dark: #0b5ed7;
-  --color-secondary: #64748b;
-  --color-border: #e2e8f0;
-  --color-background: #f8fafc;
-  --color-white: #ffffff;
+
   --color-text: #1e293b;
   --header-height: 74px;
   --nav-height: 52px;

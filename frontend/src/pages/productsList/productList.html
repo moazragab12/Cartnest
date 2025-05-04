@@ -1,379 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  Z<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../../css/header.css" />
+    <link rel="stylesheet" href="../../css/footer.css" />
+    <link rel="stylesheet" href="../../css/productList/style.css" />
+    <title>Shopify Product Page</title>
+  </head>
+  <body>
+    <!-- Header -->
 
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">   
-    <link rel="stylesheet" href="../css/header.css">
-        <title>Shopify Product Page</title>
-    <link rel="stylesheet" href="../../css/header.css">
- 
-    <link rel="stylesheet" href="../../css/footer.css">
-
-    <link rel="stylesheet" href="../../css/productList/style.css">
-</head>
-<body>
-     <!-- Header -->
-  
-  <!-- Header -->
-  <header class="header">
-    <div class="left-section">
+    <!-- Header -->
+    <header class="header">
       <div class="logo-container">
-        <div class="shop-bag-logo-container">
-          <svg class="shop-bag-logo" width="18" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.20327 0.978271C11.9153 0.978271 14.1164 3.1796 14.1164 5.88906L15.0969 5.89138C16.1834 5.89138 17.1192 6.77035 17.1867 7.85079L17.9244 19.6539C17.992 20.7361 17.1698 21.6133 16.0865 21.6133H2.32009C1.23738 21.6133 0.414609 20.7344 0.482136 19.6539L1.21983 7.85079C1.28747 6.76864 2.22126 5.89138 3.30963 5.89138H4.29016C4.29016 3.17813 6.49303 0.978271 9.20327 0.978271ZM12.1511 5.89149C12.1511 4.26503 10.8299 2.94362 9.20327 2.94362C7.5778 2.94362 6.2554 4.26421 6.2554 5.88917L12.1511 5.89149ZM4.29016 7.85657H3.30963C3.25909 7.85657 3.18415 7.92687 3.18125 7.97332L2.4589 19.648L15.9548 19.6455L15.2253 7.97332C15.2225 7.92864 15.1457 7.85657 15.0969 7.85657H14.1164V9.82181C14.1164 10.3645 13.6765 10.8044 13.1338 10.8044C12.5911 10.8044 12.1511 10.3645 12.1511 9.82181V7.85657L6.25541 7.85657L6.25541 9.82181C6.25541 10.3645 5.81547 10.8044 5.27279 10.8044C4.7301 10.8044 4.29016 10.3645 4.29016 9.82181V7.85657Z" fill="white"/>
-          </svg>
-        </div>
-        <h1 class="logo">Shopify</h1>
+        <a href="../../../index.html" class="logo-link">
+          <div class="shop-bag-logo-container">
+            <svg
+              class="shop-bag-logo"
+              width="18"
+              height="22"
+              viewBox="0 0 18 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M9.20327 0.978271C11.9153 0.978271 14.1164 3.1796 14.1164 5.88906L15.0969 5.89138C16.1834 5.89138 17.1192 6.77035 17.1867 7.85079L17.9244 19.6539C17.992 20.7361 17.1698 21.6133 16.0865 21.6133H2.32009C1.23738 21.6133 0.414609 20.7344 0.482136 19.6539L1.21983 7.85079C1.28747 6.76864 2.22126 5.89138 3.30963 5.89138H4.29016C4.29016 3.17813 6.49303 0.978271 9.20327 0.978271ZM12.1511 5.89149C12.1511 4.26503 10.8299 2.94362 9.20327 2.94362C7.5778 2.94362 6.2554 4.26421 6.2554 5.88917L12.1511 5.89149ZM4.29016 7.85657H3.30963C3.25909 7.85657 3.18415 7.92687 3.18125 7.97332L2.4589 19.648L15.9548 19.6455L15.2253 7.97332C15.2225 7.92864 15.1457 7.85657 15.0969 7.85657H14.1164V9.82181C14.1164 10.3645 13.6765 10.8044 13.1338 10.8044C12.5911 10.8044 12.1511 10.3645 12.1511 9.82181V7.85657L6.25541 7.85657L6.25541 9.82181C6.25541 10.3645 5.81547 10.8044 5.27279 10.8044C4.7301 10.8044 4.29016 10.3645 4.29016 9.82181V7.85657Z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          <span class="logo">Shopify</span>
+        </a>
       </div>
-    </div>
 
-    <div class="search-box">
-      <i class="fas fa-search search-icon"></i>
-      <input type="text" placeholder="Search essentials, groceries and more...">
-    </div>
-    <div class="header-links">
-      <a href="./src/pages/Sign_in.html" class="sign-in-link">
-        <img src="../../public/resources/images/svg/user-icon.svg" alt="User" class="icon-svg">
-        <span>Sign Up/Sign In</span>
-      </a>
-      <span class="header-divider">|</span>
-      <a href="#" class="cart-link">
-        <img src="../../public/resources//images/svg/cart-icon.svg" alt="Cart" class="icon-svg">
-        <span>Cart</span>
-      </a>
-    </div>
-  </header>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Search essentials, groceries and more..."
+        />
+        <i class="fas fa-search search-icon"></i>
+      </div>
 
+      <div class="header-links">
+        <a href="../Auth/auth.html" class="header-link">
+          <i class="fas fa-user"></i>
+          <span>Sign in</span>
+        </a>
+        <div class="header-divider"></div>
+        <a href="../cart/cart.html" class="header-link cart-link">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Cart</span>
+          <span class="cart-count">0</span>
+        </a>
+      </div>
+    </header>
 
-  <!-- Navigation -->
-  <nav class="navbar">
-    <a href="#" class="active">Groceries <i class="fas fa-chevron-down dropdown-icon"></i></a>
-    <a href="#">Premium Fruits <i class="fas fa-chevron-down dropdown-icon"></i></a>
-    <a href="#">Home & Kitchen <i class="fas fa-chevron-down dropdown-icon"></i></a>
-    <a href="#">Fashion <i class="fas fa-chevron-down dropdown-icon"></i></a>
-    <a href="#">Electronics <i class="fas fa-chevron-down dropdown-icon"></i></a>
-    <a href="#">Beauty <i class="fas fa-chevron-down dropdown-icon"></i></a>
-    <a href="#">Home Improvement <i class="fas fa-chevron-down dropdown-icon"></i></a>
-    <a href="#">Sports, Toys & Luggage <i class="fas fa-chevron-down dropdown-icon"></i></a>
-  </nav>
-  <main class="container">
-    <aside class="sidebar">
-        <hr>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <a href="#" class="active"
+        >Groceries <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+      <a href="#"
+        >Premium Fruits <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+      <a href="#"
+        >Home &amp; Kitchen <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+      <a href="#">Fashion <i class="fas fa-chevron-down dropdown-icon"></i></a>
+      <a href="#"
+        >Electronics <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+      <a href="#">Beauty <i class="fas fa-chevron-down dropdown-icon"></i></a>
+      <a href="#"
+        >Home Improvement <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+      <a href="#"
+        >Sports, Toys &amp; Luggage
+        <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>
+    </nav>
+    <main class="container">
+      <aside class="sidebar">
+        <hr />
         <details open>
           <summary>Category</summary>
           <ul>
-            <li><input type="checkbox"> Mobile accessory</li>
-            <li><input type="checkbox"> Electronics</li>
-            <li><input type="checkbox"> Smartphones</li>
-            <li><input type="checkbox"> Modern tech</li>
+            <li><input type="checkbox" /> Mobile accessory</li>
+            <li><input type="checkbox" /> Electronics</li>
+            <li><input type="checkbox" /> Smartphones</li>
+            <li><input type="checkbox" /> Modern tech</li>
           </ul>
           <a class="see-all">See all</a>
-          
         </details>
-        <hr>
+        <hr />
         <details open>
           <summary>Brands</summary>
           <ul>
-            <li><input type="checkbox" checked> Samsung</li>
-            <li><input type="checkbox" checked> Apple</li>
-            <li><input type="checkbox"> Huawei</li>
-            <li><input type="checkbox" checked> Poco</li>
-            <li><input type="checkbox"> Lenovo</li>
+            <li><input type="checkbox" checked /> Samsung</li>
+            <li><input type="checkbox" checked /> Apple</li>
+            <li><input type="checkbox" /> Huawei</li>
+            <li><input type="checkbox" checked /> Poco</li>
+            <li><input type="checkbox" /> Lenovo</li>
           </ul>
           <a class="see-all">See all</a>
         </details>
-        <hr>
-    
+        <hr />
+
         <details open>
           <summary>Features</summary>
           <ul>
-            <li><input type="checkbox" checked> Metallic</li>
-            <li><input type="checkbox"> Plastic cover</li>
-            <li><input type="checkbox"> 8GB Ram</li>
-            <li><input type="checkbox"> Super power</li>
-            <li><input type="checkbox"> Large Memory</li>
+            <li><input type="checkbox" checked /> Metallic</li>
+            <li><input type="checkbox" /> Plastic cover</li>
+            <li><input type="checkbox" /> 8GB Ram</li>
+            <li><input type="checkbox" /> Super power</li>
+            <li><input type="checkbox" /> Large Memory</li>
           </ul>
           <a class="see-all">See all</a>
         </details>
-    
-        <hr>
-    
+
+        <hr />
+
         <details>
           <summary>Price range</summary>
         </details>
-        <hr>
+        <hr />
         <details>
           <summary>Condition</summary>
         </details>
-        <hr>
+        <hr />
         <details>
           <summary>Ratings</summary>
         </details>
-        <hr>
+        <hr />
         <details>
           <summary>Manufacturer</summary>
         </details>
       </aside>
-    <div class="products">
+      <div class="products">
         <h2>
-            <p>12,911 items in Mobile accessory</p>
-            <li><input type="checkbox" checked> Verified only</li>
-            
-            <select class="feature-box">
+          <p>12,911 items in Mobile accessory</p>
+          <li><input type="checkbox" checked /> Verified only</li>
+
+          <select class="feature-box">
             <option value="1">Featured</option>
             <option value="2">Plastic cover</option>
             <option value="3">8GB Ram</option>
             <option value="4">Super power</option>
-            <option value="5" >Metallic</option>
-        </select>
-           
-    </h2>
+            <option value="5">Metallic</option>
+          </select>
+        </h2>
         <div class="product-grid">
-            <!-- Product Card -->
-           
-            <div class="product-card">
-                <img src="../../public/resources/images/watch.png" alt="Smart Watch">
-                <div class="product-info">
-                    <h4>Smart Watch Series 7, White</h4>
-                    <span class="rating">⭐ 4.5 (64)</span>
-                    <div class="price-rating">
-                        <span class="price">$429.00</span>
-                        <button class="cart-button">
-                            <div class="default-btn">
-                              <svg viewBox="0 0 24 24" width="20" height="20" stroke="#414141" stroke-width="2" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round" class="cart-icon">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                              </svg>
-                            </div>
-                            <div class="hover-btn">
-                              <svg viewBox="0 0 320 512" width="12.5" height="20" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                  d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                                  fill="#ffffff"></path>
-                              </svg>
-                            </div>
-                          </button>
-                     
-                    </div>
-                    
-                </div>
+          <!-- Product Card -->
+
+          <div class="product-card">
+            <img
+              src="../../public/resources/images/watch.png"
+              alt="Smart Watch"
+            />
+            <div class="product-info">
+              <h4>Smart Watch Series 7, White</h4>
+              <span class="rating">⭐ 4.5 (64)</span>
+              <div class="price-rating">
+                <span class="price">$429.00</span>
+                <button class="cart-button">
+                  <div class="default-btn">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="20"
+                      height="20"
+                      stroke="#414141"
+                      stroke-width="2"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="cart-icon"
+                    >
+                      <circle cx="9" cy="21" r="1"></circle>
+                      <circle cx="20" cy="21" r="1"></circle>
+                      <path
+                        d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="hover-btn">
+                    <svg
+                      viewBox="0 0 320 512"
+                      width="12.5"
+                      height="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                        fill="#ffffff"
+                      ></path>
+                    </svg>
+                  </div>
+                </button>
+              </div>
             </div>
-            
-            <div class="product-card">
-                <img src="../../public/resources/images/watch.png" alt="Smart Watch">
-                <div class="product-info">
-                    <h4>Smart Watch Series 7, White</h4>
-                    <span class="rating">⭐ 4.5 (64)</span>
-                    <div class="price-rating">
-                        <span class="price">$429.00</span>
-                        <button class="cart-button">
-                            <div class="default-btn">
-                              <svg viewBox="0 0 24 24" width="20" height="20" stroke="#414141" stroke-width="2" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round" class="cart-icon">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                              </svg>
-                            </div>
-                            <div class="hover-btn">
-                              <svg viewBox="0 0 320 512" width="12.5" height="20" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                  d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                                  fill="#ffffff"></path>
-                              </svg>
-                            </div>
-                          </button>
-                     
-                    </div>
-                    
-                </div>
+          </div>
+
+          <div class="product-card">
+            <img
+              src="../../public/resources/images/watch.png"
+              alt="Smart Watch"
+            />
+            <div class="product-info">
+              <h4>Smart Watch Series 7, White</h4>
+              <span class="rating">⭐ 4.5 (64)</span>
+              <div class="price-rating">
+                <span class="price">$429.00</span>
+                <button class="cart-button">
+                  <div class="default-btn">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="20"
+                      height="20"
+                      stroke="#414141"
+                      stroke-width="2"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="cart-icon"
+                    >
+                      <circle cx="9" cy="21" r="1"></circle>
+                      <circle cx="20" cy="21" r="1"></circle>
+                      <path
+                        d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="hover-btn">
+                    <svg
+                      viewBox="0 0 320 512"
+                      width="12.5"
+                      height="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                        fill="#ffffff"
+                      ></path>
+                    </svg>
+                  </div>
+                </button>
+              </div>
             </div>
-            
-            <div class="product-card">
-                <img src="../../public/resources/images/watch.png" alt="Smart Watch">
-                <div class="product-info">
-                    <h4>Smart Watch Series 7, White</h4>
-                    <span class="rating">⭐ 4.5 (64)</span>
-                    <div class="price-rating">
-                        <span class="price">$429.00</span>
-                        <button class="cart-button">
-                            <div class="default-btn">
-                              <svg viewBox="0 0 24 24" width="20" height="20" stroke="#414141" stroke-width="2" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round" class="cart-icon">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                              </svg>
-                            </div>
-                            <div class="hover-btn">
-                              <svg viewBox="0 0 320 512" width="12.5" height="20" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                  d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                                  fill="#ffffff"></path>
-                              </svg>
-                            </div>
-                          </button>
-                     
-                    </div>
-                    
-                </div>
+          </div>
+
+          <div class="product-card">
+            <img
+              src="../../public/resources/images/watch.png"
+              alt="Smart Watch"
+            />
+            <div class="product-info">
+              <h4>Smart Watch Series 7, White</h4>
+              <span class="rating">⭐ 4.5 (64)</span>
+              <div class="price-rating">
+                <span class="price">$429.00</span>
+                <button class="cart-button">
+                  <div class="default-btn">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="20"
+                      height="20"
+                      stroke="#414141"
+                      stroke-width="2"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="cart-icon"
+                    >
+                      <circle cx="9" cy="21" r="1"></circle>
+                      <circle cx="20" cy="21" r="1"></circle>
+                      <path
+                        d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="hover-btn">
+                    <svg
+                      viewBox="0 0 320 512"
+                      width="12.5"
+                      height="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                        fill="#ffffff"
+                      ></path>
+                    </svg>
+                  </div>
+                </button>
+              </div>
             </div>
-            
-            <div class="product-card">
-                <img src="../../public/resources/images/watch.png" alt="Smart Watch">
-                <div class="product-info">
-                    <h4>Smart Watch Series 7, White</h4>
-                    <span class="rating">⭐ 4.5 (64)</span>
-                    <div class="price-rating">
-                        <span class="price">$429.00</span>
-                        <button class="cart-button">
-                            <div class="default-btn">
-                              <svg viewBox="0 0 24 24" width="20" height="20" stroke="#414141" stroke-width="2" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round" class="cart-icon">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                              </svg>
-                            </div>
-                            <div class="hover-btn">
-                              <svg viewBox="0 0 320 512" width="12.5" height="20" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                  d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                                  fill="#ffffff"></path>
-                              </svg>
-                            </div>
-                          </button>
-                     
-                    </div>
-                    
-                </div>
+          </div>
+          <div class="product-card">
+            <img
+              src="../../public/resources/images/watch.png"
+              alt="Smart Watch"
+            />
+            <div class="product-info">
+              <h4>Smart Watch Series 7, White</h4>
+              <span class="rating">⭐ 4.5 (64)</span>
+              <div class="price-rating">
+                <span class="price">$429.00</span>
+                <button class="cart-button">
+                  <div class="default-btn">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="20"
+                      height="20"
+                      stroke="#414141"
+                      stroke-width="2"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="cart-icon"
+                    >
+                      <circle cx="9" cy="21" r="1"></circle>
+                      <circle cx="20" cy="21" r="1"></circle>
+                      <path
+                        d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="hover-btn">
+                    <svg
+                      viewBox="0 0 320 512"
+                      width="12.5"
+                      height="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                        fill="#ffffff"
+                      ></path>
+                    </svg>
+                  </div>
+                </button>
+              </div>
             </div>
-            
-            <div class="product-card">
-                <img src="../../public/resources/images/watch.png" alt="Smart Watch">
-                <div class="product-info">
-                    <h4>Smart Watch Series 7, White</h4>
-                    <span class="rating">⭐ 4.5 (64)</span>
-                    <div class="price-rating">
-                        <span class="price">$429.00</span>
-                        <button class="cart-button">
-                            <div class="default-btn">
-                              <svg viewBox="0 0 24 24" width="20" height="20" stroke="#414141" stroke-width="2" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round" class="cart-icon">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                              </svg>
-                            </div>
-                            <div class="hover-btn">
-                              <svg viewBox="0 0 320 512" width="12.5" height="20" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                  d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                                  fill="#ffffff"></path>
-                              </svg>
-                            </div>
-                          </button>
-                     
-                    </div>
-                    
-                </div>
+          </div>
+
+          <div class="product-card">
+            <img
+              src="../../public/resources/images/watch.png"
+              alt="Smart Watch"
+            />
+            <div class="product-info">
+              <h4>Smart Watch Series 7, White</h4>
+              <span class="rating">⭐ 4.5 (64)</span>
+              <div class="price-rating">
+                <span class="price">$429.00</span>
+                <button class="cart-button">
+                  <div class="default-btn">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="20"
+                      height="20"
+                      stroke="#414141"
+                      stroke-width="2"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="cart-icon"
+                    >
+                      <circle cx="9" cy="21" r="1"></circle>
+                      <circle cx="20" cy="21" r="1"></circle>
+                      <path
+                        d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="hover-btn">
+                    <svg
+                      viewBox="0 0 320 512"
+                      width="12.5"
+                      height="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                        fill="#ffffff"
+                      ></path>
+                    </svg>
+                  </div>
+                </button>
+              </div>
             </div>
-            <div class="product-card">
-                <img src="../../public/resources/images/watch.png" alt="Smart Watch">
-                <div class="product-info">
-                    <h4>Smart Watch Series 7, White</h4>
-                    <span class="rating">⭐ 4.5 (64)</span>
-                    <div class="price-rating">
-                        <span class="price">$429.00</span>
-                        <button class="cart-button">
-                            <div class="default-btn">
-                              <svg viewBox="0 0 24 24" width="20" height="20" stroke="#414141" stroke-width="2" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round" class="cart-icon">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                              </svg>
-                            </div>
-                            <div class="hover-btn">
-                              <svg viewBox="0 0 320 512" width="12.5" height="20" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                  d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                                  fill="#ffffff"></path>
-                              </svg>
-                            </div>
-                          </button>
-                     
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <img src="../../public/resources/images/watch.png" alt="Smart Watch">
-                <div class="product-info">
-                    <h4>Smart Watch Series 7, White</h4>
-                    <span class="rating">⭐ 4.5 (64)</span>
-                    <div class="price-rating">
-                        <span class="price">$429.00</span>
-                        <button class="cart-button">
-                            <div class="default-btn">
-                              <svg viewBox="0 0 24 24" width="20" height="20" stroke="#414141" stroke-width="2" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round" class="cart-icon">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                              </svg>
-                            </div>
-                            <div class="hover-btn">
-                              <svg viewBox="0 0 320 512" width="12.5" height="20" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                  d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                                  fill="#ffffff"></path>
-                              </svg>
-                            </div>
-                          </button>
-                     
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="product-card">
-                <img src="../../public/resources/images/watch.png" alt="Smart Watch">
-                <div class="product-info">
-                    <h4>Smart Watch Series 7, White</h4>
-                    <span class="rating">⭐ 4.5 (64)</span>
-                    <div class="price-rating">
-                        <span class="price">$429.00</span>
-                        <button class="cart-button">
-                            <div class="default-btn">
-                              <svg viewBox="0 0 24 24" width="20" height="20" stroke="#414141" stroke-width="2" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round" class="cart-icon">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                              </svg>
-                            </div>
-                            <div class="hover-btn">
-                              <svg viewBox="0 0 320 512" width="12.5" height="20" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                  d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                                  fill="#ffffff"></path>
-                              </svg>
-                            </div>
-                          </button>
-                     
-                    </div>
-                    
-                </div>
-            </div>
+          </div>
         </div>
-    
-    </div>
-</main>
-</body>
+      </div>
+    </main>
+    <footer>
+      <ul>
+        <li><a href="../Auth/auth.html">Login</a></li>
+        <li><a href="../Auth/auth.html">Register</a></li>
+        <li><a href="../Dashboard/index.html">Settings</a></li>
+        <li><a href="../Dashboard/index.html">My Orders</a></li>
+      </ul>
+    </footer>
+  </body>
 </html>
