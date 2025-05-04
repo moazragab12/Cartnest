@@ -6,6 +6,9 @@ import os
 from pathlib import Path
 from colorama import Fore, Style, init
 from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
 
 # Get the absolute path to the project root directory
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
@@ -37,6 +40,17 @@ RESET = Style.RESET_ALL    # Reset to default
 # Simple animation characters
 spinner_chars = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
 
+# Get database credentials from environment variables
+dotenv_path = os.path.join(ROOT_DIR, '.env')
+DB_USER = os.getenv("POSTGRES_USER", "user")
+DB_PASSWORD = os.getenv("POSTGRES_PASSWORD", "password")
+DB_HOST = os.getenv("POSTGRES_HOST", "localhost") 
+DB_PORT = os.getenv("POSTGRES_PORT", "5432")
+DB_NAME = os.getenv("POSTGRES_DB", "marketplace_db")
+
+# Create async database URL
+DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
 def divider_line():
     """Return a simple divider line"""
     return f"{PRIMARY}→ {'─' * 30}{RESET}"
@@ -66,8 +80,9 @@ async def show_spinner(message, count, steps=None):
 
 async def seed_users(count=user_seed_count):
     """Seed the database with fake users"""
-    # We're importing async_session locally to avoid circular imports
-    from database.seeders.run_seeders import async_session
+    # Create session for this function
+    engine = create_async_engine(DATABASE_URL)
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     print(divider_line())
     
@@ -88,8 +103,9 @@ async def seed_users(count=user_seed_count):
 
 async def seed_items(count=item_seed_count, users=None):
     """Seed the database with fake items"""
-    from database.seeders.run_seeders import async_session
-    from sqlalchemy import text
+    # Create session for this function
+    engine = create_async_engine(DATABASE_URL)
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     print(divider_line())
     
@@ -130,8 +146,9 @@ async def seed_deposits(count=deposit_seed_count, users=None):
         count: Number of deposits to create (integer)
         users: Optional list of user objects to assign deposits to
     """
-    from database.seeders.run_seeders import async_session
-    from sqlalchemy import text
+    # Create session for this function
+    engine = create_async_engine(DATABASE_URL)
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     print(divider_line())
     
@@ -169,8 +186,9 @@ async def seed_deposits(count=deposit_seed_count, users=None):
 
 async def seed_transactions(count=transaction_seed_count, users=None, items=None):
     """Seed the database with fake transactions"""
-    from database.seeders.run_seeders import async_session
-    from sqlalchemy import text
+    # Create session for this function
+    engine = create_async_engine(DATABASE_URL)
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     print(divider_line())
     
@@ -238,8 +256,9 @@ async def seed_transactions(count=transaction_seed_count, users=None, items=None
 
 async def seed_user_tokens(users=None):
     """Seed the database with tokens for each user (one token per user)"""
-    from database.seeders.run_seeders import async_session
-    from sqlalchemy import text
+    # Create session for this function
+    engine = create_async_engine(DATABASE_URL)
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     print(divider_line())
     

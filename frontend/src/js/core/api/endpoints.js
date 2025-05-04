@@ -12,22 +12,38 @@ const API_ENDPOINTS = {
         profile: '/api/v0/auth/profile',
         tokenStatus: '/api/v0/auth/token-status'
     },
-    
-    products: {
-        list: '/api/v0/items',
-        details: (id) => `/api/v0/items/${id}`,
-        search: '/api/v0/search/items'
+    items: {
+        list: '/api/v0/items/',
+        featured: '/api/v0/items/featured',
+        recent: '/api/v0/items/recent',
+        categories: '/api/v0/items/categories',
+        byCategory: (category) => `/api/v0/items/categories/${category}`,
+        details: (id) => `/api/v0/items/${id}`
     },
-    
+    search: {
+        searchItem: '/api/v0/search/items/search_item',
+        getItem: (id) => `/api/v0/search/items/${id}`
+    },
     profile: {
-        details: '/api/v0/profile',
-        update: '/api/v0/profile'
+        items: {
+            create: '/api/v0/profile/items',
+            list: '/api/v0/profile/items',
+            details: (id) => `/api/v0/profile/items/${id}`,
+            update: (id) => `/api/v0/profile/items/${id}`,
+            delete: (id) => `/api/v0/profile/items/${id}`
+        },
+        wallet: {
+            deposit: '/api/v0/profile/wallet/deposit',
+            balance: '/api/v0/profile/wallet/balance',
+            transactions: '/api/v0/profile/wallet/transactions'
+        },
+        overview: '/api/v0/profile/overview'
     },
-    
     transactions: {
-        list: '/api/v0/transactions',
-        create: '/api/v0/transactions',
-        details: (id) => `/api/v0/transactions/${id}`
+        purchase: '/api/v0/transactions/purchase',
+        list: '/api/v0/transactions/',
+        details: (id) => `/api/v0/transactions/${id}`,
+        transfer: '/api/v0/transactions/transfer'
     }
 };
 
