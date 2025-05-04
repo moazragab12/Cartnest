@@ -1,134 +1,235 @@
 let cartQuantity = 0;
 let cartItems = [];
 
-// Add or update items in the cart
-function addToCart(name, price) {
-    const existingItem = cartItems.find(item => item.name === name);
+function setCookie(name, value, days) {
+  const d = new Date();
+  d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+  const expires = "expires=" + d.toUTCString();
+  document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
 
-    if (existingItem) {
-        // Item exists, increase quantity
-        existingItem.quantity += 1;
-    } else {
-        // New item, add it to the cart
-        cartItems.push({ name, price, quantity: 1 });
+function getCookie(name) {
+  const cname = name + "=";
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i].trim();
+    if (c.indexOf(cname) === 0) {
+      return c.substring(cname.length, c.length);
     }
+  }
+  return "";
+}
 
-    cartQuantity += 1;
-    document.getElementById("cart-count").innerText = cartQuantity;
-    updateCartSection();
+function checkCookie() {
+  let cart = getCookie("cart");
+  if (cart) {
+    cartItems = JSON.parse(cart);
+    cartQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  } else {
+    cartItems = [];
+    cartQuantity = 0;
+  }
+  updateCartBadge();
+}
+
+function getCart() {
+  let cart = getCookie("cart");
+  if (cart) {
+    return JSON.parse(cart);
+  } else {
+    return [];
+  }
+}
+
+// Add or update items in the cart
+function addToCart(product) {
+  let cart = getCart();
+  const existing = cart.find(
+    (p) => p.name === product.name && p.image === product.image
+  );
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push(product);
+  }
+
+  setCookie("cart", JSON.stringify(cart), 7);
+
+  // Sync global variables after updating
+  cartItems = cart;
+  cartQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  
+  // Update the cart badge immediately after adding
+  updateCartBadge();
+}
+
+function updateCartBadge() {
+  const badge = document.getElementById("cart-badge");
+  if (badge) {
+    badge.innerText = cartQuantity;
+  }
 }
 
 // Remove only one specific item from the cart
 function removeFromCart(name) {
-    const itemToRemove = cartItems.find(item => item.name === name);
+  const itemToRemove = cartItems.find((item) => item.name === name);
 
-    if (itemToRemove) {
-        // Decrease quantity or remove the item if quantity reaches 0
-        if (itemToRemove.quantity > 1) {
-            itemToRemove.quantity -= 1;
-        } else {
-            cartItems = cartItems.filter(item => item.name !== name); // Remove the item from the cart
-        }
-        cartQuantity -= 1;
+  if (itemToRemove) {
+    if (itemToRemove.quantity > 1) {
+      itemToRemove.quantity -= 1;
+    } else {
+      cartItems = cartItems.filter((item) => item.name !== name);
     }
+  }
 
-    document.getElementById("cart-count").innerText = cartQuantity; // Update the cart count
-    updateCartSection(); // Re-render the cart section
+  // Update cookie and globals
+  setCookie("cart", JSON.stringify(cartItems), 7);
+  cartQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  updateCartBadge(); // Recalculate badge
+  updateCartSection();
 }
 
 // Update the cart section to display the items and their quantities
 function updateCartSection() {
-    const cartItemsContainer = document.getElementById("cart-items");
-    const cartSummary = document.getElementById("cart-summary");
+  const cartItemsContainer = document.getElementById("cart-items");
+  const cartSummary = document.getElementById("cart-summary");
 
-    // Reset the cart display
-    cartItemsContainer.innerHTML = "";
-    cartSummary.innerHTML = "";
+  if (!cartItemsContainer || !cartSummary) return; // Only run on cart page
 
-    let totalPrice = 0;
+  // Reset the cart display
+  cartItemsContainer.innerHTML = "";
+  cartSummary.innerHTML = "";
 
-    // Create cart item cards
-    cartItems.forEach((item) => {
-        totalPrice += item.price * item.quantity; // Calculate the total price
+  let totalPrice = 0;
+  let totalItems = 0; // Count total quantities
 
-        const card = document.createElement("div");
-        card.className = "container-card";
-        card.innerHTML = `
-            <div class="cardinfo">
-                <p class="name-card">${item.name}</p>
-                <p class="price">${item.price} EGP</p>
-                <p class="quantity">Quantity: ${item.quantity}</p>
-                <button onclick="removeFromCart('${item.name}')" class="delete-btn">-</button>
-            </div>
-        `;
-        cartItemsContainer.appendChild(card);
+  // Create cart item cards
+  cartItems.forEach((item) => {
+      totalPrice += item.price * item.quantity; 
+      totalItems += item.quantity; // Sum quantities
+
+      const card = document.createElement("div");
+      card.className = "container-card";
+      card.innerHTML = `
+          <div class="cardinfo">
+              <p class="name-card">${item.name}</p>
+              <p class="price">${item.price} EGP</p>
+              <p class="quantity">Quantity: ${item.quantity}</p>
+              <button onclick="removeFromCart('${item.name}')" class="delete-btn">-</button>
+          </div>
+      `;
+      cartItemsContainer.appendChild(card);
+  });
+
+  // Always show the summary, even if empty cart
+  cartSummary.innerHTML = `
+      <p><strong>Total Items:</strong> ${totalItems}</p>
+      <p><strong>Total Price:</strong> ${totalPrice.toFixed(2)} EGP</p>
+  `;
+}
+
+// Set up cart button event listeners
+function setupCartButtons() {
+  document.querySelectorAll(".cart-button").forEach((button) => {
+    button.addEventListener("click", function() {
+      const card = this.closest(".product-card");
+      const title = card.querySelector(".product-title").innerText;
+      const image = card.querySelector(".product-image img").src;
+      const priceText = card.querySelector(".current-price").innerText; // Updated selector
+      const price = parseFloat(priceText.replace(/[^0-9.]/g, "")); // remove $ and parse
+
+      const product = {
+        name: title,
+        image: image,
+        price: price,
+        quantity: 1,
+      };
+
+      addToCart(product);
     });
-
-    // Update the cart summary with the total items and total price
-    cartSummary.innerHTML = `
-        <p><strong>Total Items:</strong> ${cartQuantity}</p>
-        <p><strong>Total Price:</strong> ${totalPrice.toFixed(2)} EGP</p>
-    `;
+  });
 }
 
 // FAQ Accordion Functionality
-document.addEventListener('DOMContentLoaded', function() {
+function setupFAQ() {
   // Get all FAQ question elements
-  const faqQuestions = document.querySelectorAll('.faq-question');
-  
+  const faqQuestions = document.querySelectorAll(".faq-question");
+
   // Add click event listener to each question
-  faqQuestions.forEach(question => {
-    question.addEventListener('click', function() {
+  faqQuestions.forEach((question) => {
+    question.addEventListener("click", function() {
       // Get the parent FAQ item
       const faqItem = this.parentElement;
-      
+
       // Toggle the active class on the FAQ item
-      faqItem.classList.toggle('active');
-      
+      faqItem.classList.toggle("active");
+
       // Close other FAQ items (optional - for accordion style)
-      const otherFaqItems = document.querySelectorAll('.faq-item');
-      otherFaqItems.forEach(item => {
+      const otherFaqItems = document.querySelectorAll(".faq-item");
+      otherFaqItems.forEach((item) => {
         if (item !== faqItem) {
-          item.classList.remove('active');
+          item.classList.remove("active");
         }
       });
     });
   });
-  
-  // Newsletter form submission
-  const newsletterForm = document.querySelector('.newsletter-form');
+}
+
+// Newsletter form submission
+function setupNewsletter() {
+  const newsletterForm = document.querySelector(".newsletter-form");
   if (newsletterForm) {
-    newsletterForm.addEventListener('submit', function(e) {
+    newsletterForm.addEventListener("submit", function(e) {
       e.preventDefault();
       const emailInput = this.querySelector('input[type="email"]');
-      if (emailInput.value.trim() !== '') {
-        alert('Thank you for subscribing to our newsletter!');
-        emailInput.value = '';
+      if (emailInput.value.trim() !== "") {
+        alert("Thank you for subscribing to our newsletter!");
+        emailInput.value = "";
       }
     });
   }
+}
 
-  // Enhanced Partners section functionality
-  const partnersContainer = document.querySelector('.partners-container');
+// Enhanced Partners section functionality
+function setupPartners() {
+  const partnersContainer = document.querySelector(".partners-container");
   if (partnersContainer) {
     // Get original partners
     const originalPartners = Array.from(partnersContainer.children);
-    
+
     // Clone partners multiple times to ensure smooth infinite scrolling
     // regardless of screen width
     for (let i = 0; i < 3; i++) {
-      originalPartners.forEach(partner => {
+      originalPartners.forEach((partner) => {
         const clone = partner.cloneNode(true);
         partnersContainer.appendChild(clone);
       });
     }
-    
+
     // Ensure equal width for all partner logos
-    const allPartnerLogos = partnersContainer.querySelectorAll('.partner-logo');
+    const allPartnerLogos = partnersContainer.querySelectorAll(".partner-logo");
     const fixedWidth = 140; // Fixed width for each partner logo
-    
-    allPartnerLogos.forEach(logo => {
+
+    allPartnerLogos.forEach((logo) => {
       logo.style.width = `${fixedWidth}px`;
     });
   }
+}
+
+// Initialize everything when DOM is fully loaded
+document.addEventListener("DOMContentLoaded", function() {
+  // Check for existing cart data
+  checkCookie();
+  
+  // Set up event listeners
+  setupCartButtons();
+  setupFAQ();
+  setupNewsletter();
+  setupPartners();
+  
+  // Initialize cart sections if on cart page
+  updateCartSection();
 });
