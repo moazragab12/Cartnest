@@ -374,13 +374,17 @@ input {
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 286px);
-  gap: 12px;
+  grid-template-columns: repeat(4, 1fr); /* Changed to ensure exactly 4 items per row */
+  gap: 20px; /* Increased gap slightly for better spacing */
   justify-content: center;
+  width: 100%; /* Ensure full width is used */
+  max-width: 1200px; /* Set a maximum width for larger screens */
+  margin: 0 auto; /* Center the grid */
 }
 
 .product-card {
-  width: 286px;
+  width: 100%; /* Make cards take full column width */
+  max-width: 286px; /* Maximum width for the card */
   height: 432px;
   position: relative;
   background: var(--tertiary-color);
@@ -392,6 +396,15 @@ input {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  margin: 0 auto; /* Center the card in its grid cell */
+}
+
+/* Adjust product image to match card width */
+.product-image {
+  width: 100%;
+  height: 360px;
+  border-radius: 14px;
+  overflow: hidden;
 }
 
 .product-card:hover {
@@ -409,22 +422,6 @@ input {
   border-radius: 4px;
   font-weight: 500;
   z-index: 2;
-}
-
-.product-image {
-  width: 286px;
-  height: 360px;
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-.product-image img {
-  width: 100%;
-  height: 100%;
-}
-
-.product-card:hover .product-image img {
-  transform: scale(1.05);
 }
 
 .product-details {
