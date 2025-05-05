@@ -1,50 +1,21 @@
 // Cart page functionality
+// Now using the shared cart manager for consistent cart operations
+import { cartManager } from '../shared/cart-manager.js';
+
 document.addEventListener("DOMContentLoaded", function() {
     loadCart();
     setupRemoveAllButton();
     setupBackButton();
     setupCouponButton();
+    
+    // Listen for cart update events to refresh the UI automatically
+    document.addEventListener('cart:updated', () => {
+        loadCart();
+    });
 });
 
-function getCookie(name) {
-    const cname = name + "=";
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i].trim();
-        if (c.indexOf(cname) === 0) {
-            return c.substring(cname.length, c.length);
-        }
-    }
-    return "";
-}
-
-function setCookie(name, value, days) {
-    const d = new Date();
-    d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
-    const expires = "expires=" + d.toUTCString();
-    document.cookie = name + "=" + value + ";" + expires + ";path=/";
-}
-
-function getCart() {
-    let cart = getCookie("cart");
-    if (cart) {
-        return JSON.parse(cart);
-    } else {
-        return [];
-    }
-}
-
-function updateCartBadge() {
-    const badge = document.getElementById("cart-badge");
-    if (badge) {
-        const totalItems = getCart().reduce((sum, item) => sum + item.quantity, 0);
-        badge.innerText = totalItems;
-    }
-}
-
 function loadCart() {
-    const cart = getCart();
+    const cart = cartManager.getCart();
     const cartContainer = document.querySelector(".cart");
     
     if (!cartContainer) {
@@ -90,14 +61,14 @@ function loadCart() {
                 <p>Size: Medium, Color: Blue, Material: Plastic</p>
                 <p>Seller: Artel Market</p>
                 <div class="actions">
-                    <button class="remove" data-name="${item.name}" data-image="${item.image}">Remove</button>
+                    <button class="remove" data-name="${item.name}" data-image="${item.image}"${item.id ? ` data-id="${item.id}"` : ''}>Remove</button>
                     <button class="save">Save for later</button>
                 </div>
             </div>
             <div class="item-price">
                 <p>$${item.price.toFixed(2)}</p>
                 <div class="item-quantity">
-                    <select class="quantity-select" data-name="${item.name}" data-image="${item.image}">
+                    <select class="quantity-select" data-name="${item.name}" data-image="${item.image}"${item.id ? ` data-id="${item.id}"` : ''}>
                         ${quantityOptions}
                     </select>
                 </div>
@@ -109,18 +80,36 @@ function loadCart() {
         // Add event listener for the remove button
         const removeButton = cartItem.querySelector(".remove");
         removeButton.addEventListener("click", function() {
+            const itemId = this.getAttribute("data-id");
             const itemName = this.getAttribute("data-name");
             const itemImage = this.getAttribute("data-image");
-            removeItemFromCart(itemName, itemImage);
+            
+            // Use cart manager for removal
+            if (itemId) {
+                cartManager.removeFromCart(itemId);
+            } else {
+                cartManager.removeFromCart(itemName, itemImage);
+            }
+            
+            // UI is updated via event listener now
         });
         
         // Add event listener for quantity change
         const quantitySelect = cartItem.querySelector(".quantity-select");
         quantitySelect.addEventListener("change", function() {
+            const itemId = this.getAttribute("data-id");
             const itemName = this.getAttribute("data-name");
             const itemImage = this.getAttribute("data-image");
             const newQuantity = parseInt(this.value);
-            updateItemQuantity(itemName, itemImage, newQuantity);
+            
+            // Use cart manager for quantity update
+            if (itemId) {
+                cartManager.updateItemQuantity(itemId, newQuantity);
+            } else {
+                cartManager.updateItemQuantity(itemName, newQuantity, itemImage);
+            }
+            
+            // UI is updated via event listener now
         });
     });
 
@@ -128,25 +117,7 @@ function loadCart() {
     cartContainer.appendChild(backRemoveDiv);
     
     updateOrderSummary(totalItems, totalPrice);
-    updateCartBadge();
-}
-
-function removeItemFromCart(name, image) {
-    let cart = getCart();
-    cart = cart.filter(item => !(item.name === name && item.image === image));
-    setCookie("cart", JSON.stringify(cart), 7);
-    loadCart();
-}
-
-function updateItemQuantity(name, image, quantity) {
-    let cart = getCart();
-    const item = cart.find(item => item.name === name && item.image === image);
-    
-    if (item) {
-        item.quantity = quantity;
-        setCookie("cart", JSON.stringify(cart), 7);
-        loadCart();
-    }
+    cartManager.updateCartBadge();
 }
 
 function updateOrderSummary(totalItems, totalPrice) {
@@ -176,8 +147,9 @@ function setupRemoveAllButton() {
     if (removeAllButton) {
         removeAllButton.addEventListener("click", function() {
             if (confirm("Are you sure you want to remove all items from your cart?")) {
-                setCookie("cart", "[]", 7);
-                loadCart();
+                // Use cart manager to clear cart
+                cartManager.clearCart();
+                // UI will update via event listener
             }
         });
     }
@@ -203,13 +175,20 @@ function setupCouponButton() {
             
             if (couponCode) {
                 // Here you would typically validate the coupon with your backend
-                // For this example, let's just show an alert
-                alert(`Coupon "${couponCode}" applied!`);
+                if (window.notifications) {
+                    window.notifications.success(`Coupon "${couponCode}" applied!`);
+                } else {
+                    alert(`Coupon "${couponCode}" applied!`);
+                }
                 
                 // Reload cart to update totals
                 loadCart();
             } else {
-                alert("Please enter a coupon code.");
+                if (window.notifications) {
+                    window.notifications.warning('Please enter a coupon code.');
+                } else {
+                    alert("Please enter a coupon code.");
+                }
             }
         });
     }

@@ -345,7 +345,7 @@ input {
 }
 
 /* ====================================
-   PRODUCT CARDS
+   FEATURED PRODUCTS SECTION
    ==================================== */
 .featured-products-section {
   margin-top: 100px;
@@ -372,352 +372,458 @@ input {
   margin: 0;
 }
 
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Changed to ensure exactly 4 items per row */
-  gap: 20px; /* Increased gap slightly for better spacing */
-  justify-content: center;
-  width: 100%; /* Ensure full width is used */
-  max-width: 1200px; /* Set a maximum width for larger screens */
-  margin: 0 auto; /* Center the grid */
-}
-
-.product-card {
-  width: 100%; /* Make cards take full column width */
-  max-width: 286px; /* Maximum width for the card */
-  height: 432px;
-  position: relative;
-  background: var(--tertiary-color);
-  border-radius: 0;
-  padding: 0;
-  text-align: left;
-  box-shadow: none;
-  transition: transform var(--transition-fast);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto; /* Center the card in its grid cell */
-}
-
-/* Adjust product image to match card width */
-.product-image {
-  width: 100%;
-  height: 360px;
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-}
-
-.discount-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: #414141;
-  color: var(--tertiary-color);
-  padding: 4px 8px;
-  font-size: 12px;
-  border-radius: 4px;
-  font-weight: 500;
-  z-index: 2;
-}
-
-.product-details {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 60px;
-  margin-top: 12px;
-  padding: 0 12px;
-  gap: 8px;
-}
-
-.product-info {
-  flex: 1;
-}
-
-.product-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--black-color);
-  margin-bottom: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.product-price {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.current-price {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--black-color);
-}
-
-.original-price {
-  font-size: 14px;
-  color: #888;
-  text-decoration: line-through;
-}
-
-/* ====================================
-   PRODUCT CARD CART BUTTONS
-   ==================================== */
-
-/* Base button styles for cart buttons */
-.cart-button,
-.add-to-cart {
-  position: relative;
-  overflow: hidden;
-  outline: none;
-  cursor: pointer;
-  border-radius: 8px;
-  border: none;
-  background: linear-gradient(90deg, #ACCBEE 0%, #E7F0FD 100%);
-  box-shadow: rgba(50, 50, 93, 0.15) 0px 6px 12px -2px,
-    rgba(0, 0, 0, 0.2) 0px 3px 7px -3px;
-  font-family: var(--font-main);
-  height: 38px;
-  width: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-/* Icon styling */
-.add-to-cart i {
-  font-size: 14px;
-  color: var(--black-color);
-  transition: all 0.3s ease;
-}
-
-/* Hover state */
-.cart-button:hover,
-.add-to-cart:hover {
-  background: linear-gradient(90deg, #0c7bdd 0%, #0D99FF 100%);
-  transform: translateY(-2px);
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-}
-
-.add-to-cart:hover i {
-  color: var(--tertiary-color);
-  transform: scale(1.1);
-}
-
-/* Cart Button Animation - Fixed and improved */
-.default-btn,
-.hover-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  height: 100%;
-  width: 100%;
-}
-
-.default-btn {
-  background: transparent;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateY(0);
-}
-
-.hover-btn {
-  position: absolute;
-  top: 0;
-  left: 0;
-  text-align: center;
-  background: transparent;
-  transform: translateY(100%);
-}
-
-.cart-button:hover .default-btn {
-  transform: translateY(-100%);
-}
-
-.cart-button:hover .hover-btn {
-  transform: translateY(0);
-}
-
-/* SVG icon colors */
-.cart-icon {
-  stroke: var(--black-color);
-  transition: all 0.3s ease;
-}
-
-.cart-button:hover .cart-icon {
-  stroke: var(--tertiary-color);
-}
-
-.hover-btn svg path {
-  fill: var(--tertiary-color);
-}
-
-/* Add a subtle pop effect on click */
-.cart-button:active,
-.add-to-cart:active {
-  transform: scale(0.95);
-}
-
-/* Make sure cart buttons have consistent sizing */
-.popular-products-section .cart-button,
-.featured-products-section .cart-button,
-.featured-products-section .add-to-cart {
-  width: 38px;
-  height: 38px;
-}
-
 /* ====================================
    CATEGORIES
    ==================================== */
 .categories-section {
   margin-top: 80px;
   padding: 0 var(--spacing-xl);
+  position: relative;
+  overflow: hidden;
 }
 
 .categories-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
-}
-
-.categories-header h2 {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--black-color);
-  margin: 0;
-}
-
-.categories-header p {
-  color: #666;
-  max-width: 400px;
-  margin: 0;
-}
-
-.categories {
-  display: grid;
-  grid-template-columns:  repeat(auto-fill , 284px);
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-}
-.categories-header h2 {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--black-color);
-  margin: 0;
-}
-
-.categories-header p {
-  color: #666;
-  max-width: 400px;
-  margin: 0;
-}
-
-.categories {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-}
-.categories-header h2 {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--black-color);
-  margin: 0;
-}
-
-.categories-header p {
-  color: #666;
-  max-width: 400px;
-  margin: 0;
-}
-
-.categories {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-gap: 20px;
-  padding: 0;
-  margin: 0 auto;
-  max-width: 1200px;
-}
-
-.category-card {
-  position: relative;
-  height: 280px;
-  border-radius: var(--border-radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  transition: transform var(--transition-fast), box-shadow var(--transition-normal);
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  max-width: 100%;
-  cursor: pointer;
-}
-
-.category-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-}
-
-.image-categories {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24px 20px;
-  position: relative;
-  text-align: center;
-  height: 100%;
+  margin-bottom: 30px;
   width: 100%;
 }
 
-.category-title {
-  font-size: 24px;
+.categories-header h2 {
+  font-size: 32px;
+  font-weight: 700;
   color: var(--black-color);
-  font-weight: 600;
-  margin-bottom: var(--spacing-sm);
-  z-index: 2;
+  margin: 0;
 }
 
-.image-container-category {
-  position: relative;
-  width: 80%;
-  height: 70%;
-  margin-top: auto;
+.categories-header p {
+  color: #666;
+  max-width: 400px;
+  margin: 0;
+}
+
+/* View All Categories button container - positioned to match the image */
+.view-all-categories-container {
   display: flex;
-  align-items: flex-end;
+  justify-content: flex-start;
+  margin-bottom: 30px;
+  width: 100%;
+  padding: 5px 0;
+}
+
+/* View All Categories button styling - improved padding and arrow animation */
+.view-all-categories-btn {
+  background-color: #0ea5e9;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  gap: 6px; /* Reduced gap between text and arrow */
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 6px 15px rgba(12, 152, 255, 0.2);
+  color: white;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: visible;
   z-index: 1;
+  height: auto;
+  min-width: 200px;
+  white-space: nowrap;
+  margin: 5px 0;
 }
 
-.image-categories img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  transition: transform 0.5s ease;
+.view-all-categories-btn i {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Faster transition */
+  color: white;
+  font-size: 16px;
+  margin-left: 0; /* Removed left margin to bring arrow closer */
+  line-height: 1;
+  position: relative;
 }
 
-.category-card:hover .image-categories img {
-  transform: scale(1.08);
+/* Arrow animation with bounce effect - faster */
+@keyframes arrowBounce {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+/* Hover state - flip to white with blue text */
+.view-all-categories-btn:hover {
+  background-color: white;
+  color: #0ea5e9;
+  border: 2px solid #0ea5e9;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(12, 152, 255, 0.2);
+  padding-right: 34px; /* Slightly reduced padding */
+}
+
+.view-all-categories-btn:hover i {
+  color: #0ea5e9;
+  animation: arrowBounce 0.8s infinite; /* Reduced animation time from 1.2s to 0.8s */
+}
+
+/* Updated categories grid layout */
+.categories {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+}
+
+/* Redesigned category card with enhanced animations */
+.category-card {
+  position: relative;
+  height: 180px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  cursor: pointer;
+  transform: translateY(50px);
+  opacity: 0;
+  z-index: 1;
+  background: linear-gradient(135deg, #0D99FF, #0c7bdd);
+}
+
+/* Background shapes container */
+.background-shapes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1; /* Behind content, above gradient */
+  border-radius: inherit; /* Inherit card's border radius */
+}
+
+/* Individual shape styling with improved animations */
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15); /* Subtle white circles like image */
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform, opacity;
+}
+
+/* Different sizes and positions for shapes */
+.shape1 {
+  width: 80px;
+  height: 80px;
+  top: 15%;
+  left: 20%;
+  animation: moveShape1 20s ease-in-out infinite alternate;
+}
+
+.shape2 {
+  width: 50px;
+  height: 50px;
+  top: 60%;
+  left: 70%;
+  animation: moveShape2 24s ease-in-out infinite alternate;
+}
+
+.shape3 {
+  width: 30px;
+  height: 30px;
+  top: 30%;
+  left: 85%;
+  animation: moveShape3 18s ease-in-out infinite alternate;
+}
+
+/* Show shapes on hover with enhanced transition */
+.category-card:hover .shape {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* Separate keyframe animations for each shape for more varied movement */
+@keyframes moveShape1 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0.3;
+    border-radius: 50%;
+  }
+  33% {
+    transform: translate(15px, -15px) scale(1.1) rotate(120deg);
+    opacity: 0.6;
+    border-radius: 40%;
+  }
+  66% {
+    transform: translate(-5px, 10px) scale(0.95) rotate(240deg);
+    opacity: 0.5;
+    border-radius: 60%;
+  }
+  100% {
+    transform: translate(-15px, 5px) scale(1.05) rotate(360deg);
+    opacity: 0.4;
+    border-radius: 50%;
+  }
+}
+
+@keyframes moveShape2 {
+  0% {
+    transform: translate(0, 0) scale(0.9) rotate(0deg);
+    opacity: 0.25;
+  }
+  33% {
+    transform: translate(-20px, 10px) scale(1.15) rotate(-120deg);
+    opacity: 0.5;
+  }
+  66% {
+    transform: translate(10px, -15px) scale(1) rotate(-240deg);
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate(15px, 5px) scale(0.95) rotate(-360deg);
+    opacity: 0.3;
+  }
+}
+
+@keyframes moveShape3 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0.3;
+    border-radius: 50%;
+  }
+  25% {
+    transform: translate(10px, 15px) scale(1.2) rotate(90deg);
+    opacity: 0.5;
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  }
+  50% {
+    transform: translate(20px, 0px) scale(0.9) rotate(180deg);
+    opacity: 0.4;
+    border-radius: 50%;
+  }
+  75% {
+    transform: translate(-10px, -20px) scale(1.1) rotate(270deg);
+    opacity: 0.6;
+    border-radius: 40% 60% 50% 50% / 35% 60% 40% 65%;
+  }
+  100% {
+    transform: translate(-15px, 10px) scale(1) rotate(360deg);
+    opacity: 0.35;
+    border-radius: 50%;
+  }
+}
+
+/* Enhanced animation for cards appearing - staggered sequence */
+.category-card.animate {
+  animation: categoryAppear 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; /* Bouncy easing */
+}
+
+/* Staggered animation delays for cards */
+.category-card:nth-child(1).animate { animation-delay: 0.1s; }
+.category-card:nth-child(2).animate { animation-delay: 0.2s; }
+.category-card:nth-child(3).animate { animation-delay: 0.3s; }
+.category-card:nth-child(4).animate { animation-delay: 0.4s; }
+.category-card:nth-child(5).animate { animation-delay: 0.5s; }
+.category-card:nth-child(6).animate { animation-delay: 0.6s; }
+
+/* Enhanced spotlight highlight effect with mouse tracking */
+.card-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  filter: blur(5px);
+  will-change: transform, opacity;
+}
+
+.category-card:hover .card-highlight {
+  opacity: 1;
+  animation: pulseLight 2s infinite alternate;
+}
+
+@keyframes pulseLight {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(5px);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    filter: blur(10px);
+  }
+}
+
+/* Enhanced click animation - more pronounced */
+.category-card.clicked {
+  transform: scale(0.92);
+  opacity: 0.95;
+  transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Enhanced keyframe animations for card entrance */
+@keyframes categoryAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.9) rotate(2deg);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-10px) scale(1.02) rotate(-1deg);
+  }
+  70% {
+    transform: translateY(5px) scale(1) rotate(0.5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Category card content styling */
+.category-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  z-index: 3;
+  text-align: center;
+}
+
+/* Category letter styling - matching the image */
+.category-letter {
+  width: 60px; /* Slightly smaller */
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9); /* White background like image */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px; /* Slightly smaller */
+  font-weight: 600; /* Adjusted weight */
+  margin-bottom: 10px; /* Adjusted margin */
+  color: rgba(0, 0, 0, 0.7); /* Darker letter color */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Adjusted shadow */
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  z-index: 3;
+}
+
+/* Category title styling - matching the image's white text */
+.category-title {
+  font-size: 18px; /* Adjusted size */
+  font-weight: 600;
+  margin: 0 0 4px 0; /* Adjusted margin */
+  color: white;
+  transition: transform 0.4s ease;
+  position: relative;
+  z-index: 3;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25); /* Slightly stronger shadow */
+}
+
+/* Category count styling - matching the image */
+.category-count {
+  font-size: 13px; /* Adjusted size */
+  color: rgba(255, 255, 255, 0.85); /* Slightly less transparent */
+  transition: all 0.3s ease;
+  text-shadow: none; /* Removed shadow for cleaner look */
+  font-weight: 400;
+  z-index: 3;
+}
+
+/* Enhanced hover effects with more dramatic animations */
+.category-card:hover {
+  transform: translateY(-8px) scale(1.03); /* Adjusted hover transform */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Adjusted hover shadow */
+  z-index: 5;
+}
+
+.category-card:hover .category-letter {
+  transform: translateY(-5px) scale(1.08); /* Adjusted letter hover */
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
+  background-color: rgba(255, 255, 255, 1); /* Fully opaque on hover */
+}
+
+/* Spotlight highlight effect enhancement */
+.card-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  filter: blur(5px);
+}
+
+/* Click animation - more pronounced */
+.category-card.clicked {
+  transform: scale(0.95);
+  opacity: 0.9;
+  transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Loading and error states */
+.loading-categories,
+.no-categories,
+.error-categories {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: var(--black-color);
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+/* ANIMATION KEYFRAMES */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced keyframe animations */
+@keyframes categoryAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Responsive styles for categories */
@@ -737,6 +843,10 @@ gap: 20px;
     align-items: flex-start;
     text-align: left;
     gap: 12px;
+  }
+  
+  .view-all-categories-btn {
+    width: 100%;
   }
 }
 

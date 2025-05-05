@@ -39,6 +39,14 @@ function createProductCard(product) {
         productCard.appendChild(discountBadge);
     }
     
+    // Add category badge if category exists
+    if (product.category) {
+        const categoryBadge = document.createElement('span');
+        categoryBadge.className = 'category-badge';
+        categoryBadge.textContent = product.category;
+        productCard.appendChild(categoryBadge);
+    }
+    
     // Create product image container
     const productImage = document.createElement('div');
     productImage.className = 'product-image';
@@ -55,6 +63,10 @@ function createProductCard(product) {
     productImage.appendChild(img);
     productCard.appendChild(productImage);
     
+    // Create product content container (new wrapper for better styling)
+    const productContent = document.createElement('div');
+    productContent.className = 'product-content';
+    
     // Create product details container
     const productDetails = document.createElement('div');
     productDetails.className = 'product-details';
@@ -68,6 +80,38 @@ function createProductCard(product) {
     productTitle.className = 'product-title';
     productTitle.textContent = product.name;
     productInfo.appendChild(productTitle);
+    
+    // Add rating stars if rating exists
+    if (product.rating) {
+        const productRating = document.createElement('div');
+        productRating.className = 'product-rating';
+        
+        const stars = document.createElement('span');
+        stars.className = 'stars';
+        stars.textContent = '★'.repeat(Math.floor(product.rating)) + (product.rating % 1 >= 0.5 ? '½' : '');
+        productRating.appendChild(stars);
+        
+        const ratingCount = document.createElement('span');
+        ratingCount.className = 'rating-count';
+        ratingCount.textContent = `(${product.rating_count || '0'})`;
+        productRating.appendChild(ratingCount);
+        
+        productInfo.appendChild(productRating);
+    }
+    
+    // Add short description if available
+    if (product.description) {
+        const productDesc = document.createElement('div');
+        productDesc.className = 'product-description';
+        productDesc.textContent = product.description.substring(0, 60) + (product.description.length > 60 ? '...' : '');
+        productInfo.appendChild(productDesc);
+    }
+    
+    productDetails.appendChild(productInfo);
+    
+    // Create purchase area for price and cart button
+    const purchaseArea = document.createElement('div');
+    purchaseArea.className = 'purchase-area';
     
     // Create product price container
     const productPrice = document.createElement('div');
@@ -87,14 +131,20 @@ function createProductCard(product) {
         productPrice.appendChild(originalPrice);
     }
     
-    productInfo.appendChild(productPrice);
-    productDetails.appendChild(productInfo);
+    purchaseArea.appendChild(productPrice);
     
     // Create and add cart button using the utility function
     const cartButton = createCartButton(product.item_id);
-    productDetails.appendChild(cartButton);
+    purchaseArea.appendChild(cartButton);
     
-    productCard.appendChild(productDetails);
+    // Add purchase area to product details
+    productDetails.appendChild(purchaseArea);
+    
+    // Add product details to content wrapper
+    productContent.appendChild(productDetails);
+    
+    // Add content wrapper to card
+    productCard.appendChild(productContent);
     
     // Make the product card clickable using the navigation utility
     makeProductCardClickable(productCard, product.item_id);
@@ -108,8 +158,8 @@ function createProductCard(product) {
  */
 async function fetchFeaturedProducts() {
     try {
-        // Explicitly limit to 4 items as required
-        const limit = 4;
+        // Limit to exactly 3 items for featured products
+        const limit = 3;
         const response = await fetch(`${API_BASE_URL}/api/v0/items/featured?limit=${limit}`);
         const data = await response.json();
         return data || [];
@@ -125,8 +175,8 @@ async function fetchFeaturedProducts() {
  */
 async function fetchPopularProducts() {
     try {
-        // Explicitly limit to 8 items as required
-        const limit = 8;
+        // Limit to exactly 6 items for popular products
+        const limit = 6;
         // Using the recent endpoint as a substitute for popular products
         const response = await fetch(`${API_BASE_URL}/api/v0/items/recent?limit=${limit}`);
         const data = await response.json();

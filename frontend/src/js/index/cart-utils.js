@@ -1,65 +1,88 @@
 /**
  * Cart utilities for the marketplace
- * Handles cart operations like adding items and updating the UI
+ * Uses the shared cart-manager for consistent cart management across all pages
  */
+
+import { cartManager } from '../shared/cart-manager.js';
 
 /**
  * Add item to cart
  * @param {number|string} itemId - Item ID to add to cart
  * @param {number} quantity - Quantity to add (default: 1)
- * @returns {boolean} - Success status
+ * @returns {Promise<boolean>} - Success status
  */
-export function addToCart(itemId, quantity = 1) {
+export async function addToCart(itemId, quantity = 1) {
     if (!itemId) {
         console.error('Invalid item ID for cart');
         return false;
     }
     
     try {
-        // Get existing cart items from localStorage
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        // Fetch product details to display in notification
+        let productName = 'Product';
+        let productImage = null;
+        let productPrice = 0;
         
-        // Check if item is already in cart
-        const existingItem = cartItems.find(item => item.id === itemId);
-        
-        if (existingItem) {
-            // Increment quantity if item already exists
-            existingItem.quantity += quantity;
-        } else {
-            // Add new item to cart
-            cartItems.push({
-                id: itemId,
-                quantity: quantity
-            });
+        try {
+            const response = await fetch(`http://localhost:8000/api/v0/items/${itemId}`);
+            if (response.ok) {
+                const productDetails = await response.json();
+                productName = productDetails.name || 'Product';
+                productImage = productDetails.image_url;
+                productPrice = productDetails.price || 0;
+            }
+        } catch (error) {
+            console.error('Error fetching product details for notification', error);
         }
         
-        // Save updated cart to localStorage
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        // Create product object for cart manager
+        const product = {
+            id: itemId,
+            name: productName,
+            image: productImage,
+            price: productPrice,
+        };
         
-        // Update cart badge
-        updateCartBadge();
+        // Use the shared cart manager to add the item
+        const result = await cartManager.addToCart(product, quantity);
         
-        return true;
+        // Show appropriate notification
+        if (result.success) {
+            if (result.isNewItem) {
+                if (window.notifications) {
+                    window.notifications.success(`${productName} added to your cart!`);
+                }
+            } else {
+                if (window.notifications) {
+                    window.notifications.success(`${productName} quantity updated in your cart!`);
+                }
+            }
+        } else {
+            if (window.notifications) {
+                window.notifications.error('Could not add item to cart. Please try again.');
+            }
+        }
+        
+        return result.success;
     } catch (error) {
         console.error('Error adding item to cart:', error);
+        
+        // Show error notification if available
+        if (window.notifications) {
+            window.notifications.error('Could not add item to cart. Please try again.');
+        }
+        
         return false;
     }
 }
 
 /**
  * Update cart badge with current item count
+ * @param {boolean} animate - Whether to animate the badge
  */
-export function updateCartBadge() {
-    try {
-        const cartBadge = document.getElementById('cart-badge');
-        if (cartBadge) {
-            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-            const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
-            cartBadge.textContent = totalItems;
-        }
-    } catch (error) {
-        console.error('Error updating cart badge:', error);
-    }
+export function updateCartBadge(animate = false) {
+    // Delegate to cart manager
+    cartManager.updateCartBadge(animate);
 }
 
 /**
@@ -102,14 +125,10 @@ export function createCartButton(itemId) {
     cartButton.appendChild(hoverBtn);
     
     // Add click event listener to add item to cart
-    cartButton.addEventListener('click', (e) => {
+    cartButton.addEventListener('click', async (e) => {
         e.stopPropagation(); // Prevent triggering parent click events
-        const success = addToCart(itemId);
-        
-        if (success) {
-            // Show notification
-            alert('Item added to cart!');
-        }
+        const success = await addToCart(itemId);
+        // Notification is now handled inside addToCart function
     });
     
     return cartButton;
