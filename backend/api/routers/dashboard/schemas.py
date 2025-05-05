@@ -49,12 +49,14 @@ class TimeSeriesData(BaseModel):
 
 
 class DashboardSummary(BaseModel):
-    total_revenue: float
     total_orders: int
-    average_order_value: float
-    total_customers: int
-    revenue_growth: float
-    order_growth: float
+    total_customers: int  # Used for delivered value
+    total_spent: float
+    products_listed: int
+    purchase_activity: List[Dict[str, Any]] = []
+    sales_activity: List[Dict[str, Any]] = []
+    category_spending: List[Dict[str, Any]] = []
+    best_selling_products: List[Dict[str, Any]] = []
 
 
 class RevenueByPeriod(BaseModel):

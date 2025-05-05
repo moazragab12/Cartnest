@@ -16,76 +16,258 @@ from api.routers.dashboard.schemas import (
 async def get_dashboard_summary(
     db: Session, 
     user_id: Optional[int] = None, 
-    view_type: str = "all"
+    view_type: str = "all",
+    time_range: str = "30_days"
 ) -> DashboardSummary:
-    """Get summary statistics for the dashboard."""
-    # Calculate current period metrics
+    """Get summary statistics for the dashboard.
+    
+    Args:
+        db: Database session
+        user_id: User ID for filtering
+        view_type: View type filter 
+        time_range: Time range for filtering ('30_days', '90_days', 'this_year', 'all_time')
+    """
+    # Initialize metrics
+    total_orders = 0
+    delivered_value = 0
+    total_spent = 0
+    products_listed = 0
+    
+    # Calculate date range based on time_range parameter
     today = datetime.now().date()
-    thirty_days_ago = today - timedelta(days=30)
-    sixty_days_ago = today - timedelta(days=60)
     
-    # Base query for filtering transactions
-    base_query = db.query(Transaction).filter(Transaction.transaction_time >= thirty_days_ago)
-    prev_period_query = db.query(Transaction).filter(
-        Transaction.transaction_time >= sixty_days_ago,
-        Transaction.transaction_time < thirty_days_ago
-    )
+    if time_range == "30_days":
+        start_date = today - timedelta(days=30)
+        prev_start_date = today - timedelta(days=60) 
+        prev_end_date = start_date
+    elif time_range == "90_days":
+        start_date = today - timedelta(days=90)
+        prev_start_date = today - timedelta(days=180)
+        prev_end_date = start_date
+    elif time_range == "this_year":
+        start_date = datetime(today.year, 1, 1).date()
+        prev_start_date = datetime(today.year-1, 1, 1).date()
+        prev_end_date = datetime(today.year-1, 12, 31).date()
+    else:  # all_time
+        start_date = datetime(2000, 1, 1).date()  # A date far in the past
+        prev_start_date = None  # No previous period for all time
+        prev_end_date = None
     
-    # Apply user and view type filters
-    if user_id and view_type != "all":
-        if view_type == "seller":
-            # Filter for transactions where the user is the seller
-            base_query = base_query.filter(Transaction.seller_user_id == user_id)
-            prev_period_query = prev_period_query.filter(Transaction.seller_user_id == user_id)
-        elif view_type == "buyer":
-            # Filter for transactions where the user is the buyer
-            base_query = base_query.filter(Transaction.buyer_user_id == user_id)
-            prev_period_query = prev_period_query.filter(Transaction.buyer_user_id == user_id)
-        elif view_type == "both":
-            # Filter for transactions where the user is either buyer or seller
-            base_query = base_query.filter(
-                or_(
-                    Transaction.buyer_user_id == user_id,
-                    Transaction.seller_user_id == user_id
-                )
-            )
-            prev_period_query = prev_period_query.filter(
-                or_(
-                    Transaction.buyer_user_id == user_id,
-                    Transaction.seller_user_id == user_id
-                )
-            )
+    if user_id:
+        # Base query with time filter
+        orders_query = db.query(Transaction).filter(Transaction.buyer_user_id == user_id)
+        spent_query = db.query(func.sum(Transaction.total_amount)).filter(Transaction.buyer_user_id == user_id)
+        
+        # Apply time filter except for all_time
+        if time_range != "all_time":
+            orders_query = orders_query.filter(Transaction.transaction_time >= start_date)
+            spent_query = spent_query.filter(Transaction.transaction_time >= start_date)
+        
+        # 1. Total orders - count transactions where user is the buyer
+        total_orders = orders_query.count()
+        
+        # 2. Delivered value - same as total orders
+        delivered_value = total_orders
+        
+        # 3. Total spent - sum of transaction amounts where user is the buyer
+        total_spent_result = spent_query.scalar()
+        total_spent = total_spent_result or 0
+        
+        # 4. Products listed - count items where user is the seller
+        products_listed = db.query(Item).filter(
+            Item.seller_user_id == user_id
+        ).count()
+
+    # Activity Summary Graph Data
+    purchase_data = []
+    sales_data = []
     
-    # Current period (last 30 days)
-    current_revenue = base_query.with_entities(func.sum(Transaction.total_amount)).scalar() or 0
-    current_orders = base_query.with_entities(func.count(Transaction.transaction_id)).scalar() or 0
-    
-    # Previous period (30-60 days ago) for comparison
-    previous_revenue = prev_period_query.with_entities(func.sum(Transaction.total_amount)).scalar() or 0
-    previous_orders = prev_period_query.with_entities(func.count(Transaction.transaction_id)).scalar() or 0
-    
-    # Calculate growth rates
-    revenue_growth = ((current_revenue - previous_revenue) / previous_revenue * 100) if previous_revenue > 0 else 0
-    order_growth = ((current_orders - previous_orders) / previous_orders * 100) if previous_orders > 0 else 0
-    
-    # Total customers - either all customers, or customers who bought from this seller
-    if user_id and view_type == "seller":
-        total_customers = db.query(func.count(func.distinct(Transaction.buyer_user_id))).filter(
+    if user_id:
+        # For activity graph, use the selected time range
+        purchases_activity_query = db.query(
+            func.date(Transaction.transaction_time).label("date"),
+            func.sum(Transaction.total_amount).label("amount")
+        ).filter(
+            Transaction.buyer_user_id == user_id
+        )
+        
+        sales_activity_query = db.query(
+            func.date(Transaction.transaction_time).label("date"),
+            func.sum(Transaction.total_amount).label("amount")
+        ).filter(
             Transaction.seller_user_id == user_id
-        ).scalar() or 0
-    else:
-        total_customers = db.query(func.count(User.user_id)).scalar() or 0
+        )
+        
+        # Apply time filter except for all_time
+        if time_range != "all_time":
+            purchases_activity_query = purchases_activity_query.filter(
+                Transaction.transaction_time >= start_date
+            )
+            sales_activity_query = sales_activity_query.filter(
+                Transaction.transaction_time >= start_date
+            )
+        
+        # Get purchase data
+        purchase_results = purchases_activity_query.group_by(
+            func.date(Transaction.transaction_time)
+        ).order_by(
+            func.date(Transaction.transaction_time)
+        ).all()
+        
+        # Get sales data
+        sales_results = sales_activity_query.group_by(
+            func.date(Transaction.transaction_time)
+        ).order_by(
+            func.date(Transaction.transaction_time)
+        ).all()
+        
+        # Convert to dictionary for easier lookup
+        purchase_by_date = {str(date): float(amount) for date, amount in purchase_results}
+        sales_by_date = {str(date): float(amount) for date, amount in sales_results}
+        
+        # Determine appropriate date range for the graph based on time_range
+        if time_range == "all_time":
+            # For all time, we need to find the first transaction date
+            earliest_tx = db.query(func.min(Transaction.transaction_time)).filter(
+                or_(
+                    Transaction.buyer_user_id == user_id,
+                    Transaction.seller_user_id == user_id
+                )
+            ).scalar()
+            
+            if earliest_tx:
+                earliest_date = earliest_tx.date()
+                days_diff = (today - earliest_date).days
+                date_range = [(earliest_date + timedelta(days=i)) for i in range(days_diff + 1)]
+            else:
+                # No transactions, use last 30 days as default
+                date_range = [(today - timedelta(days=i)) for i in range(30)]
+                date_range.reverse()
+        else:
+            # For other time ranges, generate dates from start_date to today
+            days_diff = (today - start_date).days
+            date_range = [(start_date + timedelta(days=i)) for i in range(days_diff + 1)]
+        
+        # Create the purchase and sales data series
+        purchase_data = [
+            {"date": date.strftime("%Y-%m-%d"), "value": purchase_by_date.get(str(date), 0)} 
+            for date in date_range
+        ]
+        
+        sales_data = [
+            {"date": date.strftime("%Y-%m-%d"), "value": sales_by_date.get(str(date), 0)} 
+            for date in date_range
+        ]
     
-    # Average order value
-    avg_order_value = current_revenue / current_orders if current_orders > 0 else 0
+    # Spending by Category data with time range filter
+    category_spending = []
+    if user_id:
+        # Base category query
+        category_query = db.query(
+            Item.category,
+            func.sum(Transaction.total_amount).label("amount")
+        ).join(
+            Transaction, Transaction.item_id == Item.item_id
+        ).filter(
+            Transaction.buyer_user_id == user_id
+        )
+        
+        # Apply time filter except for all_time
+        if time_range != "all_time":
+            category_query = category_query.filter(Transaction.transaction_time >= start_date)
+        
+        # Execute query with grouping
+        category_results = category_query.group_by(
+            Item.category
+        ).order_by(
+            desc(func.sum(Transaction.total_amount))
+        ).all()
+        
+        # Calculate total spending for percentages
+        total_category_spending = sum(float(amount) for _, amount in category_results)
+        
+        # Format category data for the pie chart
+        for category, amount in category_results:
+            amount_float = float(amount)
+            percentage = (amount_float / total_category_spending * 100) if total_category_spending > 0 else 0
+            category_spending.append({
+                "category": category or "Other",  # Use "Other" if category is None
+                "amount": amount_float,
+                "percentage": round(percentage, 1)  # Round to 1 decimal place
+            })
     
+    # Best Selling Products with time range filter
+    best_selling_products = []
+    if user_id:
+        # Base query for best sellers
+        best_sellers_query = db.query(
+            Item.item_id,
+            Item.name,
+            func.sum(Transaction.total_amount).label("sales"),
+            func.sum(Transaction.quantity_purchased).label("units_sold")
+        ).join(
+            Transaction, Transaction.item_id == Item.item_id
+        ).filter(
+            Transaction.seller_user_id == user_id
+        )
+        
+        # Apply time filter except for all_time
+        if time_range != "all_time":
+            best_sellers_query = best_sellers_query.filter(Transaction.transaction_time >= start_date)
+            
+            # For previous period comparison (for growth calculation)
+            if prev_start_date and prev_end_date:
+                prev_period_query = db.query(
+                    Item.item_id,
+                    func.sum(Transaction.total_amount).label("sales")
+                ).join(
+                    Transaction, Transaction.item_id == Item.item_id
+                ).filter(
+                    Transaction.seller_user_id == user_id,
+                    Transaction.transaction_time >= prev_start_date,
+                    Transaction.transaction_time < prev_end_date
+                ).group_by(
+                    Item.item_id
+                ).all()
+                
+                # Create a lookup for previous period sales
+                prev_sales_lookup = {item_id: float(sales) for item_id, sales in prev_period_query}
+            else:
+                prev_sales_lookup = {}
+        else:
+            # No previous period for all time
+            prev_sales_lookup = {}
+        
+        # Get current period best sellers
+        current_period_products = best_sellers_query.group_by(
+            Item.item_id, Item.name
+        ).order_by(
+            desc(func.sum(Transaction.total_amount))
+        ).limit(5).all()
+        
+        # Format best selling products
+        for item_id, name, sales, units_sold in current_period_products:
+            prev_sales = prev_sales_lookup.get(item_id, 0)
+            growth = ((float(sales) - prev_sales) / prev_sales * 100) if prev_sales > 0 else 0
+            
+            best_selling_products.append({
+                "product_id": item_id,
+                "product_name": name,
+                "total_sales": float(sales),
+                "units_sold": int(units_sold),
+                "growth": round(growth, 1)
+            })
+    
+    # Return the dashboard summary with all data
     return DashboardSummary(
-        total_revenue=current_revenue,
-        total_orders=current_orders,
-        average_order_value=avg_order_value,
-        total_customers=total_customers,
-        revenue_growth=revenue_growth,
-        order_growth=order_growth
+        total_orders=total_orders,
+        total_customers=delivered_value,  # Reusing for delivered value
+        total_spent=total_spent,
+        products_listed=products_listed,
+        purchase_activity=purchase_data,
+        sales_activity=sales_data,
+        category_spending=category_spending,
+        best_selling_products=best_selling_products
     )
 
 
@@ -404,7 +586,7 @@ async def get_top_products(
         
         products.append(
             ProductPerformance(
-                product_id=product_id,
+                product_id=str(product_id),  # Convert integer product_id to string
                 product_name=product_name,
                 sales=float(sales),
                 quantity=int(quantity),

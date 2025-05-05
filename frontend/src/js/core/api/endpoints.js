@@ -9,7 +9,6 @@ const API_ENDPOINTS = {
         register: '/api/v0/auth/register',
         login: '/api/v0/auth/login',
         refreshToken: '/api/v0/auth/refresh-token',
-        profile: '/api/v0/auth/profile',
         tokenStatus: '/api/v0/auth/token-status'
     },
     items: {
@@ -21,8 +20,22 @@ const API_ENDPOINTS = {
         details: (id) => `/api/v0/items/${id}`
     },
     search: {
-        searchItem: '/api/v0/search/items/search_item',
-        getItem: (id) => `/api/v0/search/items/${id}`
+        items: {
+            search: '/api/v0/search/items/search_item',
+            getItem: (id) => `/api/v0/search/items/${id}`
+        },
+        deposits: {
+            search: '/api/v0/search/deposits/search',
+            getDeposit: (id) => `/api/v0/search/deposits/${id}`
+        },
+        transactions: {
+            search: '/api/v0/search/transactions/search',
+            getTransaction: (id) => `/api/v0/search/transactions/${id}`
+        },
+        users: {
+            search: '/api/v0/search/users/search',
+            getUser: (id) => `/api/v0/search/users/${id}`
+        }
     },
     profile: {
         items: {
@@ -44,6 +57,16 @@ const API_ENDPOINTS = {
         list: '/api/v0/transactions/',
         details: (id) => `/api/v0/transactions/${id}`,
         transfer: '/api/v0/transactions/transfer'
+    },
+    dashboard: {
+        profile: '/api/v0/dashboard/profile',
+        summary: '/api/v0/dashboard/summary',
+        sales: '/api/v0/dashboard/sales',
+        categories: '/api/v0/dashboard/categories',
+        topProducts: '/api/v0/dashboard/top-products',
+        recentTransactions: '/api/v0/dashboard/recent-transactions',
+        salesSummary: '/api/v0/dashboard/sales-summary',
+        customRange: '/api/v0/dashboard/custom-range'
     }
 };
 

@@ -27,7 +27,6 @@ from api.routers.dashboard.analytics import (
 
 # Create router with authentication requirement
 router = APIRouter(
-    prefix="/dashboard",
     tags=["Dashboard"],
     dependencies=[Depends(get_current_user)]
 )
@@ -42,13 +41,14 @@ def get_user_profile(current_user: User = Depends(get_current_user)):
 
 @router.get("/summary", response_model=DashboardSummary)
 async def dashboard_summary(
-    view_type: str = Query("seller", description="View type: 'seller', or 'buyer'"),
+    view_type: str = Query("all", description="View type for filtering data"),
+    time_range: str = Query("30_days", description="Time range: '30_days', '90_days', 'this_year', 'all_time'"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Get summary statistics for the dashboard. Can be filtered by seller or buyer view."""
+    """Get summary statistics for the dashboard. Can be filtered by time range."""
     # Simply use the current user's ID without role checks
-    return await get_dashboard_summary(db, user_id=current_user.user_id, view_type=view_type)
+    return await get_dashboard_summary(db, user_id=current_user.user_id, view_type=view_type, time_range=time_range)
 
 @router.get("/sales", response_model=TimeSeriesData)
 async def sales_data(
@@ -79,7 +79,9 @@ async def top_products(
 ):
     """Get top selling products. If view_type is 'seller', shows the user's top sold products. 
     If 'buyer', shows their most purchased products."""
-    return await get_top_products(db, limit, user_id=current_user.user_id, view_type=view_type)
+    products = await get_top_products(db, limit, user_id=current_user.user_id, view_type=view_type)
+    # Wrap the products in a TopProducts model as expected by the frontend
+    return [TopProducts(products=products)]
 
 @router.get("/recent-transactions", response_model=TransactionSummary)
 async def recent_transactions(
