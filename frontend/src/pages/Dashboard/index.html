@@ -63,9 +63,9 @@
           <span class="nav-text">My Orders</span>
           <span class="badge">3</span>
         </div>
-        <div class="nav-item" data-target="wishlist-tab">
-          <i class="fas fa-heart"></i>
-          <span class="nav-text">Wishlist</span>
+        <div class="nav-item" data-target="transactions-tab">
+          <i class="fas fa-exchange-alt"></i>
+          <span class="nav-text">Transactions</span>
           <span class="badge">5</span>
         </div>
         
@@ -168,6 +168,14 @@
               <div class="stat-value">$1,248</div>
               <div class="stat-label">Total Spent</div>
             </div>
+            <!-- Add dollar icons for animation -->
+            <div class="dollar-icons">
+              <div class="dollar-icon"></div>
+              <div class="dollar-icon"></div>
+              <div class="dollar-icon"></div>
+              <div class="dollar-icon"></div>
+              <div class="dollar-icon"></div>
+            </div>
           </div>
           <div class="stat-card products-card">
             <div class="stat-icon orange">
@@ -258,10 +266,10 @@
               </h3>
             </div>
             <div class="card-content">
-              <div style="display: flex; flex-direction: column; gap: 16px;">
-                <div style="display: flex; align-items: center; gap: 16px;">
+              <div class="best-selling-products-container" id="best-selling-products">
+                <div class="product-item">
                   <img src="../../public/resources/images/iphone.png" alt="iPhone" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
-                  <div style="flex: 1;">
+                  <div class="product-details">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                       <h4 style="font-weight: 500; margin: 0;">iPhone 15 Pro Max</h4>
                       <span style="font-weight: 600; color: var(--primary-color);">$11,988</span>
@@ -271,14 +279,14 @@
                       <span style="color: #10B981; font-size: 14px;">+25%</span>
                     </div>
                     <div style="width: 100%; height: 6px; background-color: #f3f4f6; border-radius: 3px; margin-top: 8px;">
-                      <div style="width: 80%; height: 100%; background-color: var(--primary-color); border-radius: 3px;"></div>
+                      <div class="product-progress-bar" data-units="12" style="height: 100%; background-color: var(--primary-color); border-radius: 3px;"></div>
                     </div>
                   </div>
                 </div>
                 
-                <div style="display: flex; align-items: center; gap: 16px;">
+                <div class="product-item">
                   <img src="../../public/resources/images/watch.png" alt="Watch" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
-                  <div style="flex: 1;">
+                  <div class="product-details">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                       <h4 style="font-weight: 500; margin: 0;">Smart Watch</h4>
                       <span style="font-weight: 600; color: var(--primary-color);">$3,192</span>
@@ -288,14 +296,14 @@
                       <span style="color: #10B981; font-size: 14px;">+12%</span>
                     </div>
                     <div style="width: 100%; height: 6px; background-color: #f3f4f6; border-radius: 3px; margin-top: 8px;">
-                      <div style="width: 65%; height: 100%; background-color: var(--primary-color); border-radius: 3px;"></div>
+                      <div class="product-progress-bar" data-units="8" style="height: 100%; background-color: var(--primary-color); border-radius: 3px;"></div>
                     </div>
                   </div>
                 </div>
                 
-                <div style="display: flex; align-items: center; gap: 16px;">
+                <div class="product-item">
                   <img src="../../public/resources/images/Hoodie.jpg" alt="Hoodie" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
-                  <div style="flex: 1;">
+                  <div class="product-details">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                       <h4 style="font-weight: 500; margin: 0;">Cotton Hoodie</h4>
                       <span style="font-weight: 600; color: var(--primary-color);">$239.96</span>
@@ -305,7 +313,7 @@
                       <span style="color: #EF4444; font-size: 14px;">-5%</span>
                     </div>
                     <div style="width: 100%; height: 6px; background-color: #f3f4f6; border-radius: 3px; margin-top: 8px;">
-                      <div style="width: 40%; height: 100%; background-color: var(--primary-color); border-radius: 3px;"></div>
+                      <div class="product-progress-bar" data-units="4" style="height: 100%; background-color: var(--primary-color); border-radius: 3px;"></div>
                     </div>
                   </div>
                 </div>
@@ -320,12 +328,6 @@
         <div class="dashboard-header">
           <h2 class="dashboard-title">My Orders</h2>
           <div class="dashboard-header-actions">
-            <div class="tab-navigation" style="margin-bottom: 0;">
-              <div class="tab-item active" data-ordertab="all-orders">All Orders</div>
-              <div class="tab-item" data-ordertab="processing">Processing</div>
-              <div class="tab-item" data-ordertab="delivered">Delivered</div>
-              <div class="tab-item" data-ordertab="cancelled">Cancelled</div>
-            </div>
           </div>
         </div>
 
@@ -338,7 +340,6 @@
                   <th>Date</th>
                   <th>Items</th>
                   <th>Total</th>
-                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -348,7 +349,6 @@
                   <td>May 1, 2025</td>
                   <td>iPhone 15 Pro Max</td>
                   <td>$999.00</td>
-                  <td><span class="order-status status-delivered">Delivered</span></td>
                   <td><a href="#" class="order-action">View</a></td>
                 </tr>
                 <tr>
@@ -356,15 +356,13 @@
                   <td>Apr 28, 2025</td>
                   <td>Smart Watch, Hoodie</td>
                   <td>$229.99</td>
-                  <td><span class="order-status status-processing">Processing</span></td>
-                  <td><a href="#" class="order-action">Track</a></td>
+                  <td><a href="#" class="order-action">View</a></td>
                 </tr>
                 <tr>
                   <td class="order-id">#ORD-7291</td>
                   <td>Apr 20, 2025</td>
                   <td>Leather Bag</td>
                   <td>$129.50</td>
-                  <td><span class="order-status status-cancelled">Cancelled</span></td>
                   <td><a href="#" class="order-action">View</a></td>
                 </tr>
                 <tr>
@@ -372,7 +370,6 @@
                   <td>Apr 15, 2025</td>
                   <td>4 items</td>
                   <td>$87.25</td>
-                  <td><span class="order-status status-delivered">Delivered</span></td>
                   <td><a href="#" class="order-action">View</a></td>
                 </tr>
                 <tr>
@@ -380,7 +377,6 @@
                   <td>Apr 5, 2025</td>
                   <td>Samsung Galaxy S24</td>
                   <td>$799.99</td>
-                  <td><span class="order-status status-delivered">Delivered</span></td>
                   <td><a href="#" class="order-action">View</a></td>
                 </tr>
               </tbody>
@@ -389,75 +385,318 @@
         </div>
       </div>
 
-      <!-- Wishlist Tab -->
-      <div class="content-section" id="wishlist-tab">
+      <!-- Transactions Tab -->
+      <div class="content-section" id="transactions-tab">
         <div class="dashboard-header">
-          <h2 class="dashboard-title">My Wishlist</h2>
+          <h2 class="dashboard-title">Transactions</h2>
+          <div class="dashboard-header-actions">
+            <button class="btn btn-outline" onclick="openDepositModal()">
+              <i class="fas fa-plus-circle"></i> Deposit
+            </button>
+            <button class="btn btn-primary" onclick="openTransferModal()">
+              <i class="fas fa-exchange-alt"></i> New Transfer
+            </button>
+          </div>
         </div>
 
-        <div class="wishlist-grid">
-          <div class="wishlist-item">
-            <div class="wishlist-image">
-              <img src="../../public/resources/images/iphone.png" alt="iPhone">
+        <!-- Transfer Modal -->
+        <div id="transfer-modal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3><i class="fas fa-exchange-alt"></i> Transfer Money</h3>
+              <span class="close-modal" onclick="closeTransferModal()">&times;</span>
             </div>
-            <div class="wishlist-details">
-              <h4 class="wishlist-title">iPhone 15 Pro 256GB</h4>
-              <div class="wishlist-price">$1,099.00</div>
-              <div class="wishlist-actions">
-                <div class="wishlist-btn add-to-cart">Add to Cart</div>
-                <div class="wishlist-btn remove-wishlist">Remove</div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="form-label" for="recipient">Recipient</label>
+                <input type="text" class="form-control" id="recipient" placeholder="Search by name or email">
+                <div id="recipient-suggestions" class="search-suggestions"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="amount">Amount ($)</label>
+                <input type="number" class="form-control" id="amount" min="1" step="0.01" placeholder="0.00">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="notes">Note (Optional)</label>
+                <textarea class="form-control" id="notes" rows="2" placeholder="Add a note about this transfer"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-outline" onclick="closeTransferModal()">Cancel</button>
+              <button class="btn btn-primary" onclick="processTransfer()">Send Money</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deposit Modal -->
+        <div id="deposit-modal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3><i class="fas fa-plus-circle"></i> Deposit Money</h3>
+              <span class="close-modal" onclick="closeDepositModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="form-label" for="deposit-amount">Amount ($)</label>
+                <input type="number" class="form-control" id="deposit-amount" min="1" step="0.01" placeholder="0.00">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="payment-method">Payment Method</label>
+                <select class="form-control" id="payment-method">
+                  <option value="credit-card">Credit Card</option>
+                  <option value="debit-card">Debit Card</option>
+                  <option value="bank-transfer">Bank Transfer</option>
+                  <option value="paypal">PayPal</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="deposit-notes">Note (Optional)</label>
+                <textarea class="form-control" id="deposit-notes" rows="2" placeholder="Add a note about this deposit"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-outline" onclick="closeDepositModal()">Cancel</button>
+              <button class="btn btn-primary" onclick="processDeposit()">Deposit Money</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transaction History -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <i class="fas fa-history"></i> Transaction History
+            </h3>
+            <div class="tab-navigation" style="margin-bottom: 0; border-bottom: none;">
+              <div class="tab-item active" data-transactiontab="all">All</div>
+              <div class="tab-item" data-transactiontab="sent">Sent</div>
+              <div class="tab-item" data-transactiontab="received">Received</div>
+            </div>
+          </div>
+          <div class="card-content">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>Transaction ID</th>
+                  <th>Date</th>
+                  <th>User</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="order-id">#TRX-9854</td>
+                  <td>May 3, 2025</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div class="user-avatar">EM</div>
+                      <span>Emily Martinez</span>
+                    </div>
+                  </td>
+                  <td><span class="transaction-type sent">Sent</span></td>
+                  <td class="amount sent">-$150.00</td>
+                  <td><span class="order-status status-delivered">Completed</span></td>
+                </tr>
+                <tr>
+                  <td class="order-id">#TRX-9832</td>
+                  <td>May 1, 2025</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div class="user-avatar">TS</div>
+                      <span>Thomas Smith</span>
+                    </div>
+                  </td>
+                  <td><span class="transaction-type received">Received</span></td>
+                  <td class="amount received">+$75.50</td>
+                  <td><span class="order-status status-delivered">Completed</span></td>
+                </tr>
+                <tr>
+                  <td class="order-id">#TRX-9801</td>
+                  <td>Apr 28, 2025</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div class="user-avatar">JW</div>
+                      <span>Jessica Williams</span>
+                    </div>
+                  </td>
+                  <td><span class="transaction-type sent">Sent</span></td>
+                  <td class="amount sent">-$200.00</td>
+                  <td><span class="order-status status-delivered">Completed</span></td>
+                </tr>
+                <tr>
+                  <td class="order-id">#TRX-9785</td>
+                  <td>Apr 26, 2025</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div class="user-avatar">RJ</div>
+                      <span>Robert Johnson</span>
+                    </div>
+                  </td>
+                  <td><span class="transaction-type received">Received</span></td>
+                  <td class="amount received">+$120.25</td>
+                  <td><span class="order-status status-delivered">Completed</span></td>
+                </tr>
+                <tr>
+                  <td class="order-id">#TRX-9754</td>
+                  <td>Apr 22, 2025</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div class="user-avatar">SB</div>
+                      <span>Sarah Brown</span>
+                    </div>
+                  </td>
+                  <td><span class="transaction-type sent">Sent</span></td>
+                  <td class="amount sent">-$45.00</td>
+                  <td><span class="order-status status-delivered">Completed</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+              <div style="color: var(--secondary-color); font-size: 14px;">
+                Showing 5 of 24 transactions
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn" style="padding: 8px 12px; background-color: var(--primary-color); color: white;">
+                  1
+                </button>
+                <button class="btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  2
+                </button>
+                <button class="btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  3
+                </button>
+                <button class="btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
               </div>
             </div>
           </div>
-          <div class="wishlist-item">
-            <div class="wishlist-image">
-              <img src="../../public/resources/images/watch.png" alt="Smart Watch">
-            </div>
-            <div class="wishlist-details">
-              <h4 class="wishlist-title">Smart Watch Series 9</h4>
-              <div class="wishlist-price">$399.00</div>
-              <div class="wishlist-actions">
-                <div class="wishlist-btn add-to-cart">Add to Cart</div>
-                <div class="wishlist-btn remove-wishlist">Remove</div>
-              </div>
-            </div>
-          </div>
-          <div class="wishlist-item">
-            <div class="wishlist-image">
-              <img src="../../public/resources/images/Hoodie.jpg" alt="Classic Hoodie">
-            </div>
-            <div class="wishlist-details">
-              <h4 class="wishlist-title">Classic Cotton Hoodie</h4>
-              <div class="wishlist-price">$59.99</div>
-              <div class="wishlist-actions">
-                <div class="wishlist-btn add-to-cart">Add to Cart</div>
-                <div class="wishlist-btn remove-wishlist">Remove</div>
-              </div>
+        </div>
+
+        <!-- User Search Section -->
+        <div class="dashboard-card" style="margin-top: 20px;">
+          <div class="card-header">
+            <h3 class="card-title">
+              <i class="fas fa-users"></i> Find Users
+            </h3>
+            <div style="position: relative; width: 300px;">
+              <input type="text" id="user-search" placeholder="Search users by name or email" class="form-control" style="padding-left: 36px;">
+              <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--secondary-color);"></i>
             </div>
           </div>
-          <div class="wishlist-item">
-            <div class="wishlist-image">
-              <img src="../../public/resources/images/bag1.jpg" alt="Leather Bag">
-            </div>
-            <div class="wishlist-details">
-              <h4 class="wishlist-title">Premium Leather Bag</h4>
-              <div class="wishlist-price">$129.50</div>
-              <div class="wishlist-actions">
-                <div class="wishlist-btn add-to-cart">Add to Cart</div>
-                <div class="wishlist-btn remove-wishlist">Remove</div>
+          <div class="card-content">
+            <div class="users-grid">
+              <div class="user-card">
+                <div class="user-avatar-large">EM</div>
+                <div class="user-details">
+                  <h4 class="user-name">Emily Martinez</h4>
+                  <p class="user-email">emily.m@example.com</p>
+                  <span class="user-status">Verified User</span>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="openTransferModalWithUser('Emily Martinez')">
+                  <i class="fas fa-exchange-alt"></i> Transfer
+                </button>
+              </div>
+              <div class="user-card">
+                <div class="user-avatar-large">TS</div>
+                <div class="user-details">
+                  <h4 class="user-name">Thomas Smith</h4>
+                  <p class="user-email">thomas.s@example.com</p>
+                  <span class="user-status">Verified User</span>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="openTransferModalWithUser('Thomas Smith')">
+                  <i class="fas fa-exchange-alt"></i> Transfer
+                </button>
+              </div>
+              <div class="user-card">
+                <div class="user-avatar-large">JW</div>
+                <div class="user-details">
+                  <h4 class="user-name">Jessica Williams</h4>
+                  <p class="user-email">jessica.w@example.com</p>
+                  <span class="user-status">Verified User</span>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="openTransferModalWithUser('Jessica Williams')">
+                  <i class="fas fa-exchange-alt"></i> Transfer
+                </button>
+              </div>
+              <div class="user-card">
+                <div class="user-avatar-large">RJ</div>
+                <div class="user-details">
+                  <h4 class="user-name">Robert Johnson</h4>
+                  <p class="user-email">robert.j@example.com</p>
+                  <span class="user-status">Verified User</span>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="openTransferModalWithUser('Robert Johnson')">
+                  <i class="fas fa-exchange-alt"></i> Transfer
+                </button>
+              </div>
+              <div class="user-card">
+                <div class="user-avatar-large">SB</div>
+                <div class="user-details">
+                  <h4 class="user-name">Sarah Brown</h4>
+                  <p class="user-email">sarah.b@example.com</p>
+                  <span class="user-status">Verified User</span>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="openTransferModalWithUser('Sarah Brown')">
+                  <i class="fas fa-exchange-alt"></i> Transfer
+                </button>
+              </div>
+              <div class="user-card">
+                <div class="user-avatar-large">MD</div>
+                <div class="user-details">
+                  <h4 class="user-name">Michael Davis</h4>
+                  <p class="user-email">michael.d@example.com</p>
+                  <span class="user-status">Verified User</span>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="openTransferModalWithUser('Michael Davis')">
+                  <i class="fas fa-exchange-alt"></i> Transfer
+                </button>
+              </div>
+              <div class="user-card">
+                <div class="user-avatar-large">OW</div>
+                <div class="user-details">
+                  <h4 class="user-name">Olivia Wilson</h4>
+                  <p class="user-email">olivia.w@example.com</p>
+                  <span class="user-status">Verified User</span>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="openTransferModalWithUser('Olivia Wilson')">
+                  <i class="fas fa-exchange-alt"></i> Transfer
+                </button>
+              </div>
+              <div class="user-card">
+                <div class="user-avatar-large">DM</div>
+                <div class="user-details">
+                  <h4 class="user-name">Daniel Miller</h4>
+                  <p class="user-email">daniel.m@example.com</p>
+                  <span class="user-status">Verified User</span>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="openTransferModalWithUser('Daniel Miller')">
+                  <i class="fas fa-exchange-alt"></i> Transfer
+                </button>
               </div>
             </div>
-          </div>
-          <div class="wishlist-item">
-            <div class="wishlist-image">
-              <img src="../../public/resources/images/tshirt.jpg" alt="Cotton T-Shirt">
-            </div>
-            <div class="wishlist-details">
-              <h4 class="wishlist-title">Organic Cotton T-Shirt</h4>
-              <div class="wishlist-price">$24.99</div>
-              <div class="wishlist-actions">
-                <div class="wishlist-btn add-to-cart">Add to Cart</div>
-                <div class="wishlist-btn remove-wishlist">Remove</div>
+            <div style="display: flex; justify-content: center; margin-top: 24px;">
+              <div style="display: flex; gap: 8px;">
+                <button class="btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn" style="padding: 8px 12px; background-color: var(--primary-color); color: white;">
+                  1
+                </button>
+                <button class="btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  2
+                </button>
+                <button class="btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  3
+                </button>
+                <button class="btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -480,7 +719,7 @@
 
         <!-- Seller Stats -->
         <div class="stats-grid">
-          <div class="stat-card">
+          <div class="stat-card products-card">
             <div class="stat-icon blue">
               <i class="fas fa-box"></i>
             </div>
@@ -488,8 +727,15 @@
               <div class="stat-value">8</div>
               <div class="stat-label">Active Products</div>
             </div>
+            <!-- Add floating product boxes for animation -->
+            <div class="product-boxes">
+              <div class="product-box"></div>
+              <div class="product-box"></div>
+              <div class="product-box"></div>
+              <div class="product-box"></div>
+            </div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card sales-card">
             <div class="stat-icon green">
               <i class="fas fa-chart-simple"></i>
             </div>
@@ -497,14 +743,29 @@
               <div class="stat-value">24</div>
               <div class="stat-label">Total Sales</div>
             </div>
+            <!-- Add animated chart bars -->
+            <div class="chart-bars">
+              <div class="chart-bar"></div>
+              <div class="chart-bar"></div>
+              <div class="chart-bar"></div>
+              <div class="chart-bar"></div>
+              <div class="chart-bar"></div>
+            </div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card earnings-card">
             <div class="stat-icon purple">
               <i class="fas fa-dollar-sign"></i>
             </div>
             <div class="stat-details">
               <div class="stat-value">$2,845</div>
               <div class="stat-label">Total Earnings</div>
+            </div>
+            <!-- Add money particles -->
+            <div class="money-particles">
+              <div class="money-particle">$</div>
+              <div class="money-particle">$</div>
+              <div class="money-particle">$</div>
+              <div class="money-particle">$</div>
             </div>
           </div>
         </div>
@@ -533,7 +794,7 @@
         </div>
 
         <!-- Top Products -->
-        <div class="dashboard-card">
+        <div class="dashboard-card" style="margin-top: 20px;">
           <div class="card-header">
             <h3 class="card-title">
               <i class="fas fa-trophy"></i> Top-Selling Products
@@ -780,10 +1041,10 @@
         <div class="dashboard-header">
           <h2 class="dashboard-title">Add New Product</h2>
           <div class="dashboard-header-actions">
-            <button class="btn btn-outline">
+            <button class="btn btn-outline" id="save-draft">
               <i class="fas fa-save"></i> Save as Draft
             </button>
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" id="publish-product">
               <i class="fas fa-check"></i> Publish Product
             </button>
           </div>
@@ -791,56 +1052,40 @@
 
         <div class="dashboard-card">
           <div class="card-content">
-            <form>
+            <form id="product-form">
               <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
                 <div>
                   <div class="form-group">
-                    <label class="form-label" for="product_title">Product Title</label>
-                    <input type="text" class="form-control" id="product_title" placeholder="Enter product title">
+                    <label class="form-label" for="product_name">Product Name</label>
+                    <input type="text" class="form-control" id="product_name" name="name" placeholder="Enter product name" required>
                   </div>
                   
                   <div class="form-group">
                     <label class="form-label" for="product_description">Product Description</label>
-                    <textarea class="form-control" id="product_description" rows="8" style="width: 100%; resize: vertical;" placeholder="Enter detailed product description"></textarea>
+                    <textarea class="form-control" id="product_description" name="description" rows="8" style="width: 100%; resize: vertical;" placeholder="Enter detailed product description" required></textarea>
                   </div>
                   
                   <div class="form-row">
                     <div class="form-group">
                       <label class="form-label" for="product_price">Price ($)</label>
-                      <input type="number" class="form-control" id="product_price" placeholder="0.00">
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="product_compare_price">Compare-at Price ($)</label>
-                      <input type="number" class="form-control" id="product_compare_price" placeholder="0.00">
-                    </div>
-                  </div>
-                  
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label class="form-label" for="product_sku">SKU</label>
-                      <input type="text" class="form-control" id="product_sku" placeholder="SKU123">
+                      <input type="number" class="form-control" id="product_price" name="price" placeholder="0.00" step="0.01" min="0" required>
                     </div>
                     <div class="form-group">
                       <label class="form-label" for="product_quantity">Quantity</label>
-                      <input type="number" class="form-control" id="product_quantity" placeholder="0">
+                      <input type="number" class="form-control" id="product_quantity" name="quantity" placeholder="0" min="0" required>
                     </div>
                   </div>
                   
                   <div class="form-group">
                     <label class="form-label" for="product_category">Category</label>
-                    <select class="form-control" id="product_category">
-                      <option>Select a category</option>
-                      <option>Electronics</option>
-                      <option>Fashion</option>
-                      <option>Home & Kitchen</option>
-                      <option>Beauty</option>
-                      <option>Groceries</option>
+                    <select class="form-control" id="product_category" name="category" required>
+                      <option value="">Select a category</option>
+                      <option value="Electronics">Electronics</option>
+                      <option value="Fashion">Fashion</option>
+                      <option value="Home & Kitchen">Home & Kitchen</option>
+                      <option value="Beauty">Beauty</option>
+                      <option value="Groceries">Groceries</option>
                     </select>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label class="form-label" for="product_tags">Tags</label>
-                    <input type="text" class="form-control" id="product_tags" placeholder="Enter tags separated by commas">
                   </div>
                 </div>
                 
@@ -851,44 +1096,15 @@
                       <i class="fas fa-cloud-upload-alt" style="font-size: 32px; color: var(--secondary-color); margin-bottom: 12px;"></i>
                       <p style="margin-bottom: 12px; color: var(--black-color);">Drag and drop images here</p>
                       <p style="font-size: 14px; color: var(--secondary-color); margin-bottom: 16px;">or</p>
-                      <button class="btn btn-outline" style="width: 100%;">Browse Files</button>
+                      <button class="btn btn-outline" id="browse-files" type="button">Browse Files</button>
+                      <input type="file" id="product_image" name="image" accept="image/*" style="display: none;">
                       <p style="font-size: 12px; color: var(--secondary-color); margin-top: 12px;">Maximum file size: 5MB</p>
                     </div>
+                    <div id="image-preview" style="display: none; text-align: center; margin-top: 10px;"></div>
                   </div>
                   
-                  <div class="form-group">
-                    <label class="form-label">Product Status</label>
-                    <div style="display: flex; gap: 10px; margin-top: 8px;">
-                      <div style="flex: 1; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; background-color: rgba(13, 153, 255, 0.05); border-color: var(--primary-color);">
-                        <div style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--primary-color); display: flex; align-items: center; justify-content: center;">
-                          <div style="width: 12px; height: 12px; border-radius: 50%; background-color: var(--primary-color);"></div>
-                        </div>
-                        <span>Active</span>
-                      </div>
-                      <div style="flex: 1; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                        <div style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #e2e8f0;"></div>
-                        <span>Draft</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label class="form-label">Product Options</label>
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                      <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="checkbox" id="track_inventory">
-                        <label for="track_inventory" style="margin: 0;">Track inventory</label>
-                      </div>
-                      <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="checkbox" id="physical_product">
-                        <label for="physical_product" style="margin: 0;">Physical product</label>
-                      </div>
-                      <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="checkbox" id="has_variations">
-                        <label for="has_variations" style="margin: 0;">This product has multiple variations</label>
-                      </div>
-                    </div>
-                  </div>
+                  <!-- Hidden product status input, will be set by JavaScript based on which button is clicked -->
+                  <input type="hidden" id="product_status" name="status" value="for_sale">
                 </div>
               </div>
             </form>
@@ -917,7 +1133,7 @@
 
         <!-- Analytics Overview -->
         <div class="stats-grid">
-          <div class="stat-card">
+          <div class="stat-card revenue-card">
             <div class="stat-icon blue">
               <i class="fas fa-chart-line"></i>
             </div>
@@ -928,8 +1144,12 @@
                 <i class="fas fa-arrow-up"></i> 15% from last period
               </div>
             </div>
+            <!-- Add trending animation -->
+            <div class="trend-arrow">
+              <i class="fas fa-arrow-trend-up"></i>
+            </div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card orders-analytics-card">
             <div class="stat-icon green">
               <i class="fas fa-shopping-cart"></i>
             </div>
@@ -940,8 +1160,14 @@
                 <i class="fas fa-arrow-up"></i> 8% from last period
               </div>
             </div>
+            <!-- Add animated circles -->
+            <div class="order-circles">
+              <div class="order-circle"></div>
+              <div class="order-circle"></div>
+              <div class="order-circle"></div>
+            </div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card customers-card">
             <div class="stat-icon purple">
               <i class="fas fa-users"></i>
             </div>
@@ -951,6 +1177,13 @@
               <div style="font-size: 12px; color: #10B981; display: flex; align-items: center; gap: 4px; margin-top: 4px;">
                 <i class="fas fa-arrow-up"></i> 12% from last period
               </div>
+            </div>
+            <!-- Add customer icons -->
+            <div class="customer-icons">
+              <div class="customer-icon"></div>
+              <div class="customer-icon"></div>
+              <div class="customer-icon"></div>
+              <div class="customer-icon"></div>
             </div>
           </div>
         </div>
@@ -1022,7 +1255,7 @@
 
         <!-- Earnings Overview -->
         <div class="stats-grid">
-          <div class="stat-card">
+          <div class="stat-card balance-card">
             <div class="stat-icon blue">
               <i class="fas fa-wallet"></i>
             </div>
@@ -1030,8 +1263,16 @@
               <div class="stat-value">$1,248.50</div>
               <div class="stat-label">Available Balance</div>
             </div>
+            <!-- Add dollar icons for animation -->
+            <div class="dollar-icons">
+              <div class="dollar-icon"></div>
+              <div class="dollar-icon"></div>
+              <div class="dollar-icon"></div>
+              <div class="dollar-icon"></div>
+              <div class="dollar-icon"></div>
+            </div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card earnings-card">
             <div class="stat-icon green">
               <i class="fas fa-money-bill-wave"></i>
             </div>
@@ -1039,14 +1280,28 @@
               <div class="stat-value">$2,845.00</div>
               <div class="stat-label">Total Earnings</div>
             </div>
+            <!-- Add money particles -->
+            <div class="money-particles">
+              <div class="money-particle">$</div>
+              <div class="money-particle">$</div>
+              <div class="money-particle">$</div>
+              <div class="money-particle">$</div>
+            </div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card payout-card">
             <div class="stat-icon purple">
               <i class="fas fa-hand-holding-usd"></i>
             </div>
             <div class="stat-details">
               <div class="stat-value">$1,596.50</div>
               <div class="stat-label">Paid Out</div>
+            </div>
+            <!-- Add coin animation -->
+            <div class="coin-stack">
+              <div class="coin"></div>
+              <div class="coin"></div>
+              <div class="coin"></div>
+              <div class="coin"></div>
             </div>
           </div>
         </div>
@@ -1074,7 +1329,7 @@
         </div>
 
         <!-- Payout History -->
-        <div class="dashboard-card">
+        <div class="dashboard-card" style="margin-top: 20px;">
           <div class="card-header">
             <h3 class="card-title">
               <i class="fas fa-history"></i> Payout History
@@ -1087,7 +1342,6 @@
                   <th>Transaction ID</th>
                   <th>Date</th>
                   <th>Amount</th>
-                  <th>Payment Method</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -1096,25 +1350,60 @@
                   <td class="order-id">#TRX-8542</td>
                   <td>Apr 28, 2025</td>
                   <td>$945.00</td>
-                  <td>Bank Transfer</td>
-                  <td><span class="order-status status-delivered">Completed</span></td>
+                  <td><span class="order-status status-cancelled">Out</span></td>
                 </tr>
                 <tr>
                   <td class="order-id">#TRX-7896</td>
                   <td>Mar 15, 2025</td>
                   <td>$651.50</td>
-                  <td>PayPal</td>
-                  <td><span class="order-status status-delivered">Completed</span></td>
+                  <td><span class="order-status status-delivered">In</span></td>
                 </tr>
                 <tr>
                   <td class="order-id">#TRX-6573</td>
                   <td>Feb 02, 2025</td>
                   <td>$425.75</td>
-                  <td>Bank Transfer</td>
-                  <td><span class="order-status status-processing">Processing</span></td>
+                  <td><span class="order-status status-cancelled">Out</span></td>
+                </tr>
+                <tr>
+                  <td class="order-id">#TRX-6125</td>
+                  <td>Jan 25, 2025</td>
+                  <td>$320.00</td>
+                  <td><span class="order-status status-delivered">In</span></td>
+                </tr>
+                <tr>
+                  <td class="order-id">#TRX-5872</td>
+                  <td>Jan 12, 2025</td>
+                  <td>$180.25</td>
+                  <td><span class="order-status status-cancelled">Out</span></td>
                 </tr>
               </tbody>
             </table>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+              <div style="color: var(--secondary-color); font-size: 14px;">
+                Showing 5 of 18 transactions
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn payout-page-btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn payout-page-btn active" style="padding: 8px 12px; background-color: var(--primary-color); color: white;">
+                  1
+                </button>
+                <button class="btn payout-page-btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  2
+                </button>
+                <button class="btn payout-page-btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  3
+                </button>
+                <button class="btn payout-page-btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  4
+                </button>
+                <button class="btn payout-page-btn" style="padding: 8px 12px; background-color: #F3F4F6; color: var(--black-color);">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1133,34 +1422,75 @@
         <div class="dashboard-card">
           <div class="card-header">
             <h3 class="card-title">
-              <i class="fas fa-user"></i> Personal Information
+              <i class="fas fa-user"></i> Account Information
             </h3>
           </div>
           <div class="card-content">
-            <form id="profile-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label" for="first_name">First Name</label>
-                  <input type="text" class="form-control" id="first_name" value="John">
+            <div style="display: flex; gap: 30px; margin-bottom: 30px;">
+              <!-- Profile Image and Balance Card -->
+              <div style="text-align: center; flex-basis: 220px;">
+                <div style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; margin: 0 auto 15px;">
+                  <img src="../../public/resources/images/review-1.jpg" alt="Profile Photo" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
-                <div class="form-group">
-                  <label class="form-label" for="last_name">Last Name</label>
-                  <input type="text" class="form-control" id="last_name" value="Doe">
+                <button class="btn btn-outline btn-sm" style="margin-bottom: 20px;">
+                  <i class="fas fa-camera"></i> Change Photo
+                </button>
+                <div class="card work">
+                  <div class="img-section">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="77" width="76" viewBox="0 0 512 512">
+                      <!-- Dollar sign/money bag SVG -->
+                      <path fill="#FFFFFF" d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V192c0-35.3-28.7-64-64-64H80c-8.8 0-16-7.2-16-16s7.2-16 16-16H448c17.7 0 32-14.3 32-32s-14.3-32-32-32H64zM416 272a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/>
+                    </svg>
+                  </div>
+                  <div class="card-desc">
+                    <div class="card-header">
+                      <div class="card-title">Balance</div>
+                    </div>
+                    <div class="card-time">$1,248.50</div>
+                    <p class="recent">
+                      <button class="deposit-btn" onclick="showTab('transactions-tab')">
+                        <i class="fas fa-plus-circle"></i> Deposit
+                      </button>
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div class="form-group">
-                <label class="form-label" for="email">Email Address</label>
-                <input type="email" class="form-control" id="email" value="john.doe@example.com">
+              
+              <!-- Account Details Form -->
+              <div style="flex-grow: 1;">
+                <form id="profile-form">
+                  <div class="form-group">
+                    <label class="form-label" for="username">Username</label>
+                    <input type="text" class="form-control" id="username" value="johndoe">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" value="john.doe@example.com">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Member Since</label>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <div class="form-control" style="background-color: #f9fafb; cursor: not-allowed;">April 15, 2023</div>
+                      <span style="color: var(--secondary-color); font-size: 14px;">2 years, 1 month</span>
+                    </div>
+                  </div>
+                </form>
               </div>
-              <div class="form-group">
-                <label class="form-label" for="phone">Phone Number</label>
-                <input type="tel" class="form-control" id="phone" value="+1 (555) 123-4567">
+            </div>
+            
+            <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
+              <h4 style="margin-bottom: 15px; font-weight: 500;">Account Actions</h4>
+              <div style="display: flex; gap: 15px;">
+                <button class="btn btn-outline" style="color: #EF4444; border-color: #EF4444;">
+                  <i class="fas fa-sign-out-alt"></i> Sign Out
+                </button>
+                <button class="btn btn-outline" style="color: #EF4444; border-color: #EF4444;">
+                  <i class="fas fa-trash"></i> Delete Account
+                </button>
               </div>
-              <div class="form-group">
-                <label class="form-label" for="birthdate">Date of Birth</label>
-                <input type="date" class="form-control" id="birthdate" value="1990-05-15">
-              </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
