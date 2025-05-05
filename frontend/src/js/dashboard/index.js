@@ -1,3 +1,5 @@
+import dashboardController from './controllers/DashboardController';
+
 const sideMenu = document.querySelector('aside');
 const menuBtn = document.getElementById('menu-btn');
 const closeBtn = document.getElementById('close-btn');
@@ -444,3 +446,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+
+/**
+ * Initialize dashboard functionality when the DOM is loaded
+ */
+document.addEventListener('DOMContentLoaded', () => {
+  // Check if we're on the dashboard page
+  const dashboardContainer = document.querySelector('#dashboardCards');
+  if (dashboardContainer) {
+    console.log('Dashboard page detected, initializing dashboard controller...');
+    dashboardController.init();
+  }
+});
+
+// Export dashboard controller for direct use
+export { dashboardController };

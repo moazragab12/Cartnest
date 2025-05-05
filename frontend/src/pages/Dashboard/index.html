@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../../css/header.css">
   <link rel="stylesheet" href="../../css/footer.css">
   <link rel="stylesheet" href="../../css/dashboard/style.css">
+  <link rel="stylesheet" href="../../css/dashboard/loading.css">
 </head>
 <body>
   <!-- Header -->
@@ -128,12 +129,13 @@
           <h2 class="dashboard-title">Dashboard</h2>
           <div class="dashboard-header-actions">
             <div style="display: flex; gap: 12px;">
-              <select class="form-control" style="width: auto; padding: 6px 12px;">
-                <option>Last 30 Days</option>
-                <option>Last 90 Days</option>
-                <option>This Year</option>
+              <select class="form-control" id="timeRangeSelector" style="width: auto; padding: 6px 12px;">
+                <option value="30_days">Last 30 Days</option>
+                <option value="90_days">Last 90 Days</option>
+                <option value="this_year">This Year</option>
+                <option value="all_time">All Time</option>
               </select>
-              <button class="btn btn-outline">
+              <button class="btn btn-outline" id="downloadReportButton">
                 <i class="fas fa-download"></i> Download Report
               </button>
             </div>
@@ -141,13 +143,13 @@
         </div>
 
         <!-- Stats Cards -->
-        <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr); gap: 20px;">
+        <div class="stats-grid" id="dashboardCards" style="grid-template-columns: repeat(2, 1fr); gap: 20px;">
           <div class="stat-card orders-card">
             <div class="stat-icon blue">
               <i class="fas fa-shopping-bag"></i>
             </div>
             <div class="stat-details">
-              <div class="stat-value">16</div>
+              <div class="stat-value" id="totalOrdersValue">16</div>
               <div class="stat-label">Total Orders</div>
             </div>
           </div>
@@ -156,7 +158,7 @@
               <i class="fas fa-truck"></i>
             </div>
             <div class="stat-details">
-              <div class="stat-value">12</div>
+              <div class="stat-value" id="deliveredValue">12</div>
               <div class="stat-label">Delivered</div>
             </div>
           </div>
@@ -165,7 +167,7 @@
               <i class="fas fa-wallet"></i>
             </div>
             <div class="stat-details">
-              <div class="stat-value">$1,248</div>
+              <div class="stat-value" id="totalSpentValue">$1,248</div>
               <div class="stat-label">Total Spent</div>
             </div>
             <!-- Add dollar icons for animation -->
@@ -182,7 +184,7 @@
               <i class="fas fa-store"></i>
             </div>
             <div class="stat-details">
-              <div class="stat-value">8</div>
+              <div class="stat-value" id="productsListedValue">8</div>
               <div class="stat-label">Products Listed</div>
             </div>
           </div>
@@ -225,36 +227,7 @@
               <div style="width: 100%; height: 250px; position: relative;">
                 <canvas id="spendingCategoryChart" width="400" height="250"></canvas>
               </div>
-              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div style="display: flex; gap: 8px; align-items: center;">
-                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: #0d99ff;"></div>
-                    <span>Electronics</span>
-                  </div>
-                  <span>$1,085.50 (45%)</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div style="display: flex; gap: 8px; align-items: center;">
-                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: #10B981;"></div>
-                    <span>Fashion</span>
-                  </div>
-                  <span>$384.20 (32%)</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div style="display: flex; gap: 8px; align-items: center;">
-                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: #F59E0B;"></div>
-                    <span>Home & Kitchen</span>
-                  </div>
-                  <span>$189.75 (15%)</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div style="display: flex; gap: 8px; align-items: center;">
-                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: #8B5CF6;"></div>
-                    <span>Other</span>
-                  </div>
-                  <span>$88.55 (8%)</span>
-                </div>
-              </div>
+              <div class="category-details" style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;"></div>
             </div>
           </div>
           
@@ -1674,9 +1647,9 @@
   </div>
 
   <script src="../../js/dashboard/script.js"></script>
-  <script src="../../js/dashboard/index.js"></script>
   <script src="../../js/dashboard/orders.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="../../js/dashboard/analytics.js"></script>
+  <script src="../../js/dashboard/init.js"></script>
 </body>
 </html>
