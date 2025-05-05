@@ -26,7 +26,7 @@ from api.routers.transactions.router import router as transaction_router
 from api.routers.search.router import search_router
 from api.routers.items.router import router as items_router
 from api.routers.dashboard.router import router as dashboard_router
-
+from api.routers.reporting.router import router as reporting_router
 # Create all tables at startup
 Base.metadata.create_all(bind=engine)
 
@@ -123,4 +123,8 @@ app.include_router(search_router , prefix=f"{api_prefix}/search", tags=["Search"
 app.include_router(auth_router, prefix=f"{api_prefix}/auth", tags=["Authentication"])
 app.include_router(profile_router, prefix=f"{api_prefix}/profile", tags=["Profile"])
 app.include_router(transaction_router, prefix=f"{api_prefix}/transactions", tags=["Transactions"])
-app.include_router(dashboard_router, prefix=f"{api_prefix}/dashboard", tags=["Dashboard"])
+app.include_router(dashboard_router, prefix=f"{api_prefix}/dashboard", tags=["Dashboard"]
+)
+app.include_router(
+    reporting_router, prefix=f"{api_prefix}/reporting", tags=["Reporting"]
+)
