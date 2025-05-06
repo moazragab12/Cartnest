@@ -1,4 +1,5 @@
 import dashboardController from './controllers/DashboardController';
+import { transferFunds, makeDeposit } from '../core/api/services/transactionsService.js';
 
 const sideMenu = document.querySelector('aside');
 const menuBtn = document.getElementById('menu-btn');
@@ -53,43 +54,108 @@ function openTransferModalWithUser(userName) {
   document.getElementById('amount').focus();
 }
 
-function processTransfer() {
+async function processTransfer() {
+  // Get form values
   const recipient = document.getElementById('recipient').value;
   const amount = document.getElementById('amount').value;
   const notes = document.getElementById('notes').value;
   
+  // Validate input
   if (!recipient || !amount) {
-    alert('Please enter a recipient and amount');
+    showNotification('Please enter a recipient and amount', 'error');
     return;
   }
   
-  // In a real application, this would make an API call to process the transfer
-  alert(`Transfer of $${amount} to ${recipient} processed successfully!`);
+  // Get the recipient's ID from the recipient name
+  const recipientId = getRecipientId(recipient);
+  if (!recipientId) {
+    showNotification('Recipient not found', 'error');
+    return;
+  }
   
-  // Add the new transaction to the table (for demo purposes)
-  const transactionTable = document.querySelector('#transactions-tab .orders-table tbody');
-  const currentDate = new Date();
-  const formattedDate = `${currentDate.toLocaleString('default', { month: 'short' })} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
-  const initials = recipient.split(' ').map(name => name[0]).join('');
+  try {
+    // Call the API to process the transfer
+    const response = await transferFunds(recipientId, parseFloat(amount));
+    
+    // Show success message with the updated balance
+    showNotification(`Transfer of $${amount} to ${recipient} processed successfully! Your new balance is $${response.cash_balance.toFixed(2)}`, 'success');
+    
+    // Add the new transaction to the table
+    const transactionTable = document.querySelector('#transactions-tab .orders-table tbody');
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.toLocaleString('default', { month: 'short' })} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
+    const initials = recipient.split(' ').map(name => name[0]).join('');
+    
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+      <td class="order-id">#TRX-${Math.floor(Math.random() * 1000)}</td>
+      <td>${formattedDate}</td>
+      <td>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="user-avatar">${initials}</div>
+          <span>${recipient}</span>
+        </div>
+      </td>
+      <td><span class="transaction-type sent">Sent</span></td>
+      <td class="amount sent">-$${parseFloat(amount).toFixed(2)}</td>
+      <td><span class="order-status status-delivered">Completed</span></td>
+    `;
+    
+    transactionTable.insertBefore(newRow, transactionTable.firstChild);
+    
+    // Close the modal
+    closeTransferModal();
+    
+    // Update the displayed balance if it exists on the page
+    updateDisplayedBalance(response.cash_balance);
+    
+  } catch (error) {
+    let errorMessage = 'An error occurred during the transfer';
+    
+    // Extract error message from API response if available
+    if (error.response && error.response.data && error.response.data.detail) {
+      errorMessage = error.response.data.detail;
+    }
+    
+    showNotification(errorMessage, 'error');
+  }
+}
+
+// Function to update any displayed balance on the page
+function updateDisplayedBalance(newBalance) {
+  // Check if there's a balance display element on the page
+  const balanceDisplay = document.getElementById('user-balance');
+  if (balanceDisplay) {
+    balanceDisplay.textContent = `$${newBalance.toFixed(2)}`;
+  }
+}
+
+// Mock function to get recipient ID from name (in a real app, you'd query the API)
+function getRecipientId(recipientName) {
+  // This is a mock implementation - in a real app this would query your backend
+  const mockUserMap = {
+    'John Doe': 1,
+    'Jane Smith': 2,
+    'Emily Martinez': 3,
+    'Thomas Smith': 4,
+    'Jessica Williams': 5,
+    'Robert Johnson': 6,
+    'Sarah Brown': 7,
+    'Michael Davis': 8,
+    'Olivia Wilson': 9,
+    'Daniel Miller': 10
+  };
   
-  const newRow = document.createElement('tr');
-  newRow.innerHTML = `
-    <td class="order-id">#TRX-${Math.floor(Math.random() * 1000)}</td>
-    <td>${formattedDate}</td>
-    <td>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <div class="user-avatar">${initials}</div>
-        <span>${recipient}</span>
-      </div>
-    </td>
-    <td><span class="transaction-type sent">Sent</span></td>
-    <td class="amount sent">-$${parseFloat(amount).toFixed(2)}</td>
-    <td><span class="order-status status-delivered">Completed</span></td>
-  `;
+  return mockUserMap[recipientName] || null;
+}
+
+// Notification function
+function showNotification(message, type = 'info') {
+  // You can customize this to show a toast or other notification UI
+  console.log(`${type.toUpperCase()}: ${message}`);
   
-  transactionTable.insertBefore(newRow, transactionTable.firstChild);
-  
-  closeTransferModal();
+  // Alert for now, but ideally replace with a proper notification component
+  alert(message);
 }
 
 // Deposit Modal Functionality
@@ -104,42 +170,56 @@ function closeDepositModal() {
   document.getElementById('deposit-notes').value = '';
 }
 
-function processDeposit() {
+async function processDeposit() {
   const amount = document.getElementById('deposit-amount').value;
   const paymentMethod = document.getElementById('payment-method').value;
   const notes = document.getElementById('deposit-notes').value;
   
   if (!amount) {
-    alert('Please enter an amount to deposit');
+    showNotification('Please enter an amount to deposit', 'error');
     return;
   }
   
-  // In a real application, this would make an API call to process the deposit
-  alert(`Deposit of $${amount} via ${paymentMethod} processed successfully!`);
-  
-  // Add the new transaction to the table (for demo purposes)
-  const transactionTable = document.querySelector('#transactions-tab .orders-table tbody');
-  const currentDate = new Date();
-  const formattedDate = `${currentDate.toLocaleString('default', { month: 'short' })} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
-  
-  const newRow = document.createElement('tr');
-  newRow.innerHTML = `
-    <td class="order-id">#TRX-${Math.floor(Math.random() * 1000)}</td>
-    <td>${formattedDate}</td>
-    <td>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <div class="user-avatar">JD</div>
-        <span>Deposit (Self)</span>
-      </div>
-    </td>
-    <td><span class="transaction-type received">Deposit</span></td>
-    <td class="amount received">+$${parseFloat(amount).toFixed(2)}</td>
-    <td><span class="order-status status-delivered">Completed</span></td>
-  `;
-  
-  transactionTable.insertBefore(newRow, transactionTable.firstChild);
-  
-  closeDepositModal();
+  try {
+    // Call the API to process the deposit
+    const response = await makeDeposit(parseFloat(amount));
+    
+    // Show success message with the updated balance
+    showNotification(`Deposit of $${amount} processed successfully! Your new balance is $${response.cash_balance.toFixed(2)}`, 'success');
+    
+    // Add the new transaction to the table
+    const transactionTable = document.querySelector('#transactions-tab .orders-table tbody');
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.toLocaleString('default', { month: 'short' })} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
+    
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+      <td class="order-id">#TRX-${Math.floor(Math.random() * 1000)}</td>
+      <td>${formattedDate}</td>
+      <td>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="user-avatar">JD</div>
+          <span>Deposit (Self)</span>
+        </div>
+      </td>
+      <td><span class="transaction-type received">Deposit</span></td>
+      <td class="amount received">+$${parseFloat(amount).toFixed(2)}</td>
+      <td><span class="order-status status-delivered">Completed</span></td>
+    `;
+    
+    transactionTable.insertBefore(newRow, transactionTable.firstChild);
+    
+    closeDepositModal();
+  } catch (error) {
+    let errorMessage = 'An error occurred during the deposit';
+    
+    // Extract error message from API response if available
+    if (error.response && error.response.data && error.response.data.detail) {
+      errorMessage = error.response.data.detail;
+    }
+    
+    showNotification(errorMessage, 'error');
+  }
 }
 
 // User search functionality

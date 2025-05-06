@@ -4,10 +4,16 @@ from fastapi import HTTPException, status
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 
+# Import all necessary models
 from api.models.transaction.model import Transaction
 from api.models.item.model import Item, item_status
 from api.models.user.model import User
 from .schemas import TransactionCreate, BalanceTransfer
+
+# Define models namespace for cleaner code in some functions
+import api.models.transaction.model as models
+import api.models.item.model as item_models
+import api.models.user.model as user_models
 
 
 def create_transaction(
@@ -296,3 +302,57 @@ def transfer_balance(
         "cash_balance": sender.cash_balance,
         "message": f"Successfully transferred {transfer_data.amount} to user {transfer_data.receiver_id}"
     }
+
+
+def get_user_purchases(db: Session, user_id: int, skip: int = 0, limit: int = 100):
+    """
+    Get all purchases made by a specific user.
+    
+    Args:
+        db: Database session
+        user_id: ID of the user who made the purchases (buyer)
+        skip: Number of records to skip for pagination
+        limit: Maximum number of records to return
+    
+    Returns:
+        List of purchases with order details including item information
+    """
+    # Query transactions table for purchases where the user is the buyer
+    # Using direct imports to avoid model namespace confusion
+    from api.models.transaction.model import Transaction
+    from api.models.item.model import Item
+    from api.models.user.model import User
+    
+    purchases = (
+        db.query(
+            Transaction,
+            Item.name.label("item_name"),
+            User.username.label("seller_name")
+        )
+        .join(Item, Transaction.item_id == Item.item_id)
+        .join(User, Transaction.seller_user_id == User.user_id)
+        .filter(Transaction.buyer_user_id == user_id)
+        .order_by(Transaction.transaction_time.desc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+    
+    # Transform the query results into the expected format
+    result = []
+    for purchase, item_name, seller_name in purchases:
+        purchase_dict = {
+            "transaction_id": purchase.transaction_id,
+            "item_id": purchase.item_id,
+            "buyer_user_id": purchase.buyer_user_id,
+            "seller_user_id": purchase.seller_user_id,
+            "quantity_purchased": purchase.quantity_purchased,
+            "purchase_price": purchase.purchase_price,
+            "total_amount": purchase.total_amount,
+            "transaction_time": purchase.transaction_time,
+            "item_name": item_name,
+            "seller_name": seller_name
+        }
+        result.append(purchase_dict)
+    
+    return result
