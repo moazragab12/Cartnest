@@ -821,6 +821,122 @@ function initDashboard() {
     loadActivityData();
 }
 
+/**
+ * Dashboard initialization script
+ * Runs when the dashboard page loads
+ */
+
+document.addEventListener('DOMContentLoaded', function() {
+    initTabs();
+    initCharts();
+    setUserInfo();
+    
+    // Load orders if that tab is active initially
+    if (document.getElementById('orders-tab').classList.contains('active')) {
+        loadUserPurchases();
+    }
+});
+
+/**
+ * Initialize tab switching functionality
+ */
+function initTabs() {
+    // Get all tab navigation links
+    const tabItems = document.querySelectorAll('.nav-item');
+    
+    // Add click event listeners to each tab
+    tabItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Remove active class from all tabs
+            tabItems.forEach(tab => tab.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            this.classList.add('active');
+            
+            // Hide all content sections
+            const contentSections = document.querySelectorAll('.content-section');
+            contentSections.forEach(section => section.classList.remove('active'));
+            
+            // Show selected content section
+            const targetId = this.dataset.target;
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+        });
+    });
+}
+
+/**
+ * Helper function to show a specific tab
+ * @param {string} tabId - The ID of the tab to show
+ */
+function showTab(tabId) {
+    // Find the nav item for this tab
+    const navItem = document.querySelector(`.nav-item[data-target="${tabId}"]`);
+    if (navItem) {
+        navItem.click();
+    }
+}
+
+/**
+ * Initialize charts for the dashboard
+ */
+function initCharts() {
+    // Initialize charts here if needed
+    // Currently handled by analytics.js
+}
+
+/**
+ * Set user information from JWT token
+ */
+function setUserInfo() {
+    const token = localStorage.getItem('accessToken');
+    if (!token) return;
+    
+    try {
+        // Get user info from token or API
+        const tokenPayload = parseJwt(token);
+        if (tokenPayload && tokenPayload.sub) {
+            // Update username in the profile
+            const profileName = document.querySelector('.profile-name');
+            if (profileName) {
+                profileName.textContent = tokenPayload.sub;
+            }
+            
+            // Update email if available
+            // const profileEmail = document.querySelector('.profile-email');
+            // if (profileEmail && tokenPayload.email) {
+            //     profileEmail.textContent = tokenPayload.email;
+            // }
+        }
+    } catch (error) {
+        console.error('Error setting user info:', error);
+    }
+}
+
+/**
+ * Parse JWT token to extract payload
+ * @param {string} token - JWT token
+ * @returns {object} Token payload as object
+ */
+function parseJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            atob(base64)
+                .split('')
+                .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+        );
+        return JSON.parse(jsonPayload);
+    } catch (error) {
+        console.error('Error parsing JWT:', error);
+        return null;
+    }
+}
+
 // Initialize when the page is loaded
 document.addEventListener('DOMContentLoaded', () => {
     if (dashboardCardsContainer) {

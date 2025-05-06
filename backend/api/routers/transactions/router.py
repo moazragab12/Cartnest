@@ -83,6 +83,43 @@ def get_transactions(
 
 
 @router.get(
+    "/purchases",
+    response_model=TransactionListResponse,
+    summary="Get user purchases"
+)
+def get_user_purchases(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get all purchases made by the current user.
+    
+    Returns:
+    - **purchases**: List of transactions where the user is the buyer
+    - **total**: Total number of purchases
+    
+    Each purchase includes:
+    - Order ID (transaction_id)
+    - Date (transaction_time)
+    - Items (item details)
+    - Total cost (total_amount)
+    """
+    purchases = crud.get_user_purchases(
+        db=db,
+        user_id=current_user.user_id,
+        skip=skip,
+        limit=limit
+    )
+    
+    return {
+        "transactions": purchases,
+        "total": len(purchases)
+    }
+
+
+@router.get(
     "/{transaction_id}",
     response_model=TransactionDetailedResponse,
     summary="Get detailed transaction information by ID"
