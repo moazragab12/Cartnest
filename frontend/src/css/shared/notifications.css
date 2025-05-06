@@ -1,0 +1,236 @@
+/* ====================================
+   ENHANCED GLOBAL NOTIFICATION SYSTEM
+   ==================================== */
+
+#global-notifications {
+  position: fixed;
+  top: 90px; /* Moved down to avoid covering the header */
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 380px;
+  width: calc(100% - 40px);
+  pointer-events: none; /* Allow clicking through the container */
+}
+
+.notification {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  padding: 16px;
+  transform: translateX(120%) scale(0.9);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+              opacity 0.3s ease-out, 
+              box-shadow 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  pointer-events: auto; /* Re-enable pointer events for individual notifications */
+}
+
+.notification:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+  transform: translateX(0) scale(1.02);
+}
+
+.notification.show {
+  transform: translateX(0) scale(1);
+  opacity: 1;
+}
+
+.notification.dismissing {
+  transform: translateX(120%) scale(0.8);
+  opacity: 0;
+}
+
+/* Notification type colors with gradients */
+.notification::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 6px;
+  background: linear-gradient(to bottom, #4cb5ff, #2d8dd8); /* Default/info color */
+}
+
+.notification-success::before {
+  background: linear-gradient(to bottom, #10b981, #059669); /* Success green gradient */
+}
+
+.notification-error::before {
+  background: linear-gradient(to bottom, #ef4444, #dc2626); /* Error red gradient */
+}
+
+.notification-warning::before {
+  background: linear-gradient(to bottom, #f59e0b, #d97706); /* Warning orange gradient */
+}
+
+/* Enhanced Icon styling with GIF support */
+.notification-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.notification-icon img {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.notification-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Content styling */
+.notification-content {
+  flex: 1;
+  min-width: 0;
+  padding-right: 8px;
+}
+
+.notification-content p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Product name styling */
+.notification-content .product-name {
+  font-weight: 600;
+  color: #111;
+}
+
+/* Close button styling */
+.notification-close {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.notification-close:hover {
+  color: #6b7280;
+  background-color: #f3f4f6;
+  transform: rotate(90deg);
+}
+
+/* Progress bar for auto-dismiss */
+.notification-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.1);
+  width: 100%;
+  transform-origin: left;
+}
+
+.notification-success .notification-progress {
+  background: linear-gradient(to right, #10b981, #059669);
+}
+
+.notification-error .notification-progress {
+  background: linear-gradient(to right, #ef4444, #dc2626);
+}
+
+.notification-warning .notification-progress {
+  background: linear-gradient(to right, #f59e0b, #d97706);
+}
+
+.notification-info .notification-progress {
+  background: linear-gradient(to right, #4cb5ff, #2d8dd8);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 576px) {
+  #global-notifications {
+    left: 20px;
+    right: 20px;
+    max-width: none;
+    width: auto;
+    top: 70px; /* Even lower on mobile to avoid covering elements */
+  }
+  
+  .notification {
+    padding: 14px;
+  }
+}
+
+/* Animation for product added to cart */
+@keyframes cartPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+.cart-badge-animate {
+  animation: cartPulse 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  color: #fff;
+  background-color: #10b981;
+}
+
+/* Product image thumbnail in notification */
+.notification-with-thumbnail {
+  padding-left: 16px;
+}
+
+.notification-with-thumbnail .notification-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.notification-with-thumbnail .notification-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Animation for the progress bar */
+@keyframes progressShrink {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+.notification-progress.animate {
+  animation: progressShrink linear forwards;
+}
+
+/* Adding a subtle background pattern */
+.notification::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 25%;
+  opacity: 0.03;
+  background-image: radial-gradient(circle, #000 1px, transparent 1px);
+  background-size: 12px 12px;
+  pointer-events: none;
+}

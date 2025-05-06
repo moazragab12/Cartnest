@@ -1,95 +1,72 @@
+// Index page functionality
+// Now using the shared cart manager for consistent cart operations
+import { cartManager } from '../shared/cart-manager.js';
+
+// Initialize global variables for backwards compatibility
 let cartQuantity = 0;
 let cartItems = [];
 
+// Update globals from cart manager for backward compatibility
+function syncCartGlobals() {
+  cartItems = cartManager.getCart();
+  cartQuantity = cartManager.getTotalQuantity();
+}
+
+// Execute this once at startup to initialize globals
+syncCartGlobals();
+
 function setCookie(name, value, days) {
-  const d = new Date();
-  d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
-  const expires = "expires=" + d.toUTCString();
-  document.cookie = name + "=" + value + ";" + expires + ";path=/";
+  // Delegate to cart manager - for backward compatibility only
+  cartManager.setCookie(name, value, days);
 }
 
 function getCookie(name) {
-  const cname = name + "=";
-  const decodedCookie = decodeURIComponent(document.cookie);
-  const ca = decodedCookie.split(";");
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i].trim();
-    if (c.indexOf(cname) === 0) {
-      return c.substring(cname.length, c.length);
-    }
-  }
-  return "";
+  // Delegate to cart manager - for backward compatibility only
+  return cartManager.getCookie(name);
 }
 
 function checkCookie() {
-  let cart = getCookie("cart");
-  if (cart) {
-    cartItems = JSON.parse(cart);
-    cartQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  } else {
-    cartItems = [];
-    cartQuantity = 0;
-  }
+  // Simply sync with cart manager
+  syncCartGlobals();
   updateCartBadge();
 }
 
 function getCart() {
-  let cart = getCookie("cart");
-  if (cart) {
-    return JSON.parse(cart);
-  } else {
-    return [];
-  }
+  // Get directly from cart manager
+  return cartManager.getCart();
 }
 
 // Add or update items in the cart
 function addToCart(product) {
-  let cart = getCart();
-  const existing = cart.find(
-    (p) => p.name === product.name && p.image === product.image
-  );
-
-  if (existing) {
-    existing.quantity += 1;
-  } else {
-    cart.push(product);
-  }
-
-  setCookie("cart", JSON.stringify(cart), 7);
-
-  // Sync global variables after updating
-  cartItems = cart;
-  cartQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  if (!product) return false;
   
-  // Update the cart badge immediately after adding
-  updateCartBadge();
+  // Use cart manager to add the item
+  cartManager.addToCart(product, product.quantity || 1)
+    .then(result => {
+      // Sync globals after cart update
+      syncCartGlobals();
+      
+      // Show notification if available
+      if (window.notifications && result.success) {
+        window.notifications.success(`${product.name} added to your cart!`);
+      }
+    });
+  
+  return true;
 }
 
 function updateCartBadge() {
-  const badge = document.getElementById("cart-badge");
-  if (badge) {
-    badge.innerText = cartQuantity;
-  }
+  // Delegate to cart manager
+  cartManager.updateCartBadge();
 }
 
 // Remove only one specific item from the cart
 function removeFromCart(name) {
-  const itemToRemove = cartItems.find((item) => item.name === name);
-
-  if (itemToRemove) {
-    if (itemToRemove.quantity > 1) {
-      itemToRemove.quantity -= 1;
-    } else {
-      cartItems = cartItems.filter((item) => item.name !== name);
-    }
-  }
-
-  // Update cookie and globals
-  setCookie("cart", JSON.stringify(cartItems), 7);
-  cartQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-
-  updateCartBadge(); // Recalculate badge
-  updateCartSection();
+  cartManager.removeFromCart(name)
+    .then(result => {
+      // Sync globals after cart update
+      syncCartGlobals();
+    });
 }
 
 // Update the cart section to display the items and their quantities
@@ -99,18 +76,18 @@ function updateCartSection() {
 
   if (!cartItemsContainer || !cartSummary) return; // Only run on cart page
 
+  // Sync with cart manager first
+  syncCartGlobals();
+
   // Reset the cart display
   cartItemsContainer.innerHTML = "";
   cartSummary.innerHTML = "";
 
-  let totalPrice = 0;
-  let totalItems = 0; // Count total quantities
+  let totalPrice = cartManager.getTotalPrice();
+  let totalItems = cartManager.getTotalQuantity();
 
   // Create cart item cards
   cartItems.forEach((item) => {
-      totalPrice += item.price * item.quantity; 
-      totalItems += item.quantity; // Sum quantities
-
       const card = document.createElement("div");
       card.className = "container-card";
       card.innerHTML = `
@@ -155,25 +132,21 @@ function setupCartButtons() {
 
 // FAQ Accordion Functionality
 function setupFAQ() {
-  // Get all FAQ question elements
-  const faqQuestions = document.querySelectorAll(".faq-question");
-
-  // Add click event listener to each question
-  faqQuestions.forEach((question) => {
-    question.addEventListener("click", function() {
-      // Get the parent FAQ item
-      const faqItem = this.parentElement;
-
-      // Toggle the active class on the FAQ item
-      faqItem.classList.toggle("active");
-
-      // Close other FAQ items (optional - for accordion style)
-      const otherFaqItems = document.querySelectorAll(".faq-item");
-      otherFaqItems.forEach((item) => {
-        if (item !== faqItem) {
-          item.classList.remove("active");
+  const faqItems = document.querySelectorAll(".faq-item");
+  
+  faqItems.forEach((item) => {
+    const question = item.querySelector(".faq-question");
+    
+    question.addEventListener("click", () => {
+      // Close all other FAQ items
+      faqItems.forEach((otherItem) => {
+        if (otherItem !== item && otherItem.classList.contains("active")) {
+          otherItem.classList.remove("active");
         }
       });
+      
+      // Toggle current FAQ item
+      item.classList.toggle("active");
     });
   });
 }
@@ -181,12 +154,15 @@ function setupFAQ() {
 // Newsletter form submission
 function setupNewsletter() {
   const newsletterForm = document.querySelector(".newsletter-form");
+  
   if (newsletterForm) {
     newsletterForm.addEventListener("submit", function(e) {
       e.preventDefault();
-      const emailInput = this.querySelector('input[type="email"]');
-      if (emailInput.value.trim() !== "") {
-        alert("Thank you for subscribing to our newsletter!");
+      const emailInput = this.querySelector("input[type='email']");
+      
+      if (emailInput && emailInput.value) {
+        // Here you would typically submit to an API
+        alert(`Thank you for subscribing with ${emailInput.value}!`);
         emailInput.value = "";
       }
     });
@@ -196,27 +172,34 @@ function setupNewsletter() {
 // Enhanced Partners section functionality
 function setupPartners() {
   const partnersContainer = document.querySelector(".partners-container");
+  
   if (partnersContainer) {
-    // Get original partners
-    const originalPartners = Array.from(partnersContainer.children);
-
-    // Clone partners multiple times to ensure smooth infinite scrolling
-    // regardless of screen width
-    for (let i = 0; i < 3; i++) {
-      originalPartners.forEach((partner) => {
-        const clone = partner.cloneNode(true);
-        partnersContainer.appendChild(clone);
-      });
-    }
-
-    // Ensure equal width for all partner logos
-    const allPartnerLogos = partnersContainer.querySelectorAll(".partner-logo");
-    const fixedWidth = 140; // Fixed width for each partner logo
-
-    allPartnerLogos.forEach((logo) => {
-      logo.style.width = `${fixedWidth}px`;
+    // Create duplicate items for infinite scroll effect
+    const originalWidth = partnersContainer.scrollWidth;
+    const logoItems = partnersContainer.querySelectorAll(".partner-logo");
+    
+    // Clone items for continuous loop effect
+    logoItems.forEach((item) => {
+      const clone = item.cloneNode(true);
+      partnersContainer.appendChild(clone);
     });
   }
+}
+
+// Setup cart event listeners for automatic UI updates
+function setupCartEventListeners() {
+  document.addEventListener('cart:updated', () => {
+    syncCartGlobals();
+    updateCartSection();
+  });
+  
+  document.addEventListener('cart:itemAdded', () => {
+    syncCartGlobals();
+  });
+  
+  document.addEventListener('cart:itemRemoved', () => {
+    syncCartGlobals();
+  });
 }
 
 // Initialize everything when DOM is fully loaded
@@ -229,6 +212,7 @@ document.addEventListener("DOMContentLoaded", function() {
   setupFAQ();
   setupNewsletter();
   setupPartners();
+  setupCartEventListeners();
   
   // Initialize cart sections if on cart page
   updateCartSection();
