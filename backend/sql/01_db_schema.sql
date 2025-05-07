@@ -124,3 +124,56 @@ DO $$ BEGIN
 EXCEPTION
     WHEN duplicate_object THEN null;
 END $$;
+-- added for Horizontal partitioning 
+
+-- 1a. USERS → admins vs. regular users
+CREATE TABLE IF NOT EXISTS users_admin   (LIKE users INCLUDING ALL);
+ALTER TABLE users_admin   ADD CHECK (role = 'admin');
+
+CREATE TABLE IF NOT EXISTS users_regular (LIKE users INCLUDING ALL);
+ALTER TABLE users_regular ADD CHECK (role = 'user');
+
+CREATE OR REPLACE VIEW users AS
+  SELECT * FROM users_admin
+  UNION ALL
+  SELECT * FROM users_regular
+;
+
+-- 1b. ITEMS → currently for sale vs. everything else
+CREATE TABLE IF NOT EXISTS items_for_sale (LIKE items INCLUDING ALL);
+ALTER TABLE items_for_sale ADD CHECK (status = 'for_sale');
+
+CREATE TABLE IF NOT EXISTS items_archived (LIKE items INCLUDING ALL);
+ALTER TABLE items_archived ADD CHECK (status <> 'for_sale');
+
+CREATE OR REPLACE VIEW items AS
+  SELECT * FROM items_for_sale
+  UNION ALL
+  SELECT * FROM items_archived
+;
+
+-- 1c. TRANSACTIONS → first half‑year vs. second half‑year
+CREATE TABLE IF NOT EXISTS transactions_h1 (LIKE transactions INCLUDING ALL);
+ALTER TABLE transactions_h1 ADD CHECK (transaction_time < DATE '2025-07-01');
+
+CREATE TABLE IF NOT EXISTS transactions_h2 (LIKE transactions INCLUDING ALL);
+ALTER TABLE transactions_h2 ADD CHECK (transaction_time >= DATE '2025-07-01');
+
+CREATE OR REPLACE VIEW transactions AS
+  SELECT * FROM transactions_h1
+  UNION ALL
+  SELECT * FROM transactions_h2
+;
+
+-- 1d. DEPOSITS → older vs. newer
+CREATE TABLE IF NOT EXISTS deposits_old (LIKE deposits INCLUDING ALL);
+ALTER TABLE deposits_old ADD CHECK (deposit_time < DATE '2025-07-01');
+
+CREATE TABLE IF NOT EXISTS deposits_new (LIKE deposits INCLUDING ALL);
+ALTER TABLE deposits_new ADD CHECK (deposit_time >= DATE '2025-07-01');
+
+CREATE OR REPLACE VIEW deposits AS
+  SELECT * FROM deposits_old
+  UNION ALL
+  SELECT * FROM deposits_new
+;
