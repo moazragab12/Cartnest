@@ -11,6 +11,7 @@ class ProductLoader {
   constructor() {
     this.apiBaseUrl = "http://localhost:8000/api/v0/items/";
     this.products = [];
+    this.allProducts = []; // Store all fetched products for pagination
     this.categories = [];
     this.currentFilters = {
       category: [],
@@ -21,11 +22,18 @@ class ProductLoader {
       rating: null,
       featured: false // Add featured flag to track if featured/recent items are being shown
     };
+    this.pagination = {
+      currentPage: 1,
+      itemsPerPage: 12, // Default items per page
+      totalPages: 1
+    };
     this.productGrid = document.querySelector(".product-grid");
     this.categoryFilters = document.querySelectorAll(
       'details ul input[type="checkbox"]'
     );
-    this.featureBox = document.querySelector('.feature-box');
+    this.featureBox = document.querySelector('.feature-box:not(.items-per-page)');
+    this.itemsPerPageSelect = document.querySelector('.items-per-page');
+    this.paginationContainer = document.querySelector('.pagination');
   }
 
   /**
@@ -47,8 +55,157 @@ class ProductLoader {
 
       // Setup feature box (Featured) listener
       this.setupFeatureBoxListener();
+
+      // Setup items per page selector listener
+      this.setupItemsPerPageListener();
+
+      // Setup pagination listeners
+      this.setupPaginationListeners();
     } catch (error) {
       console.error("Error initializing product loader:", error);
+    }
+  }
+
+  /**
+   * Set up listener for items per page selector
+   */
+  setupItemsPerPageListener() {
+    if (this.itemsPerPageSelect) {
+      this.itemsPerPageSelect.addEventListener('change', () => {
+        // Update items per page
+        this.pagination.itemsPerPage = parseInt(this.itemsPerPageSelect.value);
+        console.log(`Items per page changed to: ${this.pagination.itemsPerPage}`);
+        
+        // Reset to first page when changing items per page
+        this.pagination.currentPage = 1;
+        
+        // Apply pagination
+        this.applyPagination();
+      });
+    }
+  }
+
+  /**
+   * Set up listeners for pagination buttons
+   */
+  setupPaginationListeners() {
+    if (this.paginationContainer) {
+      this.paginationContainer.addEventListener('click', (event) => {
+        const button = event.target.closest('.pagination-btn');
+        if (!button) return;
+        
+        // Previous page button
+        if (button.title === 'Previous page') {
+          if (this.pagination.currentPage > 1) {
+            this.pagination.currentPage--;
+            this.applyPagination();
+          }
+          return;
+        }
+        
+        // Next page button
+        if (button.title === 'Next page') {
+          if (this.pagination.currentPage < this.pagination.totalPages) {
+            this.pagination.currentPage++;
+            this.applyPagination();
+          }
+          return;
+        }
+        
+        // Numeric page buttons
+        const pageNum = parseInt(button.textContent);
+        if (!isNaN(pageNum)) {
+          this.pagination.currentPage = pageNum;
+          this.applyPagination();
+        }
+      });
+    }
+  }
+
+  /**
+   * Apply pagination to products
+   */
+  applyPagination() {
+    // Calculate total pages
+    this.pagination.totalPages = Math.ceil(this.allProducts.length / this.pagination.itemsPerPage);
+    
+    // Ensure current page is valid
+    if (this.pagination.currentPage > this.pagination.totalPages) {
+      this.pagination.currentPage = Math.max(1, this.pagination.totalPages);
+    }
+    
+    // Get products for current page
+    const startIndex = (this.pagination.currentPage - 1) * this.pagination.itemsPerPage;
+    const endIndex = startIndex + this.pagination.itemsPerPage;
+    
+    // Set the products to display
+    this.products = this.allProducts.slice(startIndex, endIndex);
+    
+    console.log(`Showing products ${startIndex + 1}-${Math.min(endIndex, this.allProducts.length)} of ${this.allProducts.length}`);
+    
+    // Render the products for current page
+    this.renderProducts();
+    
+    // Update pagination UI
+    this.updatePaginationUI();
+    
+    // Update product count display
+    this.updateProductCountDisplay(this.currentFilters);
+  }
+
+  /**
+   * Update the pagination UI
+   */
+  updatePaginationUI() {
+    if (!this.paginationContainer) return;
+    
+    const totalPages = this.pagination.totalPages;
+    const currentPage = this.pagination.currentPage;
+    
+    // Clear current pagination buttons
+    this.paginationContainer.innerHTML = '';
+    
+    // Add previous button
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'pagination-btn';
+    prevBtn.title = 'Previous page';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+    this.paginationContainer.appendChild(prevBtn);
+    
+    // Add page number buttons
+    // Show a limited number of pages with the current page centered
+    const maxPageButtons = 5;
+    const halfMaxButtons = Math.floor(maxPageButtons / 2);
+    
+    let startPage = Math.max(1, currentPage - halfMaxButtons);
+    let endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
+    
+    // Adjust start if we're showing fewer pages than the max
+    if (endPage - startPage < maxPageButtons - 1) {
+      startPage = Math.max(1, endPage - maxPageButtons + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = document.createElement('button');
+      pageBtn.className = 'pagination-btn' + (i === currentPage ? ' active' : '');
+      pageBtn.textContent = i.toString();
+      this.paginationContainer.appendChild(pageBtn);
+    }
+    
+    // Add next button
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'pagination-btn';
+    nextBtn.title = 'Next page';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+    this.paginationContainer.appendChild(nextBtn);
+    
+    // Show/hide pagination based on number of pages
+    if (totalPages <= 1) {
+      this.paginationContainer.style.display = 'none';
+    } else {
+      this.paginationContainer.style.display = 'flex';
     }
   }
 
@@ -98,17 +255,12 @@ class ProductLoader {
       const data = await response.json();
       console.log("Recent items API response:", data);
       
-      this.products = Array.isArray(data) ? data : [];
+      // Store all products for pagination
+      this.allProducts = Array.isArray(data) ? data : [];
       this.currentFilters.featured = true;
       
-      // Render the products
-      this.renderProducts();
-      
-      // Update product count display
-      const categoryTitle = document.querySelector('.products h2 .filter-group p');
-      if (categoryTitle) {
-        categoryTitle.textContent = `${this.products.length} recently listed items (last ${days} days)`;
-      }
+      // Apply pagination
+      this.applyPagination();
       
       return this.products;
     } catch (error) {
@@ -237,26 +389,26 @@ class ProductLoader {
       const data = await response.json();
       console.log("API response:", data);
       
-      this.products = Array.isArray(data) ? data : [];
+      let products = Array.isArray(data) ? data : [];
       
       // Apply price filter client-side
       if (filters.priceRange) {
         const { min, max } = filters.priceRange;
         console.log(`Filtering products by price: $${min} - $${max}`);
         
-        this.products = this.products.filter(product => {
+        products = products.filter(product => {
           const price = parseFloat(product.price) || 0;
           return price >= min && price <= max;
         });
         
-        console.log(`${this.products.length} products after price filter`);
+        console.log(`${products.length} products after price filter`);
       }
       
-      // Render the products
-      this.renderProducts();
+      // Store all products for pagination
+      this.allProducts = products;
       
-      // Update product count display in the header
-      this.updateProductCountDisplay(filters);
+      // Apply pagination
+      this.applyPagination();
       
       return this.products;
     } catch (error) {
@@ -274,12 +426,26 @@ class ProductLoader {
     const categoryTitle = document.querySelector('.products h2 .filter-group p');
     if (!categoryTitle) return;
     
+    let displayText = '';
+    
     if (filters.category && filters.category.length > 0) {
       const categoryNames = filters.category.join(', ');
-      categoryTitle.textContent = `${this.products.length} items in ${categoryNames}`;
+      displayText = `${this.allProducts.length} items in ${categoryNames}`;
+    } else if (this.currentFilters.featured) {
+      displayText = `${this.allProducts.length} recently listed items`;
     } else {
-      categoryTitle.textContent = `${this.products.length} items in all categories`;
+      displayText = `${this.allProducts.length} items in all categories`;
     }
+    
+    // Add pagination info
+    const start = (this.pagination.currentPage - 1) * this.pagination.itemsPerPage + 1;
+    const end = Math.min(start + this.pagination.itemsPerPage - 1, this.allProducts.length);
+    
+    if (this.allProducts.length > 0) {
+      displayText += ` (showing ${start}-${end})`;
+    }
+    
+    categoryTitle.textContent = displayText;
   }
 
   /**
@@ -526,17 +692,8 @@ class ProductLoader {
       priceRange: { min: minPrice, max: maxPrice },
     };
 
-    // Update product count display
-    const categoryTitle = document.querySelector(
-      ".products h2 .filter-group p"
-    );
-    if (categoryTitle && categoryFilters.length > 0) {
-      categoryTitle.textContent = `${
-        this.products.length
-      } items in ${categoryFilters.join(", ")}`;
-    } else if (categoryTitle) {
-      categoryTitle.textContent = `${this.products.length} items in all categories`;
-    }
+    // Reset to first page when applying new filters
+    this.pagination.currentPage = 1;
 
     // Fetch products with filters
     this.fetchProducts(this.currentFilters);

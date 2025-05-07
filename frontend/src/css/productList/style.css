@@ -293,6 +293,12 @@ summary {
   animation: softPulse 3s infinite alternate;
 }
 
+/* Items per page selector styling */
+.items-per-page {
+  margin-left: 0.5rem;
+  min-width: 125px;
+}
+
 @keyframes softPulse {
   0% { box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
   100% { box-shadow: 0 4px 8px rgba(13,153,255,0.1); }
