@@ -1,5 +1,5 @@
 import dashboardController from './controllers/DashboardController';
-import { transferFunds, makeDeposit } from '../core/api/services/transactionsService.js';
+import { makeDeposit } from '../core/api/services/transactionsService.js';
 
 const sideMenu = document.querySelector('aside');
 const menuBtn = document.getElementById('menu-btn');
@@ -35,92 +35,6 @@ Orders.forEach(order => {
     document.querySelector('table tbody').appendChild(tr);
 });
 
-// Transactions Tab Functionality
-function openTransferModal() {
-  document.getElementById('transfer-modal').style.display = 'block';
-}
-
-function closeTransferModal() {
-  document.getElementById('transfer-modal').style.display = 'none';
-  document.getElementById('recipient').value = '';
-  document.getElementById('amount').value = '';
-  document.getElementById('notes').value = '';
-  document.getElementById('recipient-suggestions').style.display = 'none';
-}
-
-function openTransferModalWithUser(userName) {
-  document.getElementById('recipient').value = userName;
-  document.getElementById('transfer-modal').style.display = 'block';
-  document.getElementById('amount').focus();
-}
-
-async function processTransfer() {
-  // Get form values
-  const recipient = document.getElementById('recipient').value;
-  const amount = document.getElementById('amount').value;
-  const notes = document.getElementById('notes').value;
-  
-  // Validate input
-  if (!recipient || !amount) {
-    showNotification('Please enter a recipient and amount', 'error');
-    return;
-  }
-  
-  // Get the recipient's ID from the recipient name
-  const recipientId = getRecipientId(recipient);
-  if (!recipientId) {
-    showNotification('Recipient not found', 'error');
-    return;
-  }
-  
-  try {
-    // Call the API to process the transfer
-    const response = await transferFunds(recipientId, parseFloat(amount));
-    
-    // Show success message with the updated balance
-    showNotification(`Transfer of $${amount} to ${recipient} processed successfully! Your new balance is $${response.cash_balance.toFixed(2)}`, 'success');
-    
-    // Add the new transaction to the table
-    const transactionTable = document.querySelector('#transactions-tab .orders-table tbody');
-    const currentDate = new Date();
-    const formattedDate = `${currentDate.toLocaleString('default', { month: 'short' })} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
-    const initials = recipient.split(' ').map(name => name[0]).join('');
-    
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `
-      <td class="order-id">#TRX-${Math.floor(Math.random() * 1000)}</td>
-      <td>${formattedDate}</td>
-      <td>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <div class="user-avatar">${initials}</div>
-          <span>${recipient}</span>
-        </div>
-      </td>
-      <td><span class="transaction-type sent">Sent</span></td>
-      <td class="amount sent">-$${parseFloat(amount).toFixed(2)}</td>
-      <td><span class="order-status status-delivered">Completed</span></td>
-    `;
-    
-    transactionTable.insertBefore(newRow, transactionTable.firstChild);
-    
-    // Close the modal
-    closeTransferModal();
-    
-    // Update the displayed balance if it exists on the page
-    updateDisplayedBalance(response.cash_balance);
-    
-  } catch (error) {
-    let errorMessage = 'An error occurred during the transfer';
-    
-    // Extract error message from API response if available
-    if (error.response && error.response.data && error.response.data.detail) {
-      errorMessage = error.response.data.detail;
-    }
-    
-    showNotification(errorMessage, 'error');
-  }
-}
-
 // Function to update any displayed balance on the page
 function updateDisplayedBalance(newBalance) {
   // Check if there's a balance display element on the page
@@ -128,25 +42,6 @@ function updateDisplayedBalance(newBalance) {
   if (balanceDisplay) {
     balanceDisplay.textContent = `$${newBalance.toFixed(2)}`;
   }
-}
-
-// Mock function to get recipient ID from name (in a real app, you'd query the API)
-function getRecipientId(recipientName) {
-  // This is a mock implementation - in a real app this would query your backend
-  const mockUserMap = {
-    'John Doe': 1,
-    'Jane Smith': 2,
-    'Emily Martinez': 3,
-    'Thomas Smith': 4,
-    'Jessica Williams': 5,
-    'Robert Johnson': 6,
-    'Sarah Brown': 7,
-    'Michael Davis': 8,
-    'Olivia Wilson': 9,
-    'Daniel Miller': 10
-  };
-  
-  return mockUserMap[recipientName] || null;
 }
 
 // Notification function
@@ -222,93 +117,7 @@ async function processDeposit() {
   }
 }
 
-// User search functionality
 document.addEventListener('DOMContentLoaded', function() {
-  const userSearch = document.getElementById('user-search');
-  const userCards = document.querySelectorAll('.user-card');
-  
-  if (userSearch) {
-    userSearch.addEventListener('input', function() {
-      const searchValue = this.value.toLowerCase();
-      
-      userCards.forEach(card => {
-        const userName = card.querySelector('.user-name').textContent.toLowerCase();
-        const userEmail = card.querySelector('.user-email').textContent.toLowerCase();
-        
-        if (userName.includes(searchValue) || userEmail.includes(searchValue)) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-  }
-  
-  // Transfer recipient suggestions
-  const recipient = document.getElementById('recipient');
-  const suggestions = document.getElementById('recipient-suggestions');
-  
-  if (recipient && suggestions) {
-    recipient.addEventListener('input', function() {
-      const searchValue = this.value.toLowerCase();
-      
-      if (searchValue.length < 2) {
-        suggestions.style.display = 'none';
-        return;
-      }
-      
-      // Clear previous suggestions
-      suggestions.innerHTML = '';
-      suggestions.style.display = 'block';
-      
-      // Get user names from the user cards
-      const userNames = [];
-      userCards.forEach(card => {
-        userNames.push({
-          name: card.querySelector('.user-name').textContent,
-          email: card.querySelector('.user-email').textContent,
-          initials: card.querySelector('.user-avatar-large').textContent
-        });
-      });
-      
-      // Filter and add matching suggestions
-      const matchingUsers = userNames.filter(user => 
-        user.name.toLowerCase().includes(searchValue) || 
-        user.email.toLowerCase().includes(searchValue)
-      );
-      
-      matchingUsers.forEach(user => {
-        const item = document.createElement('div');
-        item.className = 'search-suggestion-item';
-        item.innerHTML = `
-          <div class="user-avatar">${user.initials}</div>
-          <div>
-            <div style="font-weight: 500;">${user.name}</div>
-            <div style="font-size: 12px; color: var(--secondary-color);">${user.email}</div>
-          </div>
-        `;
-        
-        item.addEventListener('click', function() {
-          recipient.value = user.name;
-          suggestions.style.display = 'none';
-        });
-        
-        suggestions.appendChild(item);
-      });
-      
-      if (matchingUsers.length === 0) {
-        suggestions.innerHTML = '<div style="padding: 10px 15px; color: var(--secondary-color);">No users found</div>';
-      }
-    });
-    
-    // Hide suggestions when clicking outside
-    document.addEventListener('click', function(e) {
-      if (e.target !== recipient && !suggestions.contains(e.target)) {
-        suggestions.style.display = 'none';
-      }
-    });
-  }
-  
   // Transaction tab filtering
   const transactionTabs = document.querySelectorAll('[data-transactiontab]');
   const transactionRows = document.querySelectorAll('#transactions-tab .orders-table tbody tr');
@@ -463,21 +272,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Simulate successful submission
     alert(`Product ${status === 'draft' ? 'saved as draft' : 'published'} successfully!`);
-    
-    // For a real application, you'd use fetch or XMLHttpRequest to send the data
-    // fetch('/api/items', {
-    //   method: 'POST',
-    //   body: formData
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //   console.log('Success:', data);
-    //   alert('Product saved successfully!');
-    // })
-    // .catch(error => {
-    //   console.error('Error:', error);
-    //   alert('An error occurred while saving the product.');
-    // });
   }
 
   // Add drag and drop functionality for images

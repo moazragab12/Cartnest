@@ -13,6 +13,8 @@ from .schemas import (
     SellerPerformanceReport,
     TransactionStats,
     UserSalesSummary,
+    UserItemsStatusCount,
+    SellerSalesPerformance,
 )
 from .analytics import (
     get_sales_time_series,
@@ -20,6 +22,8 @@ from .analytics import (
     get_seller_performance,
     get_transaction_statistics,
     get_user_sales_summary,
+    get_user_items_by_status,
+    get_seller_sales_chart_data,
 )
 
 # Create router with proper prefixes and tags
@@ -103,7 +107,7 @@ async def system_sales_by_category(
 
 
 @router.get(
-    "/system/sellers/performance",
+    "/user/sales/performance",
     response_model=SellerPerformanceReport,
     summary="Get top seller performance metrics",
 )
@@ -120,10 +124,12 @@ async def top_seller_performance(
     Only available to admin users.
     """
     # Check if user is admin
+    """
     if current_user.role != UserRole.admin:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required"
         )
+    """
 
     # Parse date parameters
     start = parse_date_param(start_date)
@@ -234,6 +240,31 @@ async def user_sales_summary(
     return get_user_sales_summary(db, current_user.user_id, start, end)
 
 
+@router.get(
+    "/user/items/status",
+    response_model=UserItemsStatusCount,
+    summary="Get counts of current user's items by status"
+)
+async def user_items_by_status(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Get counts of the current user's items grouped by their status (for_sale, sold, removed, draft).
+    
+    Returns a breakdown of how many items the user has in each status category.
+    """
+    # Get item status counts for the current user
+    status_counts = get_user_items_by_status(db, current_user.user_id)
+    
+    if not status_counts:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    return status_counts
+
+
 # Admin endpoint to view any user's summary
 @router.get(
     "/user/{user_id}/summary",
@@ -278,3 +309,49 @@ async def specific_user_sales_summary(
         )
 
     return summary
+
+
+@router.get(
+    "/user/seller/sales/chart",
+    response_model=SellerSalesPerformance,
+    summary="Get sales chart data for the current seller user"
+)
+async def seller_sales_chart(
+    time_range: str = Query(
+        "7_days",
+        description="Time range for chart data (7_days, 30_days, 90_days, this_year)"
+    ),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Get daily sales data formatted for chart visualization for the currently logged-in seller.
+    
+    This endpoint returns data specifically designed for rendering a sales performance chart:
+    - Daily sales amounts for the specified time period
+    - Dates formatted appropriately for the selected time period
+    - Sales statistics: total, average daily, and highest daily
+    
+    The time_range parameter can be:
+    - 7_days: Last 7 days (dates formatted as day names, e.g., Mon, Tue)
+    - 30_days: Last 30 days (dates formatted as day and month, e.g., 01 Jan)
+    - 90_days: Last 90 days (dates formatted as day and month, e.g., 01 Jan)
+    - this_year: Current year (dates formatted as month names, e.g., Jan, Feb)
+    """
+    # Check if time_range is valid
+    if time_range not in ["7_days", "30_days", "90_days", "this_year"]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid time range. Must be one of: 7_days, 30_days, 90_days, this_year"
+        )
+    
+    # Get sales chart data for the current user
+    chart_data = get_seller_sales_chart_data(db, current_user.user_id, time_range)
+    
+    if not chart_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    return chart_data

@@ -1,0 +1,187 @@
+/* General Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal.show {
+  opacity: 1;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.modal.show .modal-content {
+  transform: translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-header h3 i {
+  color: var(--primary-color);
+}
+
+.close-modal {
+  font-size: 24px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-modal:hover {
+  color: var(--primary-color);
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Change Indicator for Update Form */
+.change-indicator {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: var(--primary-color);
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+.form-group {
+  position: relative;
+}
+
+.input-modified {
+  border-color: var(--primary-color) !important;
+  background-color: rgba(var(--primary-color-rgb), 0.05) !important;
+}
+
+/* Toast notifications */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1100;
+  max-width: 400px;
+  animation: fadeInUp 0.3s, fadeOut 0.3s 2.7s;
+}
+
+.toast-success {
+  background-color: #10B981;
+}
+
+.toast-error {
+  background-color: #EF4444;
+}
+
+.toast-info {
+  background-color: #3B82F6;
+}
+
+.toast-warning {
+  background-color: #F59E0B;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Update Product Modal specific styles */
+#update-product-modal .modal-content {
+  max-width: 900px;
+}
+
+#update-product-form .form-group,
+#update-product-form .form-row {
+  margin-bottom: 20px;
+}
+
+#reset-product-changes {
+  margin-right: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #update-product-modal .modal-content {
+    width: 95%;
+  }
+  
+  #update-product-form {
+    display: flex;
+    flex-direction: column;
+  }
+}

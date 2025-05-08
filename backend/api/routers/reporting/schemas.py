@@ -73,6 +73,36 @@ class UserSalesSummary(BaseModel):
     username: str
     total_purchases: int
     total_spent: float
-    total_sales: int
+    items_purchased: int = 0  # New field for items purchased quantity
+    total_sales_transactions: int = 0  # New field for number of sales transactions
+    total_sales: int  # Now represents quantity of items sold, not transaction count
     total_earned: float
     net_balance_change: float
+
+
+class UserItemsStatusCount(BaseModel):
+    """Count of items for a user grouped by status"""
+    
+    for_sale: int = 0
+    sold: int = 0
+    removed: int = 0
+    draft: int = 0
+    user_id: int
+    username: str
+
+
+class SellerSalesDataPoint(BaseModel):
+    """A single data point for seller sales performance chart"""
+    date: str
+    amount: float
+
+
+class SellerSalesPerformance(BaseModel):
+    """Daily sales performance data for a seller's chart visualization"""
+    data: List[SellerSalesDataPoint]
+    total_sales: float
+    average_daily_sales: float
+    highest_daily_sales: float
+    time_range: str
+    user_id: int
+    username: str

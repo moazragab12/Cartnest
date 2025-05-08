@@ -135,11 +135,11 @@ async def update_item_endpoint(
             detail="Not authorized to update this item"
         )
         
-    # Check if the item is already sold
-    if db_item.status == item_status.sold:
+    # Check if the item is already removed
+    if db_item.status == item_status.removed:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Cannot update a sold item"
+            detail="Cannot update a removed item"
         )
         
     updated_item = update_item(db, item_id, item_data)
