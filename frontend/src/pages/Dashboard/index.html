@@ -33,14 +33,14 @@
       <input type="text" placeholder="Search essentials, groceries and more...">
     </div>
     <div class="header-links">
-      <a href="./src/pages/auth/auth.html" class="sign-in-link" id="auth-link">
-        <img src="./public/resources/images/svg/user-icon.svg" alt="User" class="icon-svg">
-        <span id="auth-text">Sign Up/Sign In</span>
-      </a>
-      <span class="header-divider">|</span>
       <a href="./src/pages/cart/cart.html" class="cart-link">
-        <img src="./public/resources/images/svg/cart-icon.svg" alt="Cart" class="icon-svg">
+        <img
+          src="./public/resources/images/svg/cart-icon.svg"
+          alt="Cart"
+          class="icon-svg"
+        />
         <span>Cart</span>
+        <span id="cart-badge" class="cart-badge">0</span>
       </a>
     </div>
   </header>
@@ -993,18 +993,6 @@
                     </div>
                   </div>
                 </form>
-              </div>
-            </div>
-            
-            <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
-              <h4 style="margin-bottom: 15px; font-weight: 500;">Account Actions</h4>
-              <div style="display: flex; gap: 15px;">
-                <button class="btn btn-outline" style="color: #EF4444; border-color: #EF4444;">
-                  <i class="fas fa-sign-out-alt"></i> Sign Out
-                </button>
-                <button class="btn btn-outline" style="color: #EF4444; border-color: #EF4444;">
-                  <i class="fas fa-trash"></i> Delete Account
-                </button>
               </div>
             </div>
           </div>
