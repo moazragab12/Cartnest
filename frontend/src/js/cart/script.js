@@ -5,7 +5,7 @@ import { cartManager } from "../shared/cart-manager.js";
 document.addEventListener("DOMContentLoaded", function () {
   loadCart();
 
-  // Using event delegation instead of direct binding
+  // Using event delegation for buttons
   document.addEventListener("click", function (e) {
     // Handle Remove All button click with event delegation
     if (
@@ -29,6 +29,39 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  // Add event delegation for quantity changes
+  document.addEventListener("change", function (e) {
+    if (e.target && e.target.classList.contains("quantity-select")) {
+      const itemId = e.target.getAttribute("data-id");
+      const newQuantity = parseInt(e.target.value);
+
+      console.log(`Quantity changed for item ${itemId} to ${newQuantity}`);
+
+      // Convert to number if needed
+      const numericId = Number(itemId) || itemId;
+
+      // Update quantity in cart cookies
+      cartManager.updateItemQuantity(numericId, newQuantity);
+
+      // Update the price display for this item
+      const itemElement = e.target.closest(".item");
+      if (itemElement) {
+        // Get price from item's price text
+        const itemPriceElem = itemElement.querySelector(".item-price p");
+        const unitPriceMatch = itemPriceElem.textContent.match(/\$(\d+(\.\d+)?)/);
+
+        if (unitPriceMatch) {
+          const unitPrice = parseFloat(unitPriceMatch[1]);
+          const totalPrice = unitPrice * newQuantity;
+          itemPriceElem.textContent = `$${totalPrice.toFixed(2)}`;
+        }
+      }
+
+      // Recalculate totals without page reload
+      updateCartTotals();
+    }
+  });
+
   setupCouponButton();
 
   // Log cart data for debugging
@@ -49,11 +82,7 @@ async function loadCart() {
     return;
   }
 
-  // Get existing item container and back-remove div
-  const existingItemContainer = cartContainer.querySelector(".item");
-  const backRemoveDiv = cartContainer.querySelector(".back-remove");
-
-  // Clear everything except the back-remove div
+  // Completely clear the cart container first
   cartContainer.innerHTML = "";
 
   if (cart.length === 0) {
@@ -61,9 +90,22 @@ async function loadCart() {
     emptyMessage.className = "empty-cart";
     emptyMessage.innerHTML = "<p>Your cart is empty.</p>";
     cartContainer.appendChild(emptyMessage);
-    if (backRemoveDiv) {
-      cartContainer.appendChild(backRemoveDiv);
-    }
+    
+    // Add the back-remove buttons for empty cart
+    const backRemoveDiv = document.createElement("div");
+    backRemoveDiv.className = "back-remove";
+    backRemoveDiv.innerHTML = `
+      <a href="../productsList/productList.html">
+        <button class="back">
+          <i class="fas fa-arrow-left"></i> Back to shop
+        </button>
+      </a>
+      <button class="remove-all">
+        <i class="fas fa-trash-alt"></i> Remove all
+      </button>
+    `;
+    cartContainer.appendChild(backRemoveDiv);
+    
     updateOrderSummary(0, 0);
     return;
   }
@@ -104,41 +146,41 @@ async function loadCart() {
 
       // Fill in the item HTML
       itemElement.innerHTML = `
-                <img src="/public/resources/images/${
-                  itemData.category
-                    ? itemData.category.toLowerCase()
-                    : "default"
-                }.png" alt="${itemData.name}" />
-                <div class="item-details">
-                    <p><span><strong>${
-                      itemData.name || "Unnamed Product"
-                    }</strong></span></p>
-                    <p>${
-                      itemData.description !== null &&
-                      itemData.description !== undefined
-                        ? itemData.description
-                        : "No description available"
-                    }</p>
-                    <p>Category: ${itemData.category || "Uncategorized"}</p>
-                    <p>Seller ID: ${itemData.seller_user_id || "Unknown"}</p>
-                    <div class="actions">
-                        <button class="remove" data-id="${
-                          itemData.item_id
-                        }">Remove</button>
-                        <button class="save">Save for later</button>
-                    </div>
-                </div>
-                <div class="item-price">
-                    <p>$${(itemData.price || 0).toFixed(2)}</p>
-                    <div class="item-quantity">
-                        <select class="quantity-select" data-id="${
-                          itemData.item_id
-                        }">
-                            ${quantityOptions}
-                        </select>
-                    </div>
-                </div>
-            `;
+        <img src="/public/resources/images/${
+          itemData.category
+            ? itemData.category.toLowerCase()
+            : "default"
+        }.png" alt="${itemData.name}" />
+        <div class="item-details">
+            <p><span><strong>${
+              itemData.name || "Unnamed Product"
+            }</strong></span></p>
+            <p>${
+              itemData.description !== null &&
+              itemData.description !== undefined
+                ? itemData.description
+                : "No description available"
+            }</p>
+            <p>Category: ${itemData.category || "Uncategorized"}</p>
+            <p>Seller ID: ${itemData.seller_user_id || "Unknown"}</p>
+            <div class="actions">
+                <button class="remove" data-id="${
+                  itemData.item_id
+                }">Remove</button>
+                <button class="save">Save for later</button>
+            </div>
+        </div>
+        <div class="item-price">
+            <p>$${(itemData.price || 0).toFixed(2)}</p>
+            <div class="item-quantity">
+                <select class="quantity-select" data-id="${
+                  itemData.item_id
+                }">
+                    ${quantityOptions}
+                </select>
+            </div>
+        </div>
+      `;
 
       // Add event listeners
       const removeButton = itemElement.querySelector(".remove");
@@ -158,55 +200,49 @@ async function loadCart() {
           // Remove the element from the DOM directly
           itemElement.remove();
 
-          // Recalculate totals without a full page reload
-          let newTotalItems = 0;
-          let newTotalPrice = 0;
-
-          // Get the remaining visible items to calculate new totals
-          document.querySelectorAll(".cart .item").forEach((item) => {
-            const quantitySelect = item.querySelector(".quantity-select");
-            const priceText = item.querySelector(".item-price p").textContent;
-
-            if (quantitySelect && priceText) {
-              const quantity = parseInt(quantitySelect.value) || 1;
-              const price = parseFloat(priceText.replace("$", "")) || 0;
-
-              newTotalItems += quantity;
-              newTotalPrice += price * quantity;
-            }
-          });
-
-          // If there are no items left, show empty cart message
-          if (newTotalItems === 0) {
+          // Get current cart after removal
+          const updatedCart = cartManager.getCart();
+          
+          // If cart is empty after this removal, show empty state
+          if (updatedCart.length === 0) {
+            // Instead of reloading the cart, manually update the UI for empty cart
             const cartContainer = document.querySelector(".cart");
             if (cartContainer) {
-              const backRemoveDiv = cartContainer.querySelector(".back-remove");
+              // Clear container
               cartContainer.innerHTML = "";
-
+              
+              // Add empty message
               const emptyMessage = document.createElement("div");
               emptyMessage.className = "empty-cart";
               emptyMessage.innerHTML = "<p>Your cart is empty.</p>";
               cartContainer.appendChild(emptyMessage);
-
-              if (backRemoveDiv) {
-                cartContainer.appendChild(backRemoveDiv);
-              }
+              
+              // Add back-remove buttons
+              const backRemoveDiv = document.createElement("div");
+              backRemoveDiv.className = "back-remove";
+              backRemoveDiv.innerHTML = `
+                <a href="../productsList/productList.html">
+                  <button class="back">
+                    <i class="fas fa-arrow-left"></i> Back to shop
+                  </button>
+                </a>
+                <button class="remove-all">
+                  <i class="fas fa-trash-alt"></i> Remove all
+                </button>
+              `;
+              cartContainer.appendChild(backRemoveDiv);
+              
+              // Update summary with zeros
+              updateOrderSummary(0, 0);
             }
+          } else {
+            // Just update totals if items remain
+            updateCartTotals();
           }
-
-          // Update summary with new totals
-          updateOrderSummary(newTotalItems, newTotalPrice);
 
           // Update the cart badge
           cartManager.updateCartBadge();
         }, 300);
-      });
-
-      const quantitySelect = itemElement.querySelector(".quantity-select");
-      quantitySelect.addEventListener("change", function () {
-        const itemId = this.getAttribute("data-id");
-        const newQuantity = parseInt(this.value);
-        cartManager.updateItemQuantity(itemId, newQuantity);
       });
 
       cartContainer.appendChild(itemElement);
@@ -215,27 +251,20 @@ async function loadCart() {
     }
   }
 
-  // Add back the back-remove div if it exists
-  if (backRemoveDiv) {
-    cartContainer.appendChild(backRemoveDiv);
-  } else {
-    // Create a new back-remove div if it doesn't exist
-    const newBackRemoveDiv = document.createElement("div");
-    newBackRemoveDiv.className = "back-remove";
-    newBackRemoveDiv.innerHTML = `
-            <button class="back">
-                <i class="fas fa-arrow-left"></i> Back to shop
-            </button>
-            <button class="remove-all">
-                <i class="fas fa-trash-alt"></i> Remove all
-            </button>
-        `;
-    cartContainer.appendChild(newBackRemoveDiv);
-
-    // Set up event listeners for the new buttons
-    setupBackButton();
-    setupRemoveAllButton();
-  }
+  // Add back-remove buttons after all items
+  const backRemoveDiv = document.createElement("div");
+  backRemoveDiv.className = "back-remove";
+  backRemoveDiv.innerHTML = `
+    <a href="../productsList/productList.html">
+      <button class="back">
+        <i class="fas fa-arrow-left"></i> Back to shop
+      </button>
+    </a>
+    <button class="remove-all">
+      <i class="fas fa-trash-alt"></i> Remove all
+      </button>
+  `;
+  cartContainer.appendChild(backRemoveDiv);
 
   updateOrderSummary(totalItems, totalPrice);
   cartManager.updateCartBadge();
@@ -462,4 +491,29 @@ function setupCouponButton() {
 function navigateToShop() {
   console.log("Back button clicked - navigating to shop");
   window.location.href = "../productsList/productList.html";
+}
+
+function updateCartTotals() {
+  let newTotalItems = 0;
+  let newTotalPrice = 0;
+
+  // Get the remaining visible items to calculate new totals
+  document.querySelectorAll(".cart .item").forEach((item) => {
+    const quantitySelect = item.querySelector(".quantity-select");
+    const priceText = item.querySelector(".item-price p").textContent;
+
+    if (quantitySelect && priceText) {
+      const quantity = parseInt(quantitySelect.value) || 1;
+      const price = parseFloat(priceText.replace("$", "")) || 0;
+
+      newTotalItems += quantity;
+      newTotalPrice += price;
+    }
+  });
+
+  // Update summary with new totals
+  updateOrderSummary(newTotalItems, newTotalPrice);
+
+  // Update the cart badge
+  cartManager.updateCartBadge();
 }
