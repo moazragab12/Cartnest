@@ -57,11 +57,12 @@
 }
 
 body {
+  overflow-x: hidden;
   font-family: var(--font-main);
   background-color: var(--background-color);
   margin-top: 90px;
   margin-bottom: 0;
-  padding: 20px;
+  padding: 20px 20px 0 20px; /* Remove bottom padding */
 }
 
 .container {
@@ -196,6 +197,10 @@ body {
   justify-content: space-between;
   padding: var(--spacing-lg) 0 var(--spacing-xs);
   margin-top: var(--spacing-sm);
+}
+
+.back-remove a {
+  text-decoration: none;
 }
 
 .back,
@@ -369,7 +374,8 @@ body {
   padding: var(--spacing-xxl) 20px;
   background-color: white;
   border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
+  /* Remove bottom border to prevent double line */
+  margin-bottom: 0; /* Ensure no margin at the bottom */
   flex-wrap: wrap;
 }
 
@@ -407,6 +413,7 @@ body {
   padding: var(--spacing-lg) var(--spacing-xl);
   max-width: 1200px;
   color: white;
+  margin-bottom: 3;
   border-radius: var(--border-radius-md);
   font-size: var(--font-size-lg);
 }
@@ -431,10 +438,12 @@ body {
 
 .shopify-footer {
   margin-top: 0; /* override the var(--spacing-xxl) if defined */
+  margin-bottom: 0;
 }
 
 footer {
   margin-bottom: 0;
+  margin-top: 0;
 }
 
 /* Loading and Error States */
