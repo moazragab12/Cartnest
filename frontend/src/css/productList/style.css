@@ -1214,3 +1214,91 @@ input[type="checkbox"]:checked {
     height: 36px;
   }
 }
+
+/* Product card wrapper to contain link */
+.product-card-wrapper {
+  width: 100%;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+/* Product card link styling */
+.product-card-link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Make sure the card maintains its style inside the link */
+.product-card-link .product-card {
+  width: 100%;
+  max-width: 100%;
+  min-height: 460px;
+  position: relative;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 0;
+  text-align: left;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.5s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Product card hover effect */
+.product-card-link:hover .product-card {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Adjust list view for product card links */
+.list-view .product-card-wrapper {
+  width: 100%;
+}
+
+.list-view .product-card-link .product-card {
+  flex-direction: row;
+  min-height: 220px;
+  max-height: 220px;
+}
+
+/* Cart button needs to remain clickable without navigating */
+.product-card-link .cart-button {
+  z-index: 2; /* Ensure cart button stays on top */
+}
+
+/* Ensure image zoom still works */
+.product-card-link:hover .product-image img {
+  transform: scale(1.05);
+}
+
+/* Responsive styles for product card links */
+@media (max-width: 768px) {
+  .list-view .product-card-link .product-card {
+    flex-direction: column;
+    min-height: 320px;
+    max-height: none;
+  }
+}
+
+/* Animation for new linkable cards */
+@keyframes cardAppear {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-card-animation {
+  animation: cardAppear 0.5s ease forwards;
+}

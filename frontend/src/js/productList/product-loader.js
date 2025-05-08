@@ -9,18 +9,21 @@ import { cartManager } from "../shared/cart-manager.js";
 
 class ProductLoader {
   constructor() {
-    this.apiBaseUrl = "http://localhost:8000/api/v0/items/";
+    this.apiBaseUrl = "http://localhost:8000/api/v0/";
+    this.searchEndpoint = "search/items/search";
+    this.itemsEndpoint = "items/";
     this.products = [];
     this.allProducts = []; // Store all fetched products for pagination
     this.categories = [];
     this.currentFilters = {
-      category: [],
-      brands: [],
-      features: [],
-      priceRange: { min: 0, max: 999 },
-      condition: [],
-      rating: null,
-      featured: false, // Add featured flag to track if featured/recent items are being shown
+      category: null,
+      name: null,
+      min_price: null,
+      max_price: null,
+      status: "for_sale",
+      seller_id: null,
+      min_quantity: null,
+      featured: false,
     };
     this.pagination = {
       currentPage: 1,
@@ -36,6 +39,13 @@ class ProductLoader {
     );
     this.itemsPerPageSelect = document.querySelector(".items-per-page");
     this.paginationContainer = document.querySelector(".pagination");
+    
+    // Animation variables
+    this.animationsEnabled = true;
+    
+    // Flag to control whether URL parameters are parsed on initial load
+    // Changed to true to enable URL parameter filtering
+    this.parseUrlParamsOnLoad = true;
   }
 
   /**
@@ -43,10 +53,16 @@ class ProductLoader {
    */
   async init() {
     try {
+      // Ensure all filter details elements are closed initially
+      this.closeAllFilterSections();
+      
+      // Parse URL query parameters
+      this.parseQueryParams();
+      
       // Fetch categories first
       await this.fetchCategories();
 
-      // Get initial products
+      // Get products based on URL params or default filters
       await this.fetchProducts();
 
       // Setup filter event listeners
@@ -63,11 +79,242 @@ class ProductLoader {
 
       // Setup pagination listeners
       this.setupPaginationListeners();
+      
+      // Setup search input listener
+      this.setupSearchInputListener();
+      
+      // Add animation to header on page load
+      this.initHeaderAnimation();
+      
+      // Reset feature box to default option if no specific filters are set
+      if (this.featureBox && !this.hasActiveFilters()) {
+        this.featureBox.value = "0"; // Default to regular products, not featured
+      }
     } catch (error) {
       console.error("Error initializing product loader:", error);
     }
   }
+  
+  /**
+   * Check if there are any active filters
+   */
+  hasActiveFilters() {
+    return (
+      this.currentFilters.category !== null ||
+      this.currentFilters.name !== null ||
+      this.currentFilters.min_price !== null ||
+      this.currentFilters.max_price !== null ||
+      this.currentFilters.seller_id !== null ||
+      this.currentFilters.min_quantity !== null ||
+      this.currentFilters.featured === true
+    );
+  }
+  
+  /**
+   * Close all filter details sections
+   */
+  closeAllFilterSections() {
+    const filterSections = document.querySelectorAll('.sidebar details');
+    filterSections.forEach(section => {
+      // Remove the 'open' attribute to close the details element
+      section.removeAttribute('open');
+    });
+    
+    console.log("All filter sections closed");
+  }
 
+  /**
+   * Parse query parameters from URL
+   */
+  parseQueryParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Map URL parameters to filter properties
+    if (urlParams.has('name')) this.currentFilters.name = urlParams.get('name');
+    if (urlParams.has('category')) this.currentFilters.category = urlParams.get('category');
+    if (urlParams.has('min_price')) this.currentFilters.min_price = parseFloat(urlParams.get('min_price'));
+    if (urlParams.has('max_price')) this.currentFilters.max_price = parseFloat(urlParams.get('max_price'));
+    if (urlParams.has('status')) this.currentFilters.status = urlParams.get('status');
+    if (urlParams.has('seller_id')) this.currentFilters.seller_id = parseInt(urlParams.get('seller_id'));
+    if (urlParams.has('min_quantity')) this.currentFilters.min_quantity = parseInt(urlParams.get('min_quantity'));
+    
+    // Update UI based on URL parameters
+    this.updateFilterUIFromParams();
+    
+    console.log("Parsed URL parameters:", this.currentFilters);
+  }
+  
+  /**
+   * Update filter UI elements based on parsed URL parameters
+   */
+  updateFilterUIFromParams() {
+    // Update search input if name parameter exists
+    if (this.currentFilters.name) {
+      const searchInput = document.querySelector('.search-box input');
+      if (searchInput) searchInput.value = this.currentFilters.name;
+    }
+    
+    // Update price range inputs if price parameters exist
+    if (this.currentFilters.min_price !== null) {
+      const minPriceInput = document.querySelector('.price-range-filter .input-min');
+      if (minPriceInput) minPriceInput.value = this.currentFilters.min_price;
+    }
+    
+    if (this.currentFilters.max_price !== null) {
+      const maxPriceInput = document.querySelector('.price-range-filter .input-max');
+      if (maxPriceInput) maxPriceInput.value = this.currentFilters.max_price;
+    }
+    
+    // If we have URL parameters, open the relevant filter sections
+    if (this.hasActiveFilters()) {
+      this.openRelevantFilterSections();
+    }
+    
+    // Note: Category checkboxes will be updated after categories are fetched
+  }
+  
+  /**
+   * Open filter sections that are relevant to current URL parameters
+   */
+  openRelevantFilterSections() {
+    // Open price filter section if price parameters exist
+    if (this.currentFilters.min_price !== null || this.currentFilters.max_price !== null) {
+      const priceDetails = document.querySelector('.sidebar details:nth-of-type(2)'); // Price is the second filter
+      if (priceDetails) priceDetails.setAttribute('open', '');
+    }
+    
+    // Open category filter section if category parameter exists
+    if (this.currentFilters.category) {
+      const categoryDetails = document.getElementById('category-details');
+      if (categoryDetails) categoryDetails.setAttribute('open', '');
+    }
+  }
+
+  /**
+   * Initialize header animations
+   */
+  initHeaderAnimation() {
+    if (!this.animationsEnabled) return;
+    
+    // Add animation classes to header elements
+    const header = document.querySelector('.header');
+    if (header) {
+      header.classList.add('animate-header');
+      
+      // Logo animation
+      const logo = header.querySelector('.logo-container');
+      if (logo) {
+        logo.classList.add('logo-animation');
+      }
+      
+      // Search box animation
+      const searchBox = header.querySelector('.search-box');
+      if (searchBox) {
+        searchBox.classList.add('search-box-animation');
+      }
+    }
+    
+    // Add animation to navbar categories
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+      navbar.classList.add('navbar-animation');
+      
+      // Staggered animation for navbar items
+      const navItems = navbar.querySelectorAll('a');
+      navItems.forEach((item, index) => {
+        item.style.animationDelay = `${0.1 * index}s`;
+        item.classList.add('nav-item-animation');
+      });
+    }
+  }
+
+  /**
+   * Set up listener for the search input
+   */
+  setupSearchInputListener() {
+    const searchInput = document.querySelector('.search-box input');
+    const searchIcon = document.querySelector('.search-box .search-icon');
+    
+    if (searchInput) {
+      // Debounce function to prevent too many requests
+      let searchTimeout;
+      
+      searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        
+        searchTimeout = setTimeout(() => {
+          const searchTerm = e.target.value.trim();
+          if (searchTerm.length > 2) {
+            // Update filter and URL
+            this.currentFilters.name = searchTerm;
+            this.updateURLWithFilters();
+            
+            // Reset to first page when searching
+            this.pagination.currentPage = 1;
+            
+            // Fetch products with the search term
+            this.fetchProducts();
+          } else if (searchTerm.length === 0 && this.currentFilters.name) {
+            // Clear search filter if input is empty
+            this.currentFilters.name = null;
+            this.updateURLWithFilters();
+            this.fetchProducts();
+          }
+        }, 500); // 500ms debounce
+      });
+      
+      // Handle search icon click
+      if (searchIcon) {
+        searchIcon.addEventListener('click', () => {
+          const searchTerm = searchInput.value.trim();
+          if (searchTerm.length > 0) {
+            this.currentFilters.name = searchTerm;
+            this.updateURLWithFilters();
+            this.pagination.currentPage = 1;
+            this.fetchProducts();
+          }
+        });
+      }
+      
+      // Handle Enter key in search box
+      searchInput.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') {
+          const searchTerm = e.target.value.trim();
+          if (searchTerm.length > 0) {
+            this.currentFilters.name = searchTerm;
+            this.updateURLWithFilters();
+            this.pagination.currentPage = 1;
+            this.fetchProducts();
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * Update URL with current filters without reloading the page
+   */
+  updateURLWithFilters() {
+    const params = new URLSearchParams();
+    
+    // Add non-null filters to URL parameters
+    if (this.currentFilters.name) params.set('name', this.currentFilters.name);
+    if (this.currentFilters.category) params.set('category', this.currentFilters.category);
+    if (this.currentFilters.min_price !== null) params.set('min_price', this.currentFilters.min_price);
+    if (this.currentFilters.max_price !== null) params.set('max_price', this.currentFilters.max_price);
+    if (this.currentFilters.status && this.currentFilters.status !== 'for_sale') {
+      params.set('status', this.currentFilters.status);
+    }
+    if (this.currentFilters.seller_id) params.set('seller_id', this.currentFilters.seller_id);
+    if (this.currentFilters.min_quantity) params.set('min_quantity', this.currentFilters.min_quantity);
+    
+    // Update URL without reloading the page
+    const newURL = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+    history.pushState({}, '', newURL);
+    
+    console.log("Updated URL with filters:", newURL);
+  }
+  
   /**
    * Set up listener for items per page selector
    */
@@ -236,7 +483,7 @@ class ProductLoader {
         } else {
           // Reset featured flag and fetch regular products
           this.currentFilters.featured = false;
-          this.fetchProducts(this.currentFilters);
+          this.fetchProducts();
         }
       });
     }
@@ -257,7 +504,7 @@ class ProductLoader {
       params.append("days", days);
       params.append("limit", limit);
 
-      const url = `${this.apiBaseUrl}recent?${params.toString()}`;
+      const url = `${this.apiBaseUrl}${this.itemsEndpoint}recent?${params.toString()}`;
       console.log(`Fetching recent items from the last ${days} days:`, url);
 
       const response = await fetch(url);
@@ -289,7 +536,7 @@ class ProductLoader {
    */
   async fetchCategories() {
     try {
-      const url = `${this.apiBaseUrl}categories`;
+      const url = `${this.apiBaseUrl}${this.itemsEndpoint}categories`;
       console.log("Fetching categories from:", url);
 
       const response = await fetch(url);
@@ -318,7 +565,7 @@ class ProductLoader {
    */
   updateCategoryFilters() {
     // Find the category details element - first details element in the sidebar
-    const categoryDetails = document.querySelector(".sidebar details");
+    const categoryDetails = document.getElementById('category-details');
 
     if (!categoryDetails) {
       console.error("Category details element not found");
@@ -350,9 +597,12 @@ class ProductLoader {
     sortedCategories.forEach((category) => {
       const li = document.createElement("li");
       const categoryId = category.name.toLowerCase().replace(/\s+/g, "-");
+      
+      // Check the box if this category matches the one in URL parameters
+      const isChecked = this.currentFilters.category === category.name ? 'checked' : '';
 
       li.innerHTML = `
-        <input type="checkbox" id="${categoryId}" data-category="${category.name}">
+        <input type="checkbox" id="${categoryId}" data-category="${category.name}" ${isChecked}>
         <label for="${categoryId}">${category.name} <span class="count">(${category.item_count})</span></label>
       `;
 
@@ -366,35 +616,40 @@ class ProductLoader {
     newCheckboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", () => this.applyFilters());
     });
+    
+    // Add animation to categories if enabled
+    if (this.animationsEnabled) {
+      const categoryItems = categoryList.querySelectorAll('li');
+      categoryItems.forEach((item, index) => {
+        item.style.animationDelay = `${0.05 * index}s`;
+        item.classList.add('category-item-animation');
+      });
+    }
   }
 
   /**
    * Fetch products from the API
-   * @param {Object} filters - Filter parameters
    */
-  async fetchProducts(filters = {}) {
+  async fetchProducts() {
     try {
-      // Set up query parameters
-      const params = new URLSearchParams();
-      params.append("skip", "0");
-      params.append("limit", "100");
-
       // Show loading state
       this.showLoading();
 
-      let url;
-      // If a single category is selected, use the category-specific endpoint
-      if (filters.category && filters.category.length === 1) {
-        const category = filters.category[0];
-        url = `${this.apiBaseUrl}categories/${encodeURIComponent(
-          category
-        )}?${params.toString()}`;
-        console.log(`Fetching products from category '${category}':`, url);
-      } else {
-        // For multiple categories or no category filter, use the main endpoint
-        url = `${this.apiBaseUrl}?${params.toString()}`;
-        console.log("Fetching all products:", url);
-      }
+      // Set up query parameters based on currentFilters
+      const params = new URLSearchParams();
+      
+      // Add filters to query params
+      if (this.currentFilters.name) params.set('name', this.currentFilters.name);
+      if (this.currentFilters.category) params.set('category', this.currentFilters.category);
+      if (this.currentFilters.min_price !== null) params.set('min_price', this.currentFilters.min_price);
+      if (this.currentFilters.max_price !== null) params.set('max_price', this.currentFilters.max_price);
+      if (this.currentFilters.status) params.set('status', this.currentFilters.status);
+      if (this.currentFilters.seller_id) params.set('seller_id', this.currentFilters.seller_id);
+      if (this.currentFilters.min_quantity) params.set('min_quantity', this.currentFilters.min_quantity);
+
+      // Use the search endpoint for all product fetching
+      const url = `${this.apiBaseUrl}${this.searchEndpoint}?${params.toString()}`;
+      console.log("Fetching products with filters:", url);
 
       const response = await fetch(url);
 
@@ -405,27 +660,15 @@ class ProductLoader {
       const data = await response.json();
       console.log("API response:", data);
 
-      let products = Array.isArray(data) ? data : [];
-
-      // Apply price filter client-side
-      if (filters.priceRange) {
-        const { min, max } = filters.priceRange;
-        console.log(`Filtering products by price: $${min} - $${max}`);
-
-        products = products.filter((product) => {
-          const price = parseFloat(product.price) || 0;
-          return price >= min && price <= max;
-        });
-
-        console.log(`${products.length} products after price filter`);
-      }
-
       // Store all products for pagination
-      this.allProducts = products;
+      this.allProducts = Array.isArray(data) ? data : [];
 
       // Apply pagination
       this.applyPagination();
-
+      
+      // Always update the URL with current filters
+      this.updateURLWithFilters();
+      
       return this.products;
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -446,9 +689,10 @@ class ProductLoader {
 
     let displayText = "";
 
-    if (filters.category && filters.category.length > 0) {
-      const categoryNames = filters.category.join(", ");
-      displayText = `${this.allProducts.length} items in ${categoryNames}`;
+    if (filters.category) {
+      displayText = `${this.allProducts.length} items in ${filters.category}`;
+    } else if (filters.name) {
+      displayText = `${this.allProducts.length} results for "${filters.name}"`;
     } else if (this.currentFilters.featured) {
       displayText = `${this.allProducts.length} recently listed items`;
     } else {
@@ -468,6 +712,14 @@ class ProductLoader {
     }
 
     categoryTitle.textContent = displayText;
+    
+    // Add an animation to the product count on update
+    if (this.animationsEnabled) {
+      categoryTitle.classList.remove('count-update-animation');
+      // Trigger reflow to restart animation
+      void categoryTitle.offsetWidth;
+      categoryTitle.classList.add('count-update-animation');
+    }
   }
 
   /**
@@ -504,7 +756,7 @@ class ProductLoader {
       const retryBtn = this.productGrid.querySelector(".retry-btn");
       if (retryBtn) {
         retryBtn.addEventListener("click", () =>
-          this.fetchProducts(this.currentFilters)
+          this.fetchProducts()
         );
       }
     }
@@ -529,8 +781,15 @@ class ProductLoader {
     }
 
     // Create and append product cards
-    this.products.forEach((product) => {
+    this.products.forEach((product, index) => {
       const productCard = this.createProductCard(product);
+      
+      // Add staggered animation to cards if enabled
+      if (this.animationsEnabled) {
+        productCard.style.animationDelay = `${0.05 * (index % 4)}s`;
+        productCard.classList.add('product-card-animation');
+      }
+      
       this.productGrid.appendChild(productCard);
     });
   }
@@ -541,10 +800,20 @@ class ProductLoader {
    * @returns {HTMLElement} Product card element
    */
   createProductCard(product) {
+    // Create wrapper div that will contain the card
+    const wrapper = document.createElement("div");
+    wrapper.className = "product-card-wrapper";
+    
+    // Create the actual product card
     const card = document.createElement("div");
     card.className = "product-card";
     card.dataset.productId = product.item_id;
 
+    // Make the entire card clickable by wrapping it in a link
+    const cardLink = document.createElement("a");
+    cardLink.href = `http://127.0.0.1:5500/frontend/src/pages/product/product.html?id=${product.item_id}`;
+    cardLink.className = "product-card-link";
+    
     // Determine if product is in stock
     const inStock = product.quantity > 0;
 
@@ -574,16 +843,16 @@ class ProductLoader {
       ? `<span class="category-badge">New</span>`
       : "";
 
-    // Set a default image path if one isn't provided
-    const imagePath =
-      product.image_url || `../../../public/resources/images/placeholder.jpg`;
+    // Get static image based on product category or name
+    // This will completely replace the dynamic image_url from API
+    const imagePath = this.getStaticProductImage(product);
 
     // Create the product card HTML
     card.innerHTML = `
       ${categoryBadge}
       ${!inStock ? '<span class="out-of-stock-badge">Out of Stock</span>' : ""}
       <div class="product-image">
-        <img src="${imagePath}" alt="${product.name}">
+        <img src="${imagePath}" alt="${product.name}" loading="lazy">
       </div>
       <div class="product-details">
         <div class="product-info">
@@ -638,8 +907,91 @@ class ProductLoader {
         </div>
       </div>
     `;
+    
+    // Append the card to the link
+    cardLink.appendChild(card);
+    
+    // Append the link to the wrapper
+    wrapper.appendChild(cardLink);
+    
+    // Add click event handler to prevent navigation when clicking on the cart button
+    wrapper.addEventListener('click', (event) => {
+      // If the click was on the cart button or its children, prevent navigation
+      if (event.target.closest('.cart-button')) {
+        event.preventDefault();
+      }
+    });
 
-    return card;
+    return wrapper;
+  }
+
+  /**
+   * Get appropriate static image path for a product based on category or name
+   * @param {Object} product - Product data from API
+   * @returns {string} - Path to static image
+   */
+  getStaticProductImage(product) {
+    // Base path for images
+    const basePath = "../../../public/resources/images/";
+    
+    // First check if product has a category that matches our images
+    if (product.category) {
+      const category = product.category.toLowerCase();
+      
+      // Match by category
+      if (category.includes('fashion') || category.includes('clothing') || category.includes('apparel')) {
+        return `${basePath}fashion.png`;
+      }
+    }
+    
+    // Match by product name
+    const name = product.name.toLowerCase();
+    
+    if (name.includes('iphone') || name.includes('phone') || name.includes('apple')) {
+      if (name.includes('blue')) {
+        return `${basePath}products/iphone-blue.jpg`;
+      }
+      return `${basePath}products/iphone-black.jpg`;
+    } else if (name.includes('headphone') || name.includes('earphone') || name.includes('audio')) {
+      if (name.includes('premium')) {
+        return `${basePath}products/headphones-premium.jpg`;
+      }
+      return `${basePath}products/headphones.jpg`;
+    } else if (name.includes('watch') || name.includes('time') || name.includes('clock')) {
+      if (name.includes('black')) {
+        return `${basePath}products/smart-watch-black.jpg`;
+      }
+      return `${basePath}products/smartwatch.jpg`;
+    } else if (name.includes('glass') || name.includes('sunglass') || name.includes('eyewear')) {
+      return `${basePath}products/sunglasses.jpg`;
+    } else if (name.includes('bag') || name.includes('backpack') || name.includes('purse')) {
+      return `${basePath}bag1.jpg`;
+    } else if (name.includes('shirt') || name.includes('tee')) {
+      return `${basePath}tshirt.jpg`;
+    } else if (name.includes('hoodie') || name.includes('sweater') || name.includes('sweatshirt')) {
+      return `${basePath}Hoodie.jpg`;
+    } else if (name.includes('bedroom') || name.includes('interior') || name.includes('furniture')) {
+      return `${basePath}bedroom.jpg`;
+    }
+    
+    // Default images based on item_id to ensure variety
+    const imageOptions = [
+      'bag1.jpg',
+      'bedroom.jpg',
+      'fashion.png',
+      'Hoodie.jpg',
+      'iphone.png',
+      'tshirt.jpg',
+      'watch.png',
+      'products/headphones.jpg',
+      'products/iphone-black.jpg',
+      'products/smartwatch.jpg',
+      'products/sunglasses.jpg'
+    ];
+    
+    // Use the product ID to consistently select an image
+    const imageIndex = product.item_id % imageOptions.length;
+    return `${basePath}${imageOptions[imageIndex]}`;
   }
 
   /**
@@ -682,11 +1034,51 @@ class ProductLoader {
           minPriceInput.value = "0";
           maxPriceInput.value = "999";
         }
+        
+        // Reset search input
+        const searchInput = document.querySelector('.search-box input');
+        if (searchInput) {
+          searchInput.value = '';
+        }
+
+        // Reset all filters
+        this.currentFilters = {
+          category: null,
+          name: null,
+          min_price: null,
+          max_price: null,
+          status: "for_sale",
+          seller_id: null,
+          min_quantity: null,
+          featured: false,
+        };
+        
+        // Update URL to remove parameters
+        this.updateURLWithFilters();
+        
+        // Close all filter sections
+        this.closeAllFilterSections();
 
         // Apply the reset filters
-        this.applyFilters();
+        this.fetchProducts();
+        
+        // Show animation on clear button
+        if (this.animationsEnabled && clearFiltersBtn) {
+          clearFiltersBtn.classList.add('clear-filters-animation');
+          setTimeout(() => {
+            clearFiltersBtn.classList.remove('clear-filters-animation');
+          }, 500);
+        }
       });
     }
+    
+    // Add detail open/close listeners for tracking
+    const detailElements = document.querySelectorAll('.sidebar details');
+    detailElements.forEach(detail => {
+      detail.addEventListener('toggle', () => {
+        console.log(`Filter section "${detail.querySelector('summary')?.textContent.trim()}" is now ${detail.open ? 'open' : 'closed'}`);
+      });
+    });
   }
 
   /**
@@ -694,11 +1086,17 @@ class ProductLoader {
    */
   applyFilters() {
     // Collect category filters - using data-category attribute to get the actual category names
-    const categoryFilters = Array.from(
-      document.querySelectorAll(
-        '.sidebar details:nth-of-type(1) input[type="checkbox"]:checked'
-      )
-    ).map((input) => input.dataset.category || input.id);
+    const categoryCheckboxes = document.querySelectorAll(
+      '.sidebar details:nth-of-type(1) input[type="checkbox"]:checked'
+    );
+    
+    // Single category selection logic - last checked category applies
+    if (categoryCheckboxes.length > 0) {
+      const lastCheckedCategory = categoryCheckboxes[categoryCheckboxes.length - 1];
+      this.currentFilters.category = lastCheckedCategory.dataset.category || lastCheckedCategory.id;
+    } else {
+      this.currentFilters.category = null;
+    }
 
     // Get price range
     const minPrice = parseFloat(
@@ -709,16 +1107,17 @@ class ProductLoader {
     );
 
     // Update current filters
-    this.currentFilters = {
-      category: categoryFilters,
-      priceRange: { min: minPrice, max: maxPrice },
-    };
+    this.currentFilters.min_price = minPrice;
+    this.currentFilters.max_price = maxPrice;
+    
+    // Update URL with current filters
+    this.updateURLWithFilters();
 
     // Reset to first page when applying new filters
     this.pagination.currentPage = 1;
 
     // Fetch products with filters
-    this.fetchProducts(this.currentFilters);
+    this.fetchProducts();
   }
 
   /**
@@ -754,20 +1153,26 @@ class ProductLoader {
         price: product.price,
         image_url:
           product.image_url ||
-          "../../../public/resources/images/placeholder.jpg",
+          "/frontend/public/resources/images/placeholder.jpg",
       };
 
-      // Use the cartManager from shared scripts
-      cartManager.addToCart(cartProduct, 1);
-
-      // Show notification if notifications system is available
+      // Use cartManager from shared scripts
+      const result = cartManager.addToCart(cartProduct, 1);
+      
+      // Show a consistent notification matching the index page style
       if (window.notifications) {
-        window.notifications.cart(cartProduct);
+        // Highlight product name in notification, matching index page format
+        window.notifications.success(`${product.name} added to your cart!`, 5000, {
+          productName: product.name
+        });
+        
+        // Add cart badge animation
+        cartManager.updateCartBadge(true);
       }
     } catch (error) {
       console.error("Error adding product to cart:", error);
       if (window.notifications) {
-        window.notifications.error("Failed to add product to cart");
+        window.notifications.error("Couldn't add item to cart. Please try again.");
       }
     }
   }
