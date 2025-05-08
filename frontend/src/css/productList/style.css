@@ -6,76 +6,366 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f9f9f9;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f7fafc;
   margin: 0;
   padding: 0;
-}
-.navbar{
-  margin-top: 100px;
-  margin-bottom: 0px;
+  color: #1a202c;
+  /* Add padding to body to account for fixed header */
+  padding-top: 76px;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
 
+/* Enhanced container with animated layered background pattern */
 .container {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  max-width: 1400px;
-  gap: 2rem; /* Increased spacing */
-  padding: 2rem 3rem;
-  margin-top: 0px; /* Reduced from 100px */
-  margin-left:50px;
-  margin-right: 100px;
-
+  width: 100%;
+  max-width: 100%;
+  padding: 1.5rem 2rem;
+  margin: 0 auto;
+  gap: 2rem;
+  background-color: #f7fafc;
+  background-image: 
+    radial-gradient(#e2e8f0 1px, transparent 1px),
+    radial-gradient(#d1dbe8 1px, transparent 1px);
+  background-size: 20px 20px, 30px 30px;
+  background-position: 0 0, 15px 15px;
+  animation: backgroundShift 30s linear infinite alternate;
+  position: relative;
+  overflow: hidden;
 }
 
-.sidebar {
-  flex: 0 0 250px;
-  padding: 10px 20px;
+@keyframes backgroundShift {
+  0% { background-position: 0 0, 15px 15px; }
+  100% { background-position: 20px 20px, 35px 35px; }
+}
+
+/* Add floating shapes in the background */
+.container::before, 
+.container::after {
+  content: "";
   position: absolute;
-  width: 230px;
-  height: auto;
-  left: 0px;
-  top: 180px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0.06;
+  filter: blur(30px);
 }
 
-.products {
-  flex: 3;
-  margin-left: 200px;
-  margin-right: 30px;
-  gap: 64px;
+.container::before {
+  background: linear-gradient(45deg, #0D99FF, #75cbff);
+  top: -150px;
+  right: -100px;
+  animation: floatAnimation 15s ease-in-out infinite alternate;
 }
 
-.products h2 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #080808;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 10px 10px;
-  gap: 64px;
-  width: 1000px;
-  height: 100px;
-  background: #ffffff;
-  border: 1px solid #dee2e7;
-  border-radius: 6px;
+.container::after {
+  background: linear-gradient(135deg, #7cb9e8, #0D99FF);
+  bottom: -150px;
+  left: -100px;
+  animation: floatAnimation 20s ease-in-out infinite alternate-reverse;
 }
 
+@keyframes floatAnimation {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(30px, 20px) rotate(5deg); }
+  100% { transform: translate(-20px, 40px) rotate(-5deg); }
+}
+
+/* Enhanced sidebar with better scrolling behavior and cleaner design */
+.sidebar {
+  width: 280px;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+  position: sticky;
+  top: 90px;
+  /* Start without scrollbar, will be dynamic via JS */
+  max-height: fit-content; 
+  overflow-y: hidden;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #0D99FF #f1f5f9;
+  border-left: 3px solid #0D99FF;
+  transition: all 0.3s ease;
+  
+  /* Custom scrollbar for webkit browsers */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: #0D99FF;
+    border-radius: 10px;
+  }
+}
+
+/* When sidebar needs scrolling (class added via JS) */
+.sidebar.needs-scroll {
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+/* Remove distracting animated wave effect */
+.sidebar::after {
+  display: none;
+}
+
+/* Remove distracting pulsing border animation */
+@keyframes pulse-border {
+  from { border-left: 3px solid #0D99FF; }
+  to { border-left: 3px solid #0D99FF; }
+}
+
+.sidebar:hover {
+  transform: none; /* Remove elevation change on hover */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Add smooth scrolling behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Improved filter section interactions */
 details {
-  font-weight: 700;
-  padding: 7px 10px;
-  margin-bottom: 1.01rem;
+  margin-bottom: 1.2rem;
+  transition: all 0.3s ease;
 }
 
 summary {
-  padding: 8px 8px;
-  font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
+  padding: 0.7rem 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
+  color: #2d3748;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+  background-color: rgba(255,255,255,0.6);
+}
+
+/* Add a clear-all filters button at the bottom */
+.clear-filters {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.clear-filters-btn {
+  background-color: #f8fafc;
+  color: #64748b; 
+  border: 1px solid #e2e8f0;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.clear-filters-btn:hover {
+  background-color: #f1f5f9;
+  color: #0D99FF;
+  border-color: #0D99FF;
+}
+
+.products {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Enhanced header with animated gradient, 3D hover effect, and decorative elements */
+.products h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 247, 255, 0.85));
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 
+    0 4px 15px rgba(0,0,0,0.05),
+    0 0 0 1px rgba(0,0,0,0.02);
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.products h2:hover {
+  transform: translateY(-3px) perspective(500px) rotateX(2deg);
+  box-shadow: 
+    0 8px 20px rgba(0,0,0,0.07),
+    0 0 0 1px rgba(0,0,0,0.02);
+}
+
+/* Enhanced decorative elements for product header */
+.products h2::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(13,153,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  z-index: 0;
+  animation: pulse 4s infinite ease-in-out alternate;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.1; }
+  100% { transform: scale(1.1); opacity: 0.15; }
+}
+
+.products h2::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 30%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(76,181,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  z-index: 0;
+  animation: pulse 4s infinite ease-in-out 2s alternate;
+}
+
+.products h2 p {
+  margin: 0;
+  font-weight: 600;
+  color: #2d3748;
+  position: relative;
+  z-index: 1;
+}
+
+.products h2 li {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Animated enhanced feature box with hover effects and auto-animate */
+.feature-box {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: linear-gradient(to right, white, #f8fafc);
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  color: #4a5568;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 35px;
+  position: relative;
+  overflow: hidden;
+  animation: softPulse 3s infinite alternate;
+}
+
+/* Items per page selector styling */
+.items-per-page {
+  margin-left: 0.5rem;
+  min-width: 125px;
+}
+
+@keyframes softPulse {
+  0% { box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
+  100% { box-shadow: 0 4px 8px rgba(13,153,255,0.1); }
+}
+
+.feature-box:hover {
+  border-color: #0D99FF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(13,153,255,0.15);
+}
+
+.feature-box::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: translateX(-100%);
+  animation: shine 4s infinite;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  20% { transform: translateX(100%); }
+  100% { transform: translateX(100%); }
+}
+
+details {
+  margin-bottom: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+/* Enhanced summary with smooth transition and hover effect */
+summary {
+  padding: 0.7rem 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: #2d3748;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+  background-color: rgba(255,255,255,0.6);
+}
+
+summary:hover {
+  background-color: rgba(13,153,255,0.05);
+  padding-left: 0.8rem;
+}
+
+summary::after {
+  content: '+';
+  font-size: 1.2rem;
+  color: #0D99FF;
+  opacity: 0.8;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+details[open] summary::after {
+  content: '−';
+  transform: rotate(180deg);
+  opacity: 1;
 }
 
 summary::-webkit-details-marker {
@@ -84,172 +374,644 @@ summary::-webkit-details-marker {
 
 ul {
   list-style: none;
-  padding: 0 10px;
-  margin: 0 0 0.5rem 0;
+  padding: 0.8rem 0.5rem;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 li {
- 
-  font-size: 0.95rem;
-  color: #333;
   display: flex;
   align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #4a5568;
+  transition: all 0.25s ease;
 }
 
-input[type="checkbox"] {
-  margin-right: 0.5rem;
-  accent-color: #007bff;
-  cursor: pointer;
+li:hover {
+  transform: translateX(5px);
+  color: #2d3748;
 }
 
+/* Enhanced "See all" link with animated underline and particle effect */
 .see-all {
+  display: block;
+  color: #0D99FF;
   font-size: 0.85rem;
-  color: #007bff;
+  margin-top: 0.7rem;
   text-decoration: none;
   cursor: pointer;
+  position: relative;
+  width: fit-content;
+  font-weight: 500;
+  padding-right: 15px;
 }
 
-.see-all:hover {
-  text-decoration: underline;
+.see-all::after {
+  content: "→";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease;
+}
+
+.see-all:hover::after {
+  transform: translate(5px, -50%);
+  text-shadow: 0 0 5px rgba(13,153,255,0.5);
+}
+
+.see-all::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: linear-gradient(to right, #0D99FF, #75cbff);
+  transition: width 0.3s ease;
+}
+
+.see-all:hover::before {
+  width: calc(100% - 15px);
 }
 
 hr {
-  border: none;
-  border-top: 1px solid #eee;
-  margin: 1rem 0;
-}
-.feature-box {
-  border-radius: 6px;
-  margin-top: 3px;
-  width: 150px;
-  height: 38px;
-  border-style: solid;
-  font-size: 16px;
-  font-weight: 400px;
-  border-color:#DEE2E7; ;
-}
-/* Products Section */
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive grid */
-  gap: 30px; /* Increased gap */
-  margin: 10px 10px;
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(226,232,240,0.8), transparent);
+  margin: 1.2rem 0;
+  position: relative;
 }
 
+/* Products Section */
+/* Grid View (default) */
+.product-grid.grid-view {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* List View */
+.product-grid.list-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Product card styles for grid view (default) */
 .product-card {
   width: 100%;
-  height: 310px;
-  border-radius: 8px;
+  max-width: 100%;
+  min-height: 460px;
   position: relative;
   background: #ffffff;
-  padding: 1rem;
+  border-radius: 16px;
+  padding: 0;
   text-align: left;
-  transition: transform 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.5s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+/* Product card styles specifically for list view */
+.list-view .product-card {
+  flex-direction: row;
+  min-height: 220px;
+  max-height: 220px;
+}
+
+.list-view .product-image {
+  width: 220px;
+  min-width: 220px;
+  height: 100%;
+  border-radius: 16px 0 0 16px;
+}
+
+.list-view .product-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  width: 100%;
+}
+
+.list-view .product-info {
+  padding: 0;
+}
+
+.list-view .product-title {
+  font-size: 18px;
+  min-height: auto;
+  margin-bottom: 10px;
+}
+
+.list-view .product-rating {
+  margin-bottom: 15px;
+}
+
+.list-view .purchase-area {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+/* Product card hover effect */
 .product-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
+/* Product image container */
 .product-card img {
   width: 100%;
-  max-height: 200px;
-  object-fit: contain;
-  border-radius: 8px;
-  background-color: #f8f8f8;
-  padding: 1rem;
+  height: 320px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  background-color: #f9f9f9;
+}
+
+.list-view .product-card img {
+  height: 100%;
+  width: 220px;
+}
+
+/* Image zoom effect on hover */
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Discount badge */
+.discount-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #414141;
+  color: #ffffff;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  font-weight: 500;
+  z-index: 2;
+}
+
+/* Category badge */
+.category-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #4cb5ff;
+  color: #ffffff;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  font-weight: 500;
+  z-index: 2;
 }
 
 .product-info {
-  padding: 5px 5px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 .product-info h4 {
-  padding: 5px 5px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 0.05rem;
-  line-height: 1.4;
+  font-size: 16px;
+  font-weight: 600;
+  color: #414141;
+  margin-bottom: 6px;
+  white-space: normal;
   overflow: hidden;
-  border-radius: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+  min-height: 45px;
 }
 
+/* Rating area */
 .rating {
-  padding: 5px 5px;
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 0.05rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  color: #718096;
 }
 
+.stars {
+  color: #FFD700;
+  font-size: 14px;
+}
+
+.rating-count {
+  font-size: 12px;
+  color: #777;
+}
+
+/* Price and rating layout */
 .price-rating {
-  padding: 5px 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: auto;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 12px;
 }
 
 .price {
-  padding: 5px 5px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #007bff;
+  font-size: 18px;
+  font-weight: 700;
+  color: #414141;
+}
+
+.original-price {
+  font-size: 14px;
+  color: #888;
+  text-decoration: line-through;
 }
 
 /* Cart Button */
 .cart-button {
+  position: relative;
+  overflow: hidden;
+  outline: none;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(90deg, #ACCBEE 0%, #E7F0FD 100%);
+  box-shadow: rgba(50, 50, 93, 0.15) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.2) 0px 3px 7px -3px;
+  height: 38px;
+  width: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: transparent;
-  border: 1px solid #ddd;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
 
 .cart-button:hover {
-  background-color: #007bff;
-  border-color: #007bff;
+  background: linear-gradient(90deg, #0c7bdd 0%, #0D99FF 100%);
+  transform: translateY(-2px);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.cart-button .cart-icon {
+  stroke: #414141;
+  transition: all 0.3s ease;
 }
 
 .cart-button:hover .cart-icon {
   stroke: white;
+  transform: scale(1.1);
 }
 
+/* Cart Button Animation */
 .default-btn,
 .hover-btn {
-  position: absolute;
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  height: 100%;
+  width: 100%;
+}
+
+.default-btn {
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(0);
 }
 
 .hover-btn {
-  transform: translateX(100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  background: transparent;
+  transform: translateY(100%);
 }
 
 .cart-button:hover .default-btn {
-  transform: translateX(-100%);
+  transform: translateY(-100%);
 }
 
 .cart-button:hover .hover-btn {
-  transform: translateX(0);
+  transform: translateY(0);
+}
+
+/* Add a subtle pop effect on click */
+.cart-button:active {
+  transform: scale(0.95);
+}
+
+/* Enhanced filter options layout with improved visual design and animations */
+.filter-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  animation: slideInLeft 0.5s ease;
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-15px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Enhanced view options with smooth transitions */
+.view-options {
+  display: flex;
+  gap: 0.7rem;
+  animation: slideInRight 0.5s ease;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(15px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Enhanced view buttons with modern design and animated highlights */
+.view-btn {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.view-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.view-btn:hover::after {
+  transform: translateX(100%);
+}
+
+.view-btn.active {
+  background: linear-gradient(135deg, #0D99FF 0%, #0b87e0 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 8px rgba(13,153,255,0.25);
+}
+
+.view-btn:hover:not(.active) {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.07);
+}
+
+/* Enhanced checkbox styling with animated check */
+input[type="checkbox"] {
+  accent-color: #0D99FF;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+input[type="checkbox"]:checked {
+  animation: checkPulse 0.3s ease;
+}
+
+@keyframes checkPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Enhanced price range filter with modern design and auto-apply */
+.price-range-filter {
+  padding: 0.8rem 0.5rem;
+  animation: fadeIn 0.3s ease;
+  position: relative;
+}
+
+.price-inputs {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  justify-content: space-between;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  position: relative;
+}
+
+.field span {
+  font-size: 0.85rem;
+  color: #718096;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+.field input {
+  padding: 0.6rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: white;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.field input:focus {
+  border-color: #0D99FF;
+  box-shadow: 0 0 0 3px rgba(13,153,255,0.15);
+}
+
+.separator {
+  width: 10%;
+  text-align: center;
+  font-weight: 500;
+  color: #4a5568;
+  position: relative;
+}
+
+/* Add auto-apply indicator */
+.field input:focus + .auto-apply-indicator {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.field::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  background: linear-gradient(to right, #0D99FF, #75cbff);
+  transition: width 0.3s ease;
+}
+
+.field:focus-within::after {
+  width: 100%;
+}
+
+/* Rating stars styling with improved visuals and animations */
+.rating-list label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  transition: transform 0.2s ease;
+}
+
+.rating-list label:hover {
+  transform: translateX(3px);
+}
+
+.stars {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  background: linear-gradient(to right, #FFD700, #FFC107);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  position: relative;
+}
+
+.stars::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  transform: translateX(-100%);
+  animation: starShine 3s infinite;
+}
+
+@keyframes starShine {
+  0% { transform: translateX(-100%); opacity: 0; }
+  50% { transform: translateX(100%); opacity: 0.5; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+.count {
+  font-size: 0.85rem;
+  color: #718096;
+  padding: 0.2rem 0.5rem;
+  background-color: #f1f5f9;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.rating-list label:hover .count {
+  background-color: #e6effd;
+  color: #4a5568;
+}
+
+/* Remove apply filter button and section */
+
+/* Enhanced pagination with modern design and animations */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
+  gap: 0.6rem;
+}
+
+.pagination-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.pagination-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.pagination-btn:hover::after {
+  transform: translateX(100%);
+}
+
+.pagination-btn.active {
+  background: linear-gradient(135deg, #0D99FF 0%, #0b87e0 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 8px rgba(13,153,255,0.25);
+}
+
+.pagination-btn:hover:not(.active) {
+  background-color: #f7fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.07);
 }
 
 /* Responsive Styles */
@@ -260,6 +1022,19 @@ hr {
 
   .sidebar {
     width: 220px;
+  }
+  
+  .list-view .product-card {
+    max-height: 180px;
+  }
+  
+  .list-view .product-image {
+    width: 180px;
+    min-width: 180px;
+  }
+  
+  .list-view .product-card img {
+    width: 180px;
   }
 }
 
@@ -285,18 +1060,42 @@ hr {
     margin-bottom: 1.5rem;
   }
 
-  .product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* More flexible for tablets */
-    gap: 10px;
+  .product-grid.grid-view {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  
+  .list-view .product-card {
+    flex-direction: column;
+    min-height: 320px;
+    max-height: none;
+  }
+  
+  .list-view .product-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 16px 16px 0 0;
+  }
+  
+  .list-view .product-card img {
+    width: 100%;
+    height: 200px;
+  }
+  
+  .products h2 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .filter-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .navbar a {
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-  }
-
   .header-links {
     width: 100%;
     justify-content: space-between;
@@ -310,7 +1109,12 @@ hr {
     font-size: 0.9rem;
   }
 
-  .price {
-    font-size: 1rem;
+  .rating, .price {
+    font-size: 0.85rem;
+  }
+
+  .cart-button {
+    width: 36px;
+    height: 36px;
   }
 }

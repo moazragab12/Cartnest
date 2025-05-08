@@ -1,0 +1,529 @@
+/* Filter Area Animations and Enhancements */
+
+:root {
+  --filter-bg-color: rgba(255, 255, 255, 0.85);
+  --filter-accent: #0D99FF;
+  --filter-accent-hover: #0b87e0;
+  --filter-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --animation-duration: 0.4s;
+  --btn-transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Enhanced Sidebar with Dynamic Moving Background */
+.sidebar {
+  background: var(--filter-bg-color);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: var(--filter-shadow);
+  position: sticky;
+  top: 90px;
+  height: fit-content;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 100;
+  padding: 1.8rem;
+  transform-style: preserve-3d;
+  will-change: transform, opacity; /* Performance optimization for animations */
+  border: 1px solid rgba(203, 213, 225, 0.4);
+}
+
+/* Custom scrollbar for the sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.5);
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(203, 213, 225, 0.8);
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.8);
+}
+
+/* Dynamic moving background for sidebar with enhanced animation */
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 10% 20%, rgba(13, 153, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 50%, rgba(117, 203, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 30% 80%, rgba(76, 181, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 10%, rgba(13, 153, 255, 0.05) 0%, transparent 40%);
+  z-index: -1;
+  border-radius: 16px;
+  opacity: 0.8;
+  animation: movingGradient 20s infinite alternate ease-in-out;
+  will-change: background-position;
+}
+
+@keyframes movingGradient {
+  0% {
+    background-position: 0% 0%, 100% 0%, 0% 100%, 100% 100%;
+  }
+  25% {
+    background-position: 20% 10%, 80% 20%, 10% 80%, 90% 90%;
+  }
+  50% {
+    background-position: 50% 50%, 50% 50%, 50% 50%, 50% 50%;
+  }
+  75% {
+    background-position: 80% 80%, 20% 70%, 70% 20%, 30% 30%;
+  }
+  100% {
+    background-position: 100% 100%, 0% 100%, 100% 0%, 0% 0%;
+  }
+}
+
+/* Enhanced sticky behavior with more pronounced shadow and elevation effect */
+.sidebar.sticky {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  animation: stickySlideIn 0.6s forwards;
+  border: 1px solid rgba(203, 213, 225, 0.6);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+}
+
+@keyframes stickySlideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0.8;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.06);
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* Enhanced summary styling with 3D-like animations */
+summary {
+  position: relative;
+  padding: 1rem 0.8rem;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #2d3748;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all var(--animation-duration) ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  will-change: transform, background, box-shadow;
+  border-left: 0 solid var(--filter-accent);
+  transform-style: preserve-3d;
+}
+
+/* Plus/minus indicator with enhanced 3D rotation */
+summary::after {
+  content: '+';
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--filter-accent);
+  transition: all var(--animation-duration) cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: absolute;
+  right: 1rem;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+details[open] summary::after {
+  content: '−';
+  transform: rotate(180deg) scale(1.1);
+}
+
+/* Enhanced hover effect with 3D transform */
+summary:hover {
+  background: linear-gradient(to right, rgba(237, 242, 247, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%);
+  padding-left: 1.2rem;
+  color: var(--filter-accent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px) translateZ(0);
+}
+
+/* Hide default marker */
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Enhanced animated line indicator with gradient shimmer */
+summary::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 60%;
+  width: 4px;
+  background: linear-gradient(to bottom, var(--filter-accent), #75cbff);
+  border-radius: 0 4px 4px 0;
+  transform: translateY(-50%) scaleY(0);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 0;
+}
+
+summary:hover::before {
+  transform: translateY(-50%) scaleY(1);
+  opacity: 1;
+}
+
+details[open] summary::before {
+  transform: translateY(-50%) scaleY(1);
+  opacity: 1;
+  background: linear-gradient(to bottom, var(--filter-accent), #75cbff);
+  box-shadow: 0 0 10px rgba(13, 153, 255, 0.3);
+  animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Content transition animation with improved timing */
+details > * {
+  transition: all var(--animation-duration) cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+details:not([open]) > *:not(summary) {
+  display: none;
+}
+
+details[open] > *:not(summary) {
+  animation: slideDown 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced checkbox styling with modern design */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border: 2px solid #cbd5e0;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 8px;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--filter-accent);
+  border-color: var(--filter-accent);
+  transform: scale(1.05);
+  box-shadow: 0 0 0 2px rgba(13, 153, 255, 0.15);
+}
+
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 12px;
+  font-weight: bold;
+  animation: checkmark 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes checkmark {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+input[type="checkbox"]:hover {
+  border-color: var(--filter-accent);
+  box-shadow: 0 0 0 3px rgba(13, 153, 255, 0.1);
+  transform: scale(1.05);
+}
+
+/* Enhanced price range slider styling */
+.price-range-slider {
+  height: 5px;
+  position: relative;
+  background: linear-gradient(to right, #e2e8f0, #cbd5e0, #e2e8f0);
+  border-radius: 5px;
+  margin: 15px 0 30px 0;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.range-slider-track {
+  height: 100%;
+  position: absolute;
+  background: linear-gradient(to right, var(--filter-accent), #75cbff);
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(13, 153, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.range-slider-min, .range-slider-max {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  background: transparent;
+  position: absolute;
+  pointer-events: none;
+}
+
+.range-slider-min::-webkit-slider-thumb,
+.range-slider-max::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  margin-top: -7px;
+  pointer-events: auto;
+  transition: var(--btn-transition);
+  border: 2px solid var(--filter-accent);
+}
+
+.range-slider-min::-webkit-slider-thumb:hover,
+.range-slider-max::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 4px rgba(13, 153, 255, 0.2);
+  transform: scale(1.15);
+}
+
+.range-slider-min:active::-webkit-slider-thumb,
+.range-slider-max:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+  background: var(--filter-accent);
+  box-shadow: 0 0 10px rgba(13, 153, 255, 0.4);
+}
+
+.range-slider-min:focus::-webkit-slider-thumb,
+.range-slider-max:focus::-webkit-slider-thumb {
+  background: var(--filter-accent);
+  box-shadow: 0 0 0 4px rgba(13, 153, 255, 0.2);
+}
+
+/* Enhanced apply button animation with 3D effect */
+.apply-btn {
+  background: linear-gradient(135deg, var(--filter-accent), #75cbff);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.8rem 1.2rem;
+  text-align: center;
+  transition: var(--btn-transition);
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(13, 153, 255, 0.25), 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 12px;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+}
+
+.apply-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: 0.6s;
+  z-index: 1;
+}
+
+.apply-btn:hover::after {
+  left: 100%;
+}
+
+.apply-btn:hover {
+  background: linear-gradient(135deg, #0b87e0, #4cb5ff);
+  box-shadow: 0 8px 20px rgba(13, 153, 255, 0.4), 0 2px 5px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px) translateZ(5px);
+  letter-spacing: 0.5px;
+}
+
+.apply-btn:active {
+  transform: translateY(0) translateZ(0);
+  box-shadow: 0 4px 10px rgba(13, 153, 255, 0.2);
+  transition: all 0.1s ease;
+}
+
+.apply-btn.clicked {
+  animation: buttonPress 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes buttonPress {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.94);
+  }
+  70% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Enhanced Clear All Filters Button */
+.clear-filters-btn {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 1.5rem;
+  padding: 0.7rem 1.2rem;
+  text-align: center;
+  transition: var(--btn-transition);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.clear-filters-btn:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.7), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.clear-filters-btn:hover:before {
+  transform: translateX(100%);
+}
+
+.clear-filters-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e0;
+  color: #334155;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.clear-filters-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.1s ease;
+}
+
+/* For enhanced interaction across the entire sidebar */
+.sidebar-container.sticky-activated {
+  animation: subtleGlow 4s infinite alternate;
+}
+
+@keyframes subtleGlow {
+  0% {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  }
+  100% {
+    box-shadow: 0 10px 40px rgba(13, 153, 255, 0.15);
+  }
+}
+
+/* Ripple effect for interactive elements */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(13, 153, 255, 0.2);
+  transform: scale(0);
+  animation: ripple-animation 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* Back to top button with improved design */
+#back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 45px;
+  height: 45px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: var(--filter-accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--btn-transition);
+  z-index: 99;
+}
+
+#back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+#back-to-top:hover {
+  background: var(--filter-accent);
+  color: white;
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(13, 153, 255, 0.3);
+}
