@@ -11,8 +11,10 @@
     <link rel="stylesheet" href="../../css/header.css" />
     <link rel="stylesheet" href="../../css/footer.css" />
     <link rel="stylesheet" href="../../css/cart/style.css" />
+    <link rel="stylesheet" href="../../css/shared/notifications.css" />
     <script type="module" src="../../js/cart/script.js" defer></script>
-    <title>cart</title>
+    <script src="../../js/shared/notifications.js" defer></script>
+    <title>Shopping Cart | Shopify</title>
   </head>
   <body>
     <!-- Header -->
@@ -94,10 +96,15 @@
             </div>
           </div>
         </div>
-
-        <!-- Summary Section -->
+        <!-- Enhanced Summary Section -->
         <div class="summary">
           <h2 class="summary-title">Order Summary</h2>
+
+          <!-- Items count display -->
+          <div class="items-count">
+            <i class="fas fa-shopping-basket"></i>
+            <span>0 items in your cart</span>
+          </div>
 
           <div class="coupon-section">
             <p>Have a coupon?</p>
@@ -108,19 +115,41 @@
           </div>
 
           <div class="summary-info">
-            <p>Subtotal: <span>$14030.97</span></p>
-            <p class="discount">Discount: <span>–$6000.00</span></p>
-            <p class="tax">Tax: <span>+$140.00</span></p>
+            <p>
+              <span class="row-label">Subtotal:</span>
+              <span class="amount">$0.00</span>
+            </p>
+            <p class="discount">
+              <span class="row-label">Discount:</span>
+              <span class="amount">$0.00</span>
+            </p>
+            <p class="tax">
+              <span class="row-label">Tax:</span>
+              <span class="amount">$0.00</span>
+            </p>
             <hr />
-            <p class="total">Total: <strong>$1357.97</strong></p>
+            <p class="total">
+              <span class="row-label">Total:</span>
+              <span class="amount">$0.00</span>
+            </p>
           </div>
 
-          <button class="checkout">
-            <i class="fas fa-lock"></i> Checkout Securely
-          </button>
-
+          <button class="checkout">Checkout</button>
+          <!-- Estimated delivery info -->
+          <div class="estimated-delivery">
+            <i class="fas fa-truck"></i>
+            <div>
+              <span>Estimated delivery: </span>
+              <span class="delivery-date" id="delivery-date"
+                >Calculating...</span
+              >
+            </div>
+          </div>
           <div class="payment-methods">
-            <p>We accept:</p>
+            <p>
+              We accept:
+              <span class="payment-methods-hint">(click to pay)</span>
+            </p>
             <div class="payment-icons">
               <img
                 src="https://img.icons8.com/color/48/mastercard.png"
@@ -135,10 +164,202 @@
                 src="https://img.icons8.com/ios-filled/50/mac-os.png"
                 alt="Apple Pay"
               />
-            </div>
-          </div>
+            </div>          </div>
         </div>
       </div>
+    </div>
+
+    <!-- Payment method popups -->
+    <div id="payment-popup-overlay" class="payment-popup-overlay">
+      <!-- Loading overlay -->
+      <div class="payment-loading-overlay">
+        <div class="payment-spinner"></div>
+        <p>Processing payment in a sec...</p>
+      </div>
+
+            <!-- Result message -->
+            <div class="payment-result"></div>
+
+            <!-- MasterCard popup -->
+            <div id="mastercard-popup" class="payment-popup">
+              <div class="payment-popup-header">
+                <img
+                  src="https://img.icons8.com/color/48/mastercard.png"
+                  alt="MasterCard"
+                />
+                <h3>Pay with MasterCard</h3>
+                <button class="payment-popup-close">&times;</button>
+              </div>
+              <form class="payment-form" data-payment-method="mastercard">
+                <div class="form-row">
+                  <label for="mc-name">Name on Card</label>
+                  <input
+                    type="text"
+                    id="mc-name"
+                    name="card-name"
+                    required
+                    data-label="Name on card"
+                  />
+                </div>
+                <div class="form-row">
+                  <label for="mc-number">Card Number</label>
+                  <input
+                    type="text"
+                    id="mc-number"
+                    name="card-number"
+                    placeholder="XXXX XXXX XXXX XXXX"
+                    required
+                    data-label="Card number"
+                  />
+                </div>
+                <div class="form-row form-group">
+                  <div class="form-col">
+                    <label for="mc-expiry">Expiry Date</label>
+                    <input
+                      type="text"
+                      id="mc-expiry"
+                      name="expiry-date"
+                      placeholder="MM/YY"
+                      required
+                      data-label="Expiry date"
+                    />
+                  </div>
+                  <div class="form-col">
+                    <label for="mc-cvv">CVV</label>
+                    <input
+                      type="text"
+                      id="mc-cvv"
+                      name="cvv"
+                      placeholder="XXX"
+                      required
+                      data-label="CVV"
+                    />
+                  </div>
+                </div>
+                <button type="submit" class="payment-submit">Pay Now</button>
+              </form>
+            </div>
+
+            <!-- Visa popup -->
+            <div id="visa-popup" class="payment-popup">
+              <div class="payment-popup-header">
+                <img
+                  src="https://img.icons8.com/color/48/visa.png"
+                  alt="Visa"
+                />
+                <h3>Pay with Visa</h3>
+                <button class="payment-popup-close">&times;</button>
+              </div>
+              <form class="payment-form" data-payment-method="visa">
+                <div class="form-row">
+                  <label for="visa-name">Name on Card</label>
+                  <input
+                    type="text"
+                    id="visa-name"
+                    name="card-name"
+                    required
+                    data-label="Name on card"
+                  />
+                </div>
+                <div class="form-row">
+                  <label for="visa-number">Card Number</label>
+                  <input
+                    type="text"
+                    id="visa-number"
+                    name="card-number"
+                    placeholder="XXXX XXXX XXXX XXXX"
+                    required
+                    data-label="Card number"
+                  />
+                </div>
+                <div class="form-row form-group">
+                  <div class="form-col">
+                    <label for="visa-expiry">Expiry Date</label>
+                    <input
+                      type="text"
+                      id="visa-expiry"
+                      name="expiry-date"
+                      placeholder="MM/YY"
+                      required
+                      data-label="Expiry date"
+                    />
+                  </div>
+                  <div class="form-col">
+                    <label for="visa-cvv">CVV</label>
+                    <input
+                      type="text"
+                      id="visa-cvv"
+                      name="cvv"
+                      placeholder="XXX"
+                      required
+                      data-label="CVV"
+                    />
+                  </div>
+                </div>
+                <button type="submit" class="payment-submit">Pay Now</button>
+              </form>
+            </div>
+
+            <!-- PayPal popup -->
+            <div id="paypal-popup" class="payment-popup">
+              <div class="payment-popup-header">
+                <img
+                  src="https://img.icons8.com/ios-filled/50/paypal.png"
+                  alt="PayPal"
+                />
+                <h3>Pay with PayPal</h3>
+                <button class="payment-popup-close">&times;</button>
+              </div>
+              <form class="payment-form" data-payment-method="paypal">
+                <div class="form-row">
+                  <label for="pp-email">PayPal Email</label>
+                  <input
+                    type="email"
+                    id="pp-email"
+                    name="email"
+                    required
+                    data-label="PayPal email"
+                  />
+                </div>
+                <div class="form-row">
+                  <label for="pp-password">Password</label>
+                  <input
+                    type="password"
+                    id="pp-password"
+                    name="password"
+                    required
+                    data-label="Password"
+                  />
+                </div>
+                <button type="submit" class="payment-submit">
+                  Login & Pay
+                </button>
+              </form>
+            </div>
+
+            <!-- Apple Pay popup -->
+            <div id="apple-pay-popup" class="payment-popup">
+              <div class="payment-popup-header">
+                <img
+                  src="https://img.icons8.com/ios-filled/50/mac-os.png"
+                  alt="Apple Pay"
+                />
+                <h3>Pay with Apple Pay</h3>
+                <button class="payment-popup-close">&times;</button>
+              </div>
+              <form class="payment-form" data-payment-method="apple-pay">
+                <div class="apple-pay-info">
+                  <p>Click the button below to pay with Apple Pay.</p>
+                  <p>
+                    You'll be prompted to authorize payment using Face ID or
+                    Touch ID.
+                  </p>
+                </div>
+                <button type="submit" class="payment-submit apple-pay-button">
+                  <i class="fab fa-apple"></i> Pay
+                </button>              </form>
+            </div>
+          </div>
     </div>
 
     <div class="features">
@@ -290,4 +511,24 @@
       </div>
     </footer>
   </body>
+  <script>
+  // Add this script to ensure the empty cart message is properly styled
+  document.addEventListener("DOMContentLoaded", function() {
+    const cart = document.querySelector(".cart");
+    if (cart && cart.children.length === 0) {
+      const emptyMessage = document.createElement("div");
+      emptyMessage.className = "empty-cart";
+      emptyMessage.innerHTML = `
+        <p>Your cart is empty</p>
+        <p>Looks like you haven't added anything to your cart yet.</p>
+        <a href="../productsList/productList.html">
+          <button class="back">
+            <i class="fas fa-arrow-left"></i> Continue Shopping
+          </button>
+        </a>
+      `;
+      cart.appendChild(emptyMessage);
+    }
+  });
+</script>
 </html>
