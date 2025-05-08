@@ -150,7 +150,7 @@
     </nav>
     <main class="container">
       <aside class="sidebar">
-        <details open id="category-details">
+        <details id="category-details">
           <summary>Category</summary>
           <ul id="category-list">
             <li class="loading-categories">
@@ -161,15 +161,33 @@
           <a class="see-all">See all</a>
         </details>
         <hr />
-        <details open>
+        <details>
+          <summary>Price range</summary>
+          <div class="price-range-filter">
+            <div class="price-inputs">
+              <div class="field">
+                <span>Min</span>
+                <input type="number" class="input-min" value="0" />
+              </div>
+              <div class="separator">-</div>
+              <div class="field">
+                <span>Max</span>
+                <input type="number" class="input-max" value="999" />
+              </div>
+            </div>
+            <button class="apply-btn">Apply</button>
+          </div>
+        </details>
+        <hr />
+        <details>
           <summary>Brands</summary>
           <ul>
             <li>
-              <input type="checkbox" id="samsung" checked />
+              <input type="checkbox" id="samsung" />
               <label for="samsung">Samsung</label>
             </li>
             <li>
-              <input type="checkbox" id="apple" checked />
+              <input type="checkbox" id="apple" />
               <label for="apple">Apple</label>
             </li>
             <li>
@@ -177,7 +195,7 @@
               <label for="huawei">Huawei</label>
             </li>
             <li>
-              <input type="checkbox" id="poco" checked />
+              <input type="checkbox" id="poco" />
               <label for="poco">Poco</label>
             </li>
             <li>
@@ -197,11 +215,11 @@
         </details>
         <hr />
 
-        <details open>
+        <details>
           <summary>Features</summary>
           <ul>
             <li>
-              <input type="checkbox" id="metallic" checked />
+              <input type="checkbox" id="metallic" />
               <label for="metallic">Metallic</label>
             </li>
             <li>
@@ -230,24 +248,6 @@
 
         <hr />
 
-        <details>
-          <summary>Price range</summary>
-          <div class="price-range-filter">
-            <div class="price-inputs">
-              <div class="field">
-                <span>Min</span>
-                <input type="number" class="input-min" value="0" />
-              </div>
-              <div class="separator">-</div>
-              <div class="field">
-                <span>Max</span>
-                <input type="number" class="input-max" value="999" />
-              </div>
-            </div>
-            <button class="apply-btn">Apply</button>
-          </div>
-        </details>
-        <hr />
         <details>
           <summary>Condition</summary>
           <ul>
@@ -310,7 +310,7 @@
             <div class="filter-group">
               <p>12,911 items in Mobile accessory</p>
               <div style="display: flex; align-items: center">
-                <input type="checkbox" id="verified-only" checked />
+                <input type="checkbox" id="verified-only" />
                 <label for="verified-only" style="margin-left: 0.5rem"
                   >Verified only</label
                 >
