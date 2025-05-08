@@ -37,11 +37,66 @@ class TransactionsController {
     // Set up event listeners for transaction filtering
     this.setupTransactionFilters();
     
+    // Set up deposit button event listener
+    this.setupDepositButton();
+    
     // Load initial transaction data
     this.loadTransactions();
 
     // Setup pagination event listeners
     this.setupPaginationEvents();
+  }
+
+  /**
+   * Set up the deposit button event listener
+   */
+  setupDepositButton() {
+    const depositButton = document.querySelector('.btn-deposit, button[data-deposit], button.deposit');
+    if (!depositButton) {
+      // Try to find by the content
+      const buttons = Array.from(document.querySelectorAll('button'));
+      const depositBtn = buttons.find(btn => 
+        btn.textContent.trim().includes('Deposit') || 
+        btn.innerHTML.includes('Deposit')
+      );
+      
+      if (depositBtn) {
+        console.log('Found deposit button by text content');
+        depositBtn.addEventListener('click', this.handleDepositClick.bind(this));
+      } else {
+        console.warn('Deposit button not found in transactions page');
+      }
+    } else {
+      console.log('Found deposit button by selector');
+      depositButton.addEventListener('click', this.handleDepositClick.bind(this));
+    }
+  }
+
+  /**
+   * Handle deposit button click
+   * @param {Event} event - Click event
+   */
+  handleDepositClick(event) {
+    event.preventDefault();
+    console.log('Deposit button clicked');
+    
+    // Check if openDepositModal function exists in window scope
+    if (typeof window.openDepositModal === 'function') {
+      console.log('Opening deposit modal using global function');
+      window.openDepositModal();
+    } else {
+      console.warn('openDepositModal function not found in global scope');
+      
+      // Fallback: try to open the deposit modal directly
+      const depositModal = document.getElementById('deposit-modal');
+      if (depositModal) {
+        console.log('Opening deposit modal directly');
+        depositModal.style.display = 'block';
+      } else {
+        console.error('Deposit modal element not found');
+        alert('Deposit feature is not available at the moment. Please try again later.');
+      }
+    }
   }
 
   /**
