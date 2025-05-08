@@ -2,31 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apple iPhone 14 Plus 128GB Blue - Shopify</title>
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link rel="stylesheet" href="../../css/header.css" />
-    <link rel="stylesheet" href="../../css/footer.css" />
+    <link rel="stylesheet" href="../../css/product.css" />
     <link rel="stylesheet" href="../../css/product/style.css" />
-    <link rel="stylesheet" href="../../css/index/style.css" />
-    <link rel="stylesheet" href="../../css/shared/notifications.css" />
-    <!-- Use type="module" to allow ES6 imports -->
-    <script type="module" src="../../js/shared/notifications.js"></script>
-    <script type="module" src="../../js/shared/cart-manager.js"></script>
-    <script type="module" src="../../js/product/product.js"></script>
-    <title>Product Page</title>
-    <style>
-      .color-buttons span.selected {
-        border: 2px solid #007bff;
-        box-shadow: 0 0 5px #007bff;
-      }
-    </style>
+    <link rel="stylesheet" href="../../css/product/product-card.css" />
   </head>
-
-  <body>
+  <body class="fade-in">
     <!-- Header -->
     <header class="header">
       <div class="left-section">
@@ -59,18 +46,18 @@
         />
       </div>
       <div class="header-links">
-        <a href="./src/pages/Sign_in.html" class="sign-in-link">
+        <a href="#" class="sign-in-link" id="auth-link">
           <img
-            src="../../public/resources/images/svg/user-icon.svg"
+            src="./public/resources/images/svg/user-icon.svg"
             alt="User"
             class="icon-svg"
           />
-          <span>Sign Up/Sign In</span>
+          <span id="auth-text">Sign Up/Sign In</span>
         </a>
         <span class="header-divider">|</span>
-        <a href="../cart/cart.html" class="cart-link">
+        <a href="#" class="cart-link">
           <img
-            src="../../public/resources/images/svg/cart-icon.svg"
+            src="./public/resources/images/svg/cart-icon.svg"
             alt="Cart"
             class="icon-svg"
           />
@@ -80,363 +67,906 @@
       </div>
     </header>
 
-    <!-- Breadcrumb -->
-    <nav class="navbar"></nav>
-    <div class="tran">
-      <a href="#"><span>Home</span></a> >
-      <a href="#"><span class="category-name"></span></a> >
-      <a href="#"><span class="product-name"></span></a>
-    </div>
-
-    <!-- Product Info -->
-    <div class="info">
-      <h1></h1>
+    <!-- Main Content -->
+    <main>
       <div class="container">
-        <div>
-          <img
-            src="..\..\..\public\resources\images\iphone.png"
-            alt="Product Image"
-          />
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+          <a href="#">Home</a> <i class="fas fa-chevron-right"></i>
+          <a href="#">Smart Phones</a> <i class="fas fa-chevron-right"></i>
+          <span>Product page</span>
         </div>
-        <div class="data">
-          <div class="card">
-            <!-- Seller Info -->
-            <div class="seller-info">
-              <div class="seller-initial"></div>
-              <div class="seller-details">
-                <div>Seller</div>
-                <div><strong></strong></div>
+
+        <h1 class="product-title">Apple iPhone 14 Plus 128GB Blue</h1>
+
+        <!-- Product Tabs -->
+        <div class="product-tabs">
+          <div class="tabs-left">
+            <button class="tab-btn active">General info</button>
+            <button class="tab-btn">Product details</button>
+            <button class="tab-btn">Reviews (68)</button>
+          </div>
+          <div class="tabs-right">
+            <div class="rating-summary">
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
               </div>
-              <button class="profile-btn">Seller's profile</button>
+              <span>68 reviews</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Content -->
+        <div class="product-content">
+          <!-- Product Images -->
+          <div class="product-images">
+            <div class="main-image">
+              <button class="nav-btn prev">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="image-container">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="Apple iPhone 14 Plus Blue"
+                  class="active"
+                />
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="Apple iPhone 14 Plus Blue"
+                />
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="Apple iPhone 14 Plus Blue"
+                />
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="Apple iPhone 14 Plus Blue"
+                />
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="Apple iPhone 14 Plus Blue"
+                />
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="Apple iPhone 14 Plus Blue"
+                />
+              </div>
+              <button class="nav-btn next">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+            <div class="thumbnail-gallery">
+              <div class="thumbnail active" data-index="0">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="iPhone thumbnail 1"
+                />
+              </div>
+              <div class="thumbnail" data-index="1">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="iPhone thumbnail 2"
+                />
+              </div>
+              <div class="thumbnail" data-index="2">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="iPhone thumbnail 3"
+                />
+              </div>
+              <div class="thumbnail" data-index="3">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="iPhone thumbnail 4"
+                />
+              </div>
+              <div class="thumbnail" data-index="4">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="iPhone thumbnail 5"
+                />
+              </div>
+              <div class="thumbnail" data-index="5">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="iPhone thumbnail 6"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Details -->
+          <div class="product-details">
+            <div class="seller-info">
+              <div class="seller-avatar">R</div>
+              <div class="seller-name">
+                <h3>Seller</h3>
+                <p>Ramy Ahmed</p>
+              </div>
+              <a href="#" class="seller-profile-btn">Seller's profile</a>
             </div>
 
-            <!-- Options -->
-
-            <!-- Options -->
-            <div class="options">
-              <div>Options</div>
-              <div class="option-buttons">
+            <div class="product-options">
+              <h3>Options</h3>
+              <div class="storage-options">
                 <button>64 GB</button>
-                <button class="active">128 GB</button>
+                <button class="selected">128 GB</button>
                 <button>256 GB</button>
                 <button>512 GB</button>
               </div>
+
+              <div class="color-options">
+                <h3>Color: Blue</h3>
+                <div class="color-selector">
+                  <button class="color-btn blue selected"></button>
+                  <button class="color-btn orange"></button>
+                  <button class="color-btn silver"></button>
+                  <button class="color-btn black"></button>
+                </div>
+              </div>
+
+              <div class="price-section">
+                <h2 class="price">$940.00</h2>
+                <div class="availability-info">
+                  <div class="availability">
+                    <i class="fas fa-check-circle"></i>
+                    Available to order
+                  </div>
+                  <div class="remaining-quantity">
+                    <i class="fas fa-box"></i>
+                    Only 12 left in stock
+                  </div>
+                </div>
+              </div>
+
+              <div class="quantity-section">
+                <button class="qty-btn minus">−</button>
+                <input type="text" value="1" class="qty-input" />
+                <button class="qty-btn plus">+</button>
+                <button class="add-to-cart-btn">
+                  <i class="fas fa-shopping-cart"></i>
+                  Add to cart
+                </button>
+                <button class="wishlist-btn">
+                  <i class="far fa-heart"></i>
+                </button>
+                <button class="compare-btn">
+                  <i class="fas fa-exchange-alt"></i>
+                </button>
+              </div>
+
+              <div class="payment-options">
+                <div class="payment-option">
+                  <i class="far fa-circle-check blue-icon"></i>
+                  Interest-free loan
+                </div>
+                <div class="payment-option">
+                  <i class="far fa-credit-card green-icon"></i>
+                  Pay by installments
+                </div>
+              </div>
+
+              <div class="shipping-section">
+                <div class="section-header">
+                  <h3>Shipping options</h3>
+                  <button class="find-store-btn">
+                    <i class="fas fa-location-dot"></i>
+                    Find local store
+                  </button>
+                </div>
+
+                <div class="shipping-options">
+                  <div class="shipping-option">
+                    <div class="option-details">
+                      <p>Pickup from the store</p>
+                    </div>
+                    <div class="option-timing">
+                      <p>Today</p>
+                    </div>
+                    <div class="option-price">
+                      <p>Free</p>
+                    </div>
+                  </div>
+                  <div class="shipping-option">
+                    <div class="option-details">
+                      <p>Pickup from postal offices</p>
+                    </div>
+                    <div class="option-timing">
+                      <p>Tomorrow</p>
+                    </div>
+                    <div class="option-price">
+                      <p>$25.00</p>
+                    </div>
+                  </div>
+                  <div class="shipping-option">
+                    <div class="option-details">
+                      <p>Delivery by courier</p>
+                    </div>
+                    <div class="option-timing">
+                      <p>2-3 days</p>
+                    </div>
+                    <div class="option-price">
+                      <p>$35.00</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Overview -->
+        <section class="product-overview">
+          <h2>Product Overview</h2>
+
+          <div class="overview-content">
+            <div class="highlights">
+              <h3>Highlights</h3>
+              <ul>
+                <li>
+                  Dynamic Island for quick access to alerts and live activities.
+                </li>
+                <li>
+                  Super Retina XDR Display with ProMotion for ultra-smooth
+                  scrolling.
+                </li>
+                <li>A17 Pro Chip (or latest) for blazing-fast performance.</li>
+                <li>
+                  Pro Camera System with advanced low-light performance and 48MP
+                  main sensor.
+                </li>
+                <li>Cinematic Mode for recording videos with depth control.</li>
+                <li>
+                  MagSafe for easy attachment of accessories and faster wireless
+                  charging.
+                </li>
+              </ul>
             </div>
 
-            <!-- Colors -->
-            <div class="colors">
-              <div>Color: <strong>Blue</strong></div>
-              <div class="color-buttons">
-                <span class="color-pink"></span>
-                <span class="color-red"></span>
-                <span class="color-blue selected"></span>
-                <span class="color-black"></span>
+            <div class="specifications">
+              <h3>Specifications</h3>
+              <table>
+                <tr>
+                  <td>Style</td>
+                  <td>Classic style</td>
+                </tr>
+                <tr>
+                  <td>Certificate</td>
+                  <td>ISO-898921212</td>
+                </tr>
+                <tr>
+                  <td>Size</td>
+                  <td>34mm x 450mm x 19mm</td>
+                </tr>
+                <tr>
+                  <td>Memory</td>
+                  <td>36GB RAM</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section class="reviews-section">
+          <div class="reviews-header">
+            <h2>Reviews</h2>
+            <button class="leave-review-btn">
+              <i class="fas fa-pencil"></i>
+              Leave a review
+            </button>
+          </div>
+
+          <div class="reviews-summary">
+            <div class="rating-box">
+              <div class="average-rating">4.1</div>
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+              </div>
+              <div class="total-reviews">68 reviews</div>
+            </div>
+
+            <div class="rating-bars">
+              <div class="rating-bar">
+                <span class="star-level">5 ★</span>
+                <div class="bar-container">
+                  <div class="bar" style="--width: 70%"></div>
+                </div>
+                <span class="count">37</span>
+              </div>
+              <div class="rating-bar">
+                <span class="star-level">4 ★</span>
+                <div class="bar-container">
+                  <div class="bar" style="--width: 30%"></div>
+                </div>
+                <span class="count">16</span>
+              </div>
+              <div class="rating-bar">
+                <span class="star-level">3 ★</span>
+                <div class="bar-container">
+                  <div class="bar" style="--width: 15%"></div>
+                </div>
+                <span class="count">9</span>
+              </div>
+              <div class="rating-bar">
+                <span class="star-level">2 ★</span>
+                <div class="bar-container">
+                  <div class="bar" style="--width: 8%"></div>
+                </div>
+                <span class="count">4</span>
+              </div>
+              <div class="rating-bar">
+                <span class="star-level">1 ★</span>
+                <div class="bar-container">
+                  <div class="bar" style="--width: 5%"></div>
+                </div>
+                <span class="count">3</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="reviews-list">
+            <!-- Review 1 -->
+            <div class="review">
+              <div class="review-header">
+                <div class="reviewer-info">
+                  <h3>
+                    Rafael Marquez <i class="fas fa-check-circle verified"></i>
+                  </h3>
+                </div>
+                <div class="review-date">June 28, 2023</div>
+              </div>
+
+              <div class="review-rating">
+                <div class="stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                </div>
+              </div>
+
+              <div class="review-specs">
+                <span class="spec">Color: <span class="value">Blue</span></span>
+                <span class="spec"
+                  >Model: <span class="value">128GB</span></span
+                >
+              </div>
+
+              <div class="review-content">
+                <p>
+                  The phone has a new A15 Bionic chip, which makes it
+                  lightning-fast and responsive. The camera system has also been
+                  upgraded, and it now includes a 12-megapixel ultra-wide lens
+                  and a 12-megapixel wide lens.
+                </p>
+
+                <div class="review-details">
+                  <div class="pros">
+                    <span>Pros:</span> Premium device, and it comes with a high
+                    price tag
+                  </div>
+                  <div class="cons">
+                    <span>Cons:</span> Does not have a headphone jack
+                  </div>
+                </div>
+              </div>
+
+              <div class="review-actions">
+                <button class="reply-btn">
+                  <i class="fas fa-reply"></i> Reply
+                </button>
+                <div class="vote-buttons">
+                  <button class="vote-btn">
+                    <i class="far fa-thumbs-up"></i>
+                    <span>0</span>
+                  </button>
+                  <button class="vote-btn">
+                    <i class="far fa-thumbs-down"></i>
+                    <span>0</span>
+                  </button>
+                </div>
               </div>
             </div>
 
-            <!-- Price -->
-            <div class="price-section"></div>
+            <!-- Review 2 -->
+            <div class="review">
+              <div class="review-header">
+                <div class="reviewer-info">
+                  <h3>Daniel Adams</h3>
+                </div>
+                <div class="review-date">May 8, 2023</div>
+              </div>
 
-            <!-- Availability -->
-            <div class="availability"></div>
+              <div class="review-rating">
+                <div class="stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                </div>
+              </div>
 
-            <!-- Quantity -->
-            <div class="quantity-section">
-              <div class="quantity-wrapper">
-                <button type="button" class="quantity-btn" id="decrease-btn">
-                  -
+              <div class="review-specs">
+                <span class="spec"
+                  >Color: <span class="value">Black</span></span
+                >
+                <span class="spec"
+                  >Model: <span class="value">256GB</span></span
+                >
+              </div>
+
+              <div class="review-content">
+                <p>
+                  The phone has a new A15 Bionic chip, which makes it
+                  lightning-fast and responsive. The camera system has also been
+                  upgraded, and it now includes a 12-megapixel ultra-wide lens
+                  and a 12-megapixel wide lens. The battery life is excellent,
+                  and it can easily last a whole day of heavy use.
+                </p>
+
+                <div class="review-details">
+                  <div class="pros">
+                    <span>Pros:</span> Consequuntur magni, voluptatem sequi,
+                    tempora
+                  </div>
+                  <div class="cons">
+                    <span>Cons:</span> Architecto beatae, quis autem
+                  </div>
+                </div>
+              </div>
+
+              <div class="review-actions">
+                <button class="reply-btn">
+                  <i class="fas fa-reply"></i> Reply
                 </button>
+                <div class="vote-buttons">
+                  <button class="vote-btn">
+                    <i class="far fa-thumbs-up"></i>
+                    <span>0</span>
+                  </button>
+                  <button class="vote-btn">
+                    <i class="far fa-thumbs-down"></i>
+                    <span>0</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                <input
-                  type="number"
-                  min="1"
-                  value="1"
-                  class="quantity-input"
-                  id="quantity-input"
+          <a href="#" class="show-all-reviews">
+            Show all reviews <i class="fas fa-chevron-right"></i>
+          </a>
+        </section>
+
+        <!-- Related Products Section -->
+        <section class="related-products">
+          <h2>Related Products</h2>
+
+          <div class="card-products-grid">
+            <!-- Product Card 1 -->
+            <div class="card-product-card">
+              <span class="card-discount-badge">-21%</span>
+              <div class="card-product-image">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="VRB01 Virtual Reality Glasses"
                 />
-
-                <button type="button" class="quantity-btn" id="increase-btn">
-                  +
-                </button>
               </div>
-              <button class="quantity-btn2">🛒 Add to cart</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="product-overview">
-      <div class="highlights">
-        <h2>product overview</h2>
-        <ul>
-          <li>
-            Dynamic Island for quick access to alerts and live activities.
-          </li>
-          <li>
-            Super Retina XDR Display with ProMotion for ultra-smooth scrolling.
-          </li>
-          <li>A17 Pro Chip (or latest) for blazing-fast performance.</li>
-          <li>
-            Pro Camera System with advanced low-light performance and 48MP main
-            sensor.
-          </li>
-          <li>Cinematic Mode for recording videos with depth control.</li>
-          <li>
-            MagSafe for easy attachment of accessories and faster wireless
-            charging.
-          </li>
-        </ul>
-      </div>
-
-      <div class="specs">
-        <h2>Specifications</h2>
-        <table class="specs-table">
-          <tr>
-            <td>Style</td>
-            <td>Classic style</td>
-          </tr>
-          <tr>
-            <td>Certificate</td>
-            <td>ISO-898921212</td>
-          </tr>
-          <tr>
-            <td>Size</td>
-            <td>34mm x 450mm x 19mm</td>
-          </tr>
-          <tr>
-            <td>Memory</td>
-            <td>36GB RAM</td>
-          </tr>
-        </table>
-      </div>
-    </div>
-
-    <section class="featured-products-section">
-      <div class="featured-products-header">
-        <h2>veiwed Products</h2>
-      </div>
-
-      <div class="products-grid">
-        <!-- Product Card 1 -->
-        <div class="product-card">
-          <span class="discount-badge">-13%</span>
-          <div class="product-image">
-            <img
-              src="..\..\..\public\resources\images\iphone.png"
-              alt="Double Bed & Side Tables"
-            />
-          </div>
-          <div class="product-details">
-            <div class="product-info">
-              <h3 class="product-title">oppo</h3>
-              <div class="product-price">
-                <span class="current-price">$200.00</span>
-                <span class="original-price">$230.00</span>
+              <div class="card-product-content">
+                <div class="card-product-details">
+                  <div class="card-product-info">
+                    <h3 class="card-product-title">
+                      VRB01 Virtual Reality Glasses
+                    </h3>
+                    <div class="card-product-rating">
+                      <div class="card-stars">★★★★☆</div>
+                      <span class="card-rating-count">(14)</span>
+                    </div>
+                    <div class="card-product-description">
+                      Immersive VR experience with advanced motion tracking and
+                      high-resolution display.
+                    </div>
+                  </div>
+                  <div class="card-purchase-area">
+                    <div class="card-product-price">
+                      <span class="card-current-price">$340.99</span>
+                      <span class="card-original-price">$430.00</span>
+                    </div>
+                    <button class="card-cart-button">
+                      <div class="card-default-btn">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="20"
+                          height="20"
+                          stroke="#414141"
+                          stroke-width="2"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="card-cart-icon"
+                        >
+                          <circle cx="9" cy="21" r="1"></circle>
+                          <circle cx="20" cy="21" r="1"></circle>
+                          <path
+                            d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                          ></path>
+                        </svg>
+                      </div>
+                      <div class="card-hover-btn">
+                        <svg
+                          viewBox="0 0 320 512"
+                          width="12.5"
+                          height="20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                            fill="#ffffff"
+                          />
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-            <button class="cart-button">
-              <div class="default-btn">
-                <svg
-                  viewBox="0 0 24 24"
-                  width="20"
-                  height="20"
-                  stroke="#414141"
-                  stroke-width="2"
-                  fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="cart-icon"
-                >
-                  <circle cx="9" cy="21" r="1"></circle>
-                  <circle cx="20" cy="21" r="1"></circle>
-                  <path
-                    d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
-                  ></path>
-                </svg>
-              </div>
-              <div class="hover-btn">
-                <svg
-                  viewBox="0 0 320 512"
-                  width="12.5"
-                  height="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                    fill="#ffffff"
-                  ></path>
-                </svg>
-              </div>
-            </button>
-          </div>
-        </div>
 
-        <!-- Product Card 2 -->
-        <div class="product-card">
-          <span class="discount-badge">-13%</span>
-          <div class="product-image">
-            <img
-              src="..\..\..\public\resources\images\iphone.png"
-              alt="Double Bed & Side Tables"
-            />
-          </div>
-          <div class="product-details">
-            <div class="product-info">
-              <h3 class="product-title">realme</h3>
-              <div class="product-price">
-                <span class="current-price">$200.00</span>
-                <span class="original-price">$230.00</span>
+            <!-- Product Card 2 -->
+            <div class="card-product-card">
+              <span class="card-category-badge">New</span>
+              <div class="card-product-image">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="Apple iPhone 14 128GB White"
+                />
+              </div>
+              <div class="card-product-content">
+                <div class="card-product-details">
+                  <div class="card-product-info">
+                    <h3 class="card-product-title">
+                      Apple iPhone 14 128GB White
+                    </h3>
+                    <div class="card-product-rating">
+                      <div class="card-stars">★★★★☆</div>
+                      <span class="card-rating-count">(142)</span>
+                    </div>
+                    <div class="card-product-description">
+                      The latest iPhone with incredible camera and performance
+                      features.
+                    </div>
+                  </div>
+                  <div class="card-purchase-area">
+                    <div class="card-product-price">
+                      <span class="card-current-price">$899.00</span>
+                    </div>
+                    <button class="card-cart-button">
+                      <div class="card-default-btn">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="20"
+                          height="20"
+                          stroke="#414141"
+                          stroke-width="2"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="card-cart-icon"
+                        >
+                          <circle cx="9" cy="21" r="1"></circle>
+                          <circle cx="20" cy="21" r="1"></circle>
+                          <path
+                            d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                          ></path>
+                        </svg>
+                      </div>
+                      <div class="card-hover-btn">
+                        <svg
+                          viewBox="0 0 320 512"
+                          width="12.5"
+                          height="20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                            fill="#ffffff"
+                          />
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-            <button class="cart-button">
-              <div class="default-btn">
-                <svg
-                  viewBox="0 0 24 24"
-                  width="20"
-                  height="20"
-                  stroke="#414141"
-                  stroke-width="2"
-                  fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="cart-icon"
-                >
-                  <circle cx="9" cy="21" r="1"></circle>
-                  <circle cx="20" cy="21" r="1"></circle>
-                  <path
-                    d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
-                  ></path>
-                </svg>
-              </div>
-              <div class="hover-btn">
-                <svg
-                  viewBox="0 0 320 512"
-                  width="12.5"
-                  height="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                    fill="#ffffff"
-                  ></path>
-                </svg>
-              </div>
-            </button>
-          </div>
-        </div>
 
-        <!-- Product Card 3 -->
-        <div class="product-card">
-          <span class="discount-badge">-13%</span>
-          <div class="product-image">
-            <img
-              src="..\..\..\public\resources\images\iphone.png"
-              alt="Double Bed & Side Tables"
-            />
-          </div>
-          <div class="product-details">
-            <div class="product-info">
-              <h3 class="product-title">iphone</h3>
-              <div class="product-price">
-                <span class="current-price">$200.00</span>
-                <span class="original-price">$230.00</span>
+            <!-- Product Card 3 -->
+            <div class="card-product-card">
+              <div class="card-product-image">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="Smart Watch Series 7, White"
+                />
+              </div>
+              <div class="card-product-content">
+                <div class="card-product-details">
+                  <div class="card-product-info">
+                    <h3 class="card-product-title">
+                      Smart Watch Series 7, White
+                    </h3>
+                    <div class="card-product-rating">
+                      <div class="card-stars">★★★★★</div>
+                      <span class="card-rating-count">(64)</span>
+                    </div>
+                    <div class="card-product-description">
+                      Advanced fitness tracking, heart monitoring and seamless
+                      connectivity.
+                    </div>
+                  </div>
+                  <div class="card-purchase-area">
+                    <div class="card-product-price">
+                      <span class="card-current-price">$429.00</span>
+                    </div>
+                    <button class="card-cart-button">
+                      <div class="card-default-btn">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="20"
+                          height="20"
+                          stroke="#414141"
+                          stroke-width="2"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="card-cart-icon"
+                        >
+                          <circle cx="9" cy="21" r="1"></circle>
+                          <circle cx="20" cy="21" r="1"></circle>
+                          <path
+                            d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                          ></path>
+                        </svg>
+                      </div>
+                      <div class="card-hover-btn">
+                        <svg
+                          viewBox="0 0 320 512"
+                          width="12.5"
+                          height="20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                            fill="#ffffff"
+                          />
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-            <button class="cart-button">
-              <div class="default-btn">
-                <svg
-                  viewBox="0 0 24 24"
-                  width="20"
-                  height="20"
-                  stroke="#414141"
-                  stroke-width="2"
-                  fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="cart-icon"
-                >
-                  <circle cx="9" cy="21" r="1"></circle>
-                  <circle cx="20" cy="21" r="1"></circle>
-                  <path
-                    d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
-                  ></path>
-                </svg>
-              </div>
-              <div class="hover-btn">
-                <svg
-                  viewBox="0 0 320 512"
-                  width="12.5"
-                  height="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                    fill="#ffffff"
-                  ></path>
-                </svg>
-              </div>
-            </button>
           </div>
-        </div>
+        </section>
 
-        <!-- Product Card 4 -->
+        <!-- Viewed Products Section -->
+        <section class="viewed-products">
+          <h2>Viewed products</h2>
 
-        <div class="product-card">
-          <span class="discount-badge">-13%</span>
-          <div class="product-image">
-            <img
-              src="..\..\..\public\resources\images\iphone.png"
-              alt="Double Bed & Side Tables"
-            />
-          </div>
-          <div class="product-details">
-            <div class="product-info">
-              <h3 class="product-title">redmi</h3>
-              <div class="product-price">
-                <span class="current-price">$200.00</span>
-                <span class="original-price">$230.00</span>
+          <div class="card-products-grid">
+            <!-- Product Card 1 -->
+            <div class="card-product-card">
+              <span class="card-category-badge">Popular</span>
+              <div class="card-product-image">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="Sony Dualsense Edge Controller"
+                />
+              </div>
+              <div class="card-product-content">
+                <div class="card-product-details">
+                  <div class="card-product-info">
+                    <h3 class="card-product-title">
+                      Sony Dualsense Edge Controller
+                    </h3>
+                    <div class="card-product-rating">
+                      <div class="card-stars">★★★★★</div>
+                      <span class="card-rating-count">(187)</span>
+                    </div>
+                    <div class="card-product-description">
+                      Professional controller with customizable buttons and
+                      replaceable modules.
+                    </div>
+                  </div>
+                  <div class="card-purchase-area">
+                    <div class="card-product-price">
+                      <span class="card-current-price">$200.00</span>
+                    </div>
+                    <button class="card-cart-button">
+                      <div class="card-default-btn">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="20"
+                          height="20"
+                          stroke="#414141"
+                          stroke-width="2"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="card-cart-icon"
+                        >
+                          <circle cx="9" cy="21" r="1"></circle>
+                          <circle cx="20" cy="21" r="1"></circle>
+                          <path
+                            d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                          ></path>
+                        </svg>
+                      </div>
+                      <div class="card-hover-btn">
+                        <svg
+                          viewBox="0 0 320 512"
+                          width="12.5"
+                          height="20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                            fill="#ffffff"
+                          />
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-            <button class="cart-button">
-              <div class="default-btn">
-                <svg
-                  viewBox="0 0 24 24"
-                  width="20"
-                  height="20"
-                  stroke="#414141"
-                  stroke-width="2"
-                  fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="cart-icon"
-                >
-                  <circle cx="9" cy="21" r="1"></circle>
-                  <circle cx="20" cy="21" r="1"></circle>
-                  <path
-                    d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
-                  ></path>
-                </svg>
+
+            <!-- Product Card 2 -->
+            <div class="card-product-card">
+              <span class="card-discount-badge">-17%</span>
+              <div class="card-product-image">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="VRB01 Camera Nikon Max"
+                />
               </div>
-              <div class="hover-btn">
-                <svg
-                  viewBox="0 0 320 512"
-                  width="12.5"
-                  height="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                    fill="#ffffff"
-                  ></path>
-                </svg>
+              <div class="card-product-content">
+                <div class="card-product-details">
+                  <div class="card-product-info">
+                    <h3 class="card-product-title">VRB01 Camera Nikon Max</h3>
+                    <div class="card-product-rating">
+                      <div class="card-stars">★★★★★</div>
+                      <span class="card-rating-count">(14)</span>
+                    </div>
+                    <div class="card-product-description">
+                      Professional camera with high resolution sensor and
+                      amazing low-light performance.
+                    </div>
+                  </div>
+                  <div class="card-purchase-area">
+                    <div class="card-product-price">
+                      <span class="card-current-price">$652.00</span>
+                    </div>
+                    <button class="card-cart-button">
+                      <div class="card-default-btn">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="20"
+                          height="20"
+                          stroke="#414141"
+                          stroke-width="2"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="card-cart-icon"
+                        >
+                          <circle cx="9" cy="21" r="1"></circle>
+                          <circle cx="20" cy="21" r="1"></circle>
+                          <path
+                            d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                          ></path>
+                        </svg>
+                      </div>
+                      <div class="card-hover-btn">
+                        <svg
+                          viewBox="0 0 320 512"
+                          width="12.5"
+                          height="20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                            fill="#ffffff"
+                          />
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
+                </div>
               </div>
-            </button>
+            </div>
+
+            <!-- Product Card 3 -->
+            <div class="card-product-card">
+              <span class="card-category-badge">Bestseller</span>
+              <div class="card-product-image">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png"
+                  alt="Apple iPhone 14 128GB Blue"
+                />
+              </div>
+              <div class="card-product-content">
+                <div class="card-product-details">
+                  <div class="card-product-info">
+                    <h3 class="card-product-title">
+                      Apple iPhone 14 128GB Blue
+                    </h3>
+                    <div class="card-product-rating">
+                        <div class="card-stars">★★★★★</div>
+                        <span class="card-rating-count">(335)</span>
+                      </div>
+                    <div class="card-product-description">
+                      The newest iPhone with powerful performance and amazing
+                      camera features.
+                    </div>
+                  </div>
+                  <div class="card-purchase-area">
+                    <div class="card-product-price">
+                      <span class="card-current-price">$899.00</span>
+                    </div>
+                    <button class="card-cart-button">
+                      <div class="card-default-btn">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="20"
+                          height="20"
+                          stroke="#414141"
+                          stroke-width="2"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="card-cart-icon"
+                        >
+                          <circle cx="9" cy="21" r="1"></circle>
+                          <circle cx="20" cy="21" r="1"></circle>
+                          <path
+                            d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                          ></path>
+                        </svg>
+                      </div>
+                      <div class="card-hover-btn">
+                        <svg
+                          viewBox="0 0 320 512"
+                          width="12.5"
+                          height="20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M160 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0c-24.4-3.8-64.5-14.3-91.5-26.3c-16.1-7.2-23.4-26.1-16.2-42.2s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C119.4 279.3 84.4 270 58.4 253c-14.2-9.3-27.5-22-35.8-39.6c-8.4-17.9-10.1-37.9-6.1-59.2C23.7 116 52.3 91.2 84.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                            fill="#ffffff"
+                          />
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
       </div>
-    </section>
-    <footer class="shopify-footer">
+    </main>
+
+    <!-- Footer with full width and proper styling -->
+    <footer>
       <div class="footer-top">
         <div class="footer-top-content">
           <div class="footer-info">
@@ -551,10 +1081,16 @@
               alt="English"
               class="flag-icon"
             />
+
             English <i class="fas fa-chevron-down"></i>
           </div>
         </div>
       </div>
     </footer>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script src="../../js/product/script.js"></script>
   </body>
 </html>
