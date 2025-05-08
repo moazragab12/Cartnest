@@ -67,7 +67,11 @@ const API_ENDPOINTS = {
         recentTransactions: '/api/v0/dashboard/recent-transactions',
         salesSummary: '/api/v0/dashboard/sales-summary',
         customRange: '/api/v0/dashboard/custom-range'
-    }
+    },
+    reporting: {
+        itemsStatus: '/api/v0/reporting/user/items/status'
+    },
+
 };
 
 export default API_ENDPOINTS;

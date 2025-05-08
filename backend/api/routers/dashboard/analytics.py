@@ -66,8 +66,18 @@ async def get_dashboard_summary(
         # 1. Total orders - count transactions where user is the buyer
         total_orders = orders_query.count()
         
-        # 2. Delivered value - same as total orders
-        delivered_value = total_orders
+        # 2. Delivered value - now get the sum of quantities sold where user is the seller
+        # This will properly show quantity of items delivered/sold
+        delivered_query = db.query(func.sum(Transaction.quantity_purchased)).filter(
+            Transaction.seller_user_id == user_id
+        )
+        
+        # Apply time filter except for all_time
+        if time_range != "all_time":
+            delivered_query = delivered_query.filter(Transaction.transaction_time >= start_date)
+            
+        delivered_result = delivered_query.scalar()
+        delivered_value = delivered_result or 0
         
         # 3. Total spent - sum of transaction amounts where user is the buyer
         total_spent_result = spent_query.scalar()
@@ -519,12 +529,16 @@ async def get_top_products(
     thirty_days_ago = today - timedelta(days=30)
     sixty_days_ago = today - timedelta(days=60)
     
-    # Base query for current period top products
+    # Base query for current period top products with additional fields
     base_query = db.query(
         Item.item_id,
         Item.name,
+        Item.description,
+        Item.price,
+        Item.category,
+        Item.status,
         func.sum(Transaction.total_amount).label("sales"),
-        func.count(Transaction.transaction_id).label("quantity")
+        func.sum(Transaction.quantity_purchased).label("quantity")
     ).join(
         Transaction, Transaction.item_id == Item.item_id
     ).filter(
@@ -566,7 +580,7 @@ async def get_top_products(
     
     # Get top products for current period
     current_period_products = base_query.group_by(
-        Item.item_id, Item.name
+        Item.item_id, Item.name, Item.description, Item.price, Item.category, Item.status
     ).order_by(
         desc(func.sum(Transaction.total_amount))
     ).limit(limit).all()
@@ -580,16 +594,22 @@ async def get_top_products(
     
     # Calculate growth and prepare response
     products = []
-    for product_id, product_name, sales, quantity in current_period_products:
+    for product_id, product_name, description, price, category, status, sales, quantity in current_period_products:
         previous_sales = previous_period_sales.get(product_id, 0)
         growth = ((sales - previous_sales) / previous_sales * 100) if previous_sales > 0 else 0
+        revenue = float(sales)
         
         products.append(
             ProductPerformance(
-                product_id=str(product_id),  # Convert integer product_id to string
+                product_id=str(product_id),
                 product_name=product_name,
+                description=description or "",
+                price=float(price),
+                category=category or "Uncategorized",
+                status=status,
                 sales=float(sales),
                 quantity=int(quantity),
+                revenue=revenue,
                 growth=float(growth)
             )
         )
