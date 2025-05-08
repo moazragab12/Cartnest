@@ -48,7 +48,10 @@ function addToCart(product) {
       
       // Show notification if available
       if (window.notifications && result.success) {
-        window.notifications.success(`${product.name} added to your cart!`);
+        // Highlight product name in notification, consistent with other pages
+        window.notifications.success(`${product.name} added to your cart!`, 5000, {
+          productName: product.name
+        });
       }
     });
   

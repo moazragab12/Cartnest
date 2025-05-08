@@ -50,11 +50,17 @@ export async function addToCart(itemId, quantity = 1) {
         if (result.success) {
             if (result.isNewItem) {
                 if (window.notifications) {
-                    window.notifications.success(`${productName} added to your cart!`);
+                    // Highlight product name in the notification
+                    window.notifications.success(`${productName} added to your cart!`, 5000, {
+                        productName: productName
+                    });
                 }
             } else {
                 if (window.notifications) {
-                    window.notifications.success(`${productName} quantity updated in your cart!`);
+                    // Highlight product name in the updated quantity notification
+                    window.notifications.success(`${productName} quantity updated in your cart!`, 5000, {
+                        productName: productName
+                    });
                 }
             }
         } else {

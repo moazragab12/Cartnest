@@ -9,7 +9,8 @@ const API_ENDPOINTS = {
         register: '/api/v0/auth/register',
         login: '/api/v0/auth/login',
         refreshToken: '/api/v0/auth/refresh-token',
-        tokenStatus: '/api/v0/auth/token-status'
+        tokenStatus: '/api/v0/auth/token-status',
+        profile: '/api/v0/auth/profile'
     },
     items: {
         list: '/api/v0/items/',
@@ -21,7 +22,7 @@ const API_ENDPOINTS = {
     },
     search: {
         items: {
-            search: '/api/v0/search/items/search_item',
+            search: '/api/v0/search/items/search',
             getItem: (id) => `/api/v0/search/items/${id}`
         },
         deposits: {
@@ -38,6 +39,7 @@ const API_ENDPOINTS = {
         }
     },
     profile: {
+        overview: '/api/v0/profile/overview',
         items: {
             create: '/api/v0/profile/items',
             list: '/api/v0/profile/items',
@@ -49,12 +51,12 @@ const API_ENDPOINTS = {
             deposit: '/api/v0/profile/wallet/deposit',
             balance: '/api/v0/profile/wallet/balance',
             transactions: '/api/v0/profile/wallet/transactions'
-        },
-        overview: '/api/v0/profile/overview'
+        }
     },
     transactions: {
         purchase: '/api/v0/transactions/purchase',
         list: '/api/v0/transactions/',
+        purchases: '/api/v0/transactions/purchases',
         details: (id) => `/api/v0/transactions/${id}`,
         transfer: '/api/v0/transactions/transfer'
     },
@@ -69,9 +71,21 @@ const API_ENDPOINTS = {
         customRange: '/api/v0/dashboard/custom-range'
     },
     reporting: {
-        itemsStatus: '/api/v0/reporting/user/items/status'
-    },
-
+        system: {
+            salesTimeSeries: '/api/v0/reporting/system/sales/time-series',
+            salesCategories: '/api/v0/reporting/system/sales/categories',
+            sellersPerformance: '/api/v0/reporting/system/sellers/performance',
+            transactionsStats: '/api/v0/reporting/system/transactions/stats'
+        },
+        user: {
+            salesTimeSeries: '/api/v0/reporting/user/sales/time-series',
+            transactionsStats: '/api/v0/reporting/user/transactions/stats',
+            summary: '/api/v0/reporting/user/summary',
+            userSummary: (userId) => `/api/v0/reporting/user/${userId}/summary`,
+            itemsStatus: '/api/v0/reporting/user/items/status',
+            sellerSalesChart: (timeRange) => `/api/v0/reporting/user/seller/sales/chart?time_range=${timeRange}`
+        }
+    }
 };
 
 export default API_ENDPOINTS;

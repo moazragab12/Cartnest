@@ -29,8 +29,9 @@
       defer
     ></script>
     <!-- Shared Scripts - Cart and Notifications -->
-    <script src="../../js/shared/cart-manager.js" type="module"></script>
-    <script src="../../js/shared/notifications.js" type="module"></script>
+    <script src="../../js/shared/cart-manager.js" type="module" defer></script>
+    <!-- Load notifications without type=module to ensure window.notifications is accessible -->
+    <script src="../../js/shared/notifications.js" defer></script>
     <!-- Product Loader JS - Handles dynamic product loading -->
     <script
       src="../../js/productList/product-loader.js"
@@ -353,26 +354,6 @@
 
     <!-- Back to top button will be added by JavaScript -->
 
-    <!-- Initialize notifications system -->
-    <script type="text/javascript">
-      document.addEventListener("DOMContentLoaded", function () {
-        // Ensure notifications container exists
-        if (!document.getElementById("global-notifications")) {
-          const notificationsContainer = document.createElement("div");
-          notificationsContainer.id = "global-notifications";
-          document.body.appendChild(notificationsContainer);
-          console.log("Notifications container added to page");
-        }
-
-        // Test if cart notifications are working on page load
-        setTimeout(() => {
-          if (window.notifications) {
-            console.log("Notifications system ready for use");
-          } else {
-            console.error("Notifications system not available");
-          }
-        }, 1000);
-      });
-    </script>
+    <!-- Notifications will be shown via notifications.js -->
   </body>
 </html>

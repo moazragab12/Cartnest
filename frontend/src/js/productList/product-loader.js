@@ -754,20 +754,26 @@ class ProductLoader {
         price: product.price,
         image_url:
           product.image_url ||
-          "../../../public/resources/images/placeholder.jpg",
+          "/frontend/public/resources/images/placeholder.jpg",
       };
 
-      // Use the cartManager from shared scripts
-      cartManager.addToCart(cartProduct, 1);
-
-      // Show notification if notifications system is available
+      // Use cartManager from shared scripts
+      const result = cartManager.addToCart(cartProduct, 1);
+      
+      // Show a consistent notification matching the index page style
       if (window.notifications) {
-        window.notifications.cart(cartProduct);
+        // Highlight product name in notification, matching index page format
+        window.notifications.success(`${product.name} added to your cart!`, 5000, {
+          productName: product.name
+        });
+        
+        // Add cart badge animation
+        cartManager.updateCartBadge(true);
       }
     } catch (error) {
       console.error("Error adding product to cart:", error);
       if (window.notifications) {
-        window.notifications.error("Failed to add product to cart");
+        window.notifications.error("Couldn't add item to cart. Please try again.");
       }
     }
   }

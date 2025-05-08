@@ -157,11 +157,12 @@ class NotificationSystem {
    * @returns {string} - HTML markup for the icon
    */
   getIconForType(type) {
-    const gifPath = (gifName) => `./public/resources/gifs/${gifName}.gif`;
+    // Use absolute paths from root to ensure images work on all pages
+    const gifPath = (gifName) => `/frontend/public/resources/gifs/${gifName}.gif`;
     
     switch (type) {
       case 'success':
-        return `<img src="${gifPath('Succuss')}" alt="Success" />`;
+        return `<img src="${gifPath('Success')}" alt="Success" />`;
       case 'error':
         return `<img src="${gifPath('Error')}" alt="Error" />`;
       case 'warning':
