@@ -33,14 +33,14 @@
       <input type="text" placeholder="Search essentials, groceries and more...">
     </div>
     <div class="header-links">
-      <a href="./src/pages/auth/auth.html" class="sign-in-link" id="auth-link">
-        <img src="./public/resources/images/svg/user-icon.svg" alt="User" class="icon-svg">
-        <span id="auth-text">Sign Up/Sign In</span>
-      </a>
-      <span class="header-divider">|</span>
       <a href="./src/pages/cart/cart.html" class="cart-link">
-        <img src="./public/resources/images/svg/cart-icon.svg" alt="Cart" class="icon-svg">
+        <img
+          src="./public/resources/images/svg/cart-icon.svg"
+          alt="Cart"
+          class="icon-svg"
+        />
         <span>Cart</span>
+        <span id="cart-badge" class="cart-badge">0</span>
       </a>
     </div>
   </header>
@@ -65,12 +65,10 @@
         <div class="nav-item" data-target="orders-tab">
           <i class="fas fa-shopping-bag"></i>
           <span class="nav-text">My Orders</span>
-          <span class="badge">3</span>
         </div>
         <div class="nav-item" data-target="transactions-tab">
           <i class="fas fa-exchange-alt"></i>
           <span class="nav-text">Transactions</span>
-          <span class="badge">5</span>
         </div>
         
         <!-- Seller Section -->
@@ -85,7 +83,6 @@
         <div class="nav-item" data-target="products-tab">
           <i class="fas fa-box"></i>
           <span class="nav-text">My Products</span>
-          <span class="badge">8</span>
         </div>
         <div class="nav-item" data-target="add-product-tab">
           <i class="fas fa-plus"></i>
@@ -386,6 +383,67 @@
                   <option value="paypal">PayPal</option>
                 </select>
               </div>
+              
+              <!-- Credit Card Form -->
+              <div id="credit-card-form">
+                <!-- Credit Card Preview -->
+                <div class="credit-card-preview">
+                  <div class="credit-card-inner">
+                    <div class="card-chip"></div>
+                    <div class="card-brand"><i class="fab fa-cc-visa"></i></div>
+                    <div class="card-preview-number">•••• •••• •••• ••••</div>
+                    <div class="card-details">
+                      <div class="card-holder-container">
+                        <div class="card-label">Card Holder</div>
+                        <div class="card-preview-name">Your Name</div>
+                      </div>
+                      <div class="card-expires-container">
+                        <div class="card-label">Expires</div>
+                        <div class="card-preview-expiry">MM/YY</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Credit Card Form Fields -->
+                <div class="credit-card-form-fields">
+                  <div class="form-group">
+                    <label class="form-label" for="card-number">Card Number</label>
+                    <div class="input-with-icon">
+                      <input type="text" class="form-control" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                      <i class="fab fa-cc-visa card-icon"></i>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label" for="card-name">Cardholder Name</label>
+                    <input type="text" class="form-control" id="card-name" placeholder="Name as appears on card">
+                  </div>
+                  
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="card-expiry">Expiry Date</label>
+                      <input type="text" class="form-control" id="card-expiry" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="card-cvc">CVC</label>
+                      <input type="text" class="form-control" id="card-cvc" placeholder="123" maxlength="4">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Alternative Payment Methods Form -->
+              <div id="alternative-payment-form" style="display: none;">
+                <div class="alternative-payment-container">
+                  <div class="alternative-payment-icon">
+                    <i class="fab fa-paypal" id="alternative-payment-icon"></i>
+                  </div>
+                  <h4 id="alternative-payment-title">PayPal</h4>
+                  <p>You'll be redirected to the secure payment page after clicking "Deposit Money" button.</p>
+                </div>
+              </div>
+              
               <div class="form-group">
                 <label class="form-label" for="deposit-notes">Note (Optional)</label>
                 <textarea class="form-control" id="deposit-notes" rows="2" placeholder="Add a note about this deposit"></textarea>
@@ -447,7 +505,6 @@
             </table>
             <div class="pagination-container">
               <div class="transaction-count">
-                Showing 5 of 24 transactions
               </div>
               <div class="pagination">
                 <button class="pagination-btn prev">
@@ -876,11 +933,6 @@
       <div class="content-section" id="profile-tab">
         <div class="dashboard-header">
           <h2 class="dashboard-title">My Profile</h2>
-          <div class="dashboard-header-actions">
-            <button class="btn btn-primary" id="save-profile">
-              <i class="fas fa-save"></i> Save Changes
-            </button>
-          </div>
         </div>
 
         <div class="dashboard-card">
@@ -925,34 +977,22 @@
                 <form id="profile-form">
                   <div class="form-group">
                     <label class="form-label" for="username">Username</label>
-                    <input type="text" class="form-control" id="username" value="johndoe">
+                    <input type="text" class="form-control" id="username" value="johndoe" readonly style="background-color: #f9fafb; cursor: not-allowed;">
                   </div>
                   
                   <div class="form-group">
                     <label class="form-label" for="email">Email Address</label>
-                    <input type="email" class="form-control" id="email" value="john.doe@example.com">
+                    <input type="email" class="form-control" id="email" value="john.doe@example.com" readonly style="background-color: #f9fafb; cursor: not-allowed;">
                   </div>
                   
                   <div class="form-group">
                     <label class="form-label">Member Since</label>
                     <div style="display: flex; align-items: center; gap: 10px;">
-                      <div class="form-control" style="background-color: #f9fafb; cursor: not-allowed;">April 15, 2023</div>
-                      <span style="color: var(--secondary-color); font-size: 14px;">2 years, 1 month</span>
+                      <div id="member-since-date" class="form-control" style="background-color: #f9fafb; cursor: not-allowed;">Loading...</div>
+                      <span id="member-since-duration" style="color: var(--secondary-color); font-size: 14px;"></span>
                     </div>
                   </div>
                 </form>
-              </div>
-            </div>
-            
-            <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
-              <h4 style="margin-bottom: 15px; font-weight: 500;">Account Actions</h4>
-              <div style="display: flex; gap: 15px;">
-                <button class="btn btn-outline" style="color: #EF4444; border-color: #EF4444;">
-                  <i class="fas fa-sign-out-alt"></i> Sign Out
-                </button>
-                <button class="btn btn-outline" style="color: #EF4444; border-color: #EF4444;">
-                  <i class="fas fa-trash"></i> Delete Account
-                </button>
               </div>
             </div>
           </div>
@@ -1148,6 +1188,7 @@
   <script type="module" src="../../js/dashboard/sellerDashboard.js"></script>
   <script src="../../js/dashboard/products.js"></script>
   <script type="module" src="../../js/dashboard/profile.js"></script>
+  <script type="module" src="../../js/dashboard/badgeUpdater.js"></script>
   <script>
     // Additional inline scripts can go here
   </script>

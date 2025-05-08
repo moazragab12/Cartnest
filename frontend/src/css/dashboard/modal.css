@@ -7,7 +7,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 9999; /* Increased z-index to ensure it appears above all other elements */
   justify-content: center;
   align-items: center;
   opacity: 0;
@@ -16,6 +16,7 @@
 
 .modal.show {
   opacity: 1;
+  display: flex !important; /* Force display flex when showing */
 }
 
 .modal-content {
@@ -30,6 +31,8 @@
   flex-direction: column;
   transform: translateY(20px);
   transition: transform 0.3s ease;
+  position: relative; /* Ensure proper stacking context */
+  margin: auto; /* Center in viewport */
 }
 
 .modal.show .modal-content {
@@ -172,6 +175,137 @@
 
 #reset-product-changes {
   margin-right: auto;
+}
+
+/* Credit Card Form Styles */
+.credit-card-preview {
+  margin-bottom: 20px;
+  perspective: 1000px;
+}
+
+.credit-card-inner {
+  width: 100%;
+  height: 200px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #0d99ff, #0b5ed7);
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(13, 153, 255, 0.2);
+  position: relative;
+  transition: transform 0.6s;
+  color: white;
+}
+
+.card-chip {
+  width: 40px;
+  height: 30px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  border-radius: 5px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.card-brand {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 28px;
+}
+
+.card-preview-number {
+  position: absolute;
+  top: 90px;
+  left: 20px;
+  right: 20px;
+  font-size: 20px;
+  letter-spacing: 3px;
+  text-align: center;
+}
+
+.card-details {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 5px;
+}
+
+.credit-card-form-fields {
+  margin-top: 20px;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon .card-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #0d99ff;
+  font-size: 18px;
+}
+
+.alternative-payment-container {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.alternative-payment-icon {
+  font-size: 48px;
+  color: #0d99ff;
+  margin-bottom: 15px;
+}
+
+.alternative-payment-icon .fa-bank,
+.alternative-payment-icon .fa-university {
+  color: #10B981;
+}
+
+.alternative-payment-icon .fa-paypal {
+  color: #0070ba;
+}
+
+.alternative-payment-container h4 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.alternative-payment-container p {
+  color: #64748b;
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Responsive adjustment for the credit card form */
+@media (max-width: 576px) {
+  .credit-card-inner {
+    height: 180px;
+  }
+  
+  .card-preview-number {
+    top: 80px;
+    font-size: 18px;
+  }
+  
+  .card-details {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
 /* Responsive adjustments */

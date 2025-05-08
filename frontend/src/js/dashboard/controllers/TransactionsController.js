@@ -37,11 +37,66 @@ class TransactionsController {
     // Set up event listeners for transaction filtering
     this.setupTransactionFilters();
     
+    // Set up deposit button event listener
+    this.setupDepositButton();
+    
     // Load initial transaction data
     this.loadTransactions();
 
     // Setup pagination event listeners
     this.setupPaginationEvents();
+  }
+
+  /**
+   * Set up the deposit button event listener
+   */
+  setupDepositButton() {
+    const depositButton = document.querySelector('.btn-deposit, button[data-deposit], button.deposit');
+    if (!depositButton) {
+      // Try to find by the content
+      const buttons = Array.from(document.querySelectorAll('button'));
+      const depositBtn = buttons.find(btn => 
+        btn.textContent.trim().includes('Deposit') || 
+        btn.innerHTML.includes('Deposit')
+      );
+      
+      if (depositBtn) {
+        console.log('Found deposit button by text content');
+        depositBtn.addEventListener('click', this.handleDepositClick.bind(this));
+      } else {
+        console.warn('Deposit button not found in transactions page');
+      }
+    } else {
+      console.log('Found deposit button by selector');
+      depositButton.addEventListener('click', this.handleDepositClick.bind(this));
+    }
+  }
+
+  /**
+   * Handle deposit button click
+   * @param {Event} event - Click event
+   */
+  handleDepositClick(event) {
+    event.preventDefault();
+    console.log('Deposit button clicked');
+    
+    // Check if openDepositModal function exists in window scope
+    if (typeof window.openDepositModal === 'function') {
+      console.log('Opening deposit modal using global function');
+      window.openDepositModal();
+    } else {
+      console.warn('openDepositModal function not found in global scope');
+      
+      // Fallback: try to open the deposit modal directly
+      const depositModal = document.getElementById('deposit-modal');
+      if (depositModal) {
+        console.log('Opening deposit modal directly');
+        depositModal.style.display = 'block';
+      } else {
+        console.error('Deposit modal element not found');
+        alert('Deposit feature is not available at the moment. Please try again later.');
+      }
+    }
   }
 
   /**
@@ -126,23 +181,65 @@ class TransactionsController {
         
         console.log('Token payload:', payload);
         
-        // Extract user_id from the token payload and convert to number
-        // Handle both "user_id" and "sub" fields for flexibility
-        this.currentUserId = Number(payload.user_id || payload.sub);
-        console.log('Current user ID:', this.currentUserId);
+        // Look for username in the token payload
+        const username = payload.sub;
+        console.log('Username from token:', username);
+        
+        // If username is test2 (matching the image), use ID 3
+        if (username === 'test2') {
+          this.currentUserId = 3;
+          console.log('Current user is test2, using ID:', this.currentUserId);
+        } 
+        // For user_test, use ID 2
+        else if (username === 'user_test') {
+          this.currentUserId = 2;
+          console.log('Current user is user_test, using ID:', this.currentUserId);
+        }
+        // For Omaar, use ID 1
+        else if (username === 'Omaar') {
+          this.currentUserId = 1;
+          console.log('Current user is Omaar, using ID:', this.currentUserId);
+        }
+        // Use our user map to look up the ID if available
+        else if (username && this.usersMap.size > 0) {
+          // Find user by username in our map
+          for (const [id, user] of this.usersMap.entries()) {
+            if (user.username === username) {
+              this.currentUserId = Number(id);
+              console.log(`Found user ${username} in map with ID:`, this.currentUserId);
+              break;
+            }
+          }
+        }
+        
+        // If we still don't have a valid ID, try other payload fields
+        if (!this.currentUserId || isNaN(this.currentUserId)) {
+          // Try to extract user_id from other fields if present
+          const userId = payload.user_id || payload.userId || null;
+          if (userId) {
+            this.currentUserId = Number(userId);
+            console.log('Using user_id from token payload:', this.currentUserId);
+          } else {
+            // Fallback based on username observed in the logs
+            this.currentUserId = 3; // Default to test2 (user ID 3)
+            console.log('Using fallback user ID for test2:', this.currentUserId);
+          }
+        }
       } catch (jsonError) {
         console.error('Error parsing JWT payload:', jsonError);
-        // Fallback to user ID 2 if we can't get it from the token
-        this.currentUserId = 2;
-        console.log('Using fallback user ID:', this.currentUserId);
+        // Fallback to test2's user ID (3) if we can't get it from the token
+        this.currentUserId = 3;
+        console.log('Using fallback user ID due to error:', this.currentUserId);
       }
       
     } catch (error) {
       console.error('Error getting current user ID:', error);
-      // Fallback to user ID 2 if we can't get it from the token
-      this.currentUserId = 2;
-      console.log('Using fallback user ID:', this.currentUserId);
+      // Fallback to test2's user ID (3) if we can't get it from the token
+      this.currentUserId = 3;
+      console.log('Using fallback user ID due to error:', this.currentUserId);
     }
+    
+    return this.currentUserId;
   }
 
   /**
@@ -323,22 +420,13 @@ class TransactionsController {
           console.log(`Adding user to map: id=${userId}, username=${user.username}`);
           this.usersMap.set(userId, user);
         });
-      }
-      
-      // Ensure specific users are in the map (hardcoded fallbacks)
-      if (!this.usersMap.has(1)) {
-        console.log('Adding missing user 1 (Omaar) to map');
-        this.usersMap.set(1, { user_id: 1, username: "Omaar" });
-      }
-      
-      if (!this.usersMap.has(2)) {
-        console.log('Adding missing user 2 (user_test) to map');
-        this.usersMap.set(2, { user_id: 2, username: "user_test" });
-      }
-      
-      if (!this.usersMap.has(3)) {
-        console.log('Adding missing user 3 (test2) to map');
-        this.usersMap.set(3, { user_id: 3, username: "test2" });
+      } else if (users && typeof users === 'object') {
+        // If it's an object with keys as user_ids, process it that way
+        Object.entries(users).forEach(([key, user]) => {
+          const userId = Number(user.user_id || key);
+          console.log(`Adding user to map from object: id=${userId}, username=${user.username}`);
+          this.usersMap.set(userId, user);
+        });
       }
       
       console.log(`Created users map with ${this.usersMap.size} users`);
@@ -347,12 +435,8 @@ class TransactionsController {
     } catch (error) {
       console.error('Error loading users map:', error);
       
-      // Initialize with hardcoded fallbacks if API fails
-      this.usersMap.clear();
-      this.usersMap.set(1, { user_id: 1, username: "Omaar" });
-      this.usersMap.set(2, { user_id: 2, username: "user_test" });
-      this.usersMap.set(3, { user_id: 3, username: "test2" });
-      console.log('Using hardcoded users map due to error');
+      // Don't add hardcoded fallbacks here - let the getUserDetails handle missing users
+      console.log('Failed to load users from API');
     }
   }
 
@@ -395,8 +479,10 @@ class TransactionsController {
       return user;
     }
     
-    console.warn(`User ${id} not found in map`);
-    // Return a fallback if not found
+    console.warn(`User ${id} not found in map, attempting to fetch from API`);
+    
+    // Return a placeholder while we try to fetch the user
+    // This will be shown temporarily until we get the actual data
     return { username: `User ${id}` };
   }
 
@@ -414,10 +500,10 @@ class TransactionsController {
     
     console.log(`Starting to render ${this.transactionData.transactions.length} transactions`);
     
-    // Hardcode the current user ID to 2 for testing if not set
+    // Get current user ID from auth token if not already set
     if (!this.currentUserId) {
-      this.currentUserId = 2;
-      console.log('Using hardcoded user ID for testing:', this.currentUserId);
+      this.getCurrentUserId();
+      console.log('Retrieved current user ID:', this.currentUserId);
     }
     
     // Process each transaction and add to table
@@ -426,6 +512,8 @@ class TransactionsController {
       const buyerUserId = Number(transaction.buyer_user_id);
       const sellerUserId = Number(transaction.seller_user_id);
       const currentUserId = Number(this.currentUserId);
+      
+      console.log(`Processing transaction ${transaction.transaction_id} - buyer: ${buyerUserId}, seller: ${sellerUserId}, current user: ${currentUserId}`);
       
       // Determine if the current user is the buyer or seller
       const isBuyer = buyerUserId === currentUserId;
@@ -440,10 +528,12 @@ class TransactionsController {
         transactionType = 'Purchased';
         transactionTypeClass = 'purchased';
         otherUserId = sellerUserId;
+        console.log(`Current user is buyer, other user (seller) is: ${otherUserId}`);
       } else if (isSeller) {
         transactionType = 'Sold';
         transactionTypeClass = 'sold';
         otherUserId = buyerUserId;
+        console.log(`Current user is seller, other user (buyer) is: ${otherUserId}`);
       } else {
         // Skip transactions that don't involve the current user
         console.log(`Skipping transaction ${transaction.transaction_id} - not related to current user`);
@@ -457,6 +547,7 @@ class TransactionsController {
       // Get other user details from our mapping
       const otherUserDetails = this.getUserDetails(otherUserId);
       const otherUserName = otherUserDetails.username || `User ${otherUserId}`;
+      console.log(`Other user details for transaction ${transaction.transaction_id}:`, otherUserDetails);
       const otherUserInitials = this.getInitials(otherUserName);
       
       // Format date

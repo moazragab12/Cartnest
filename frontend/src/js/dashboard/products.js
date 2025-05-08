@@ -10,16 +10,71 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize the add product form handlers
     initAddProductForm();
+    
+    // Initialize the search functionality
+    initProductSearch();
 });
 
 // API Base URL - same as used in other API calls
 const API_BASE_URL = 'http://localhost:8000/api/v0';
+
+// Store all products globally to use for filtering
+let allProducts = [];
 
 // Initialize products tab functionality
 function initProductsTab() {
     loadUserProducts();
     setupSortingDropdown();
     setupTabFiltering();
+}
+
+// Function to initialize the search functionality
+function initProductSearch() {
+    const searchInput = document.querySelector('#products-tab .dashboard-header-actions input[type="text"]');
+    if (!searchInput) return;
+    
+    // Reset search input on initialization
+    searchInput.value = '';
+    
+    // Implement immediate search on each keystroke
+    searchInput.addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        
+        // Get all product rows
+        const rows = document.querySelectorAll('#products-tab .orders-table tbody tr');
+        
+        // Direct DOM filtering for immediate response
+        rows.forEach(row => {
+            const productName = row.querySelector('td:nth-child(1) span').textContent.toLowerCase();
+            const productId = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            const category = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+            const price = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+            
+            // Check if any of the fields contain the search term
+            const matchesSearch = 
+                productName.includes(searchTerm) || 
+                productId.includes(searchTerm) || 
+                category.includes(searchTerm) || 
+                price.includes(searchTerm);
+            
+            // Show or hide row based on search match
+            row.style.display = matchesSearch ? '' : 'none';
+        });
+        
+        // Update the count text
+        updateFilteredProductsCount();
+    });
+}
+
+// Function to update the product count text when filtering
+function updateFilteredProductsCount() {
+    const visibleRows = document.querySelectorAll('#products-tab .orders-table tbody tr[style=""]');
+    const totalRows = allProducts.length;
+    
+    const paginationText = document.querySelector('#products-tab .card-content > div > div:first-child');
+    if (paginationText) {
+        paginationText.textContent = `Showing ${visibleRows.length} of ${totalRows} products`;
+    }
 }
 
 // Function to fetch user products from API
@@ -53,6 +108,9 @@ async function loadUserProducts() {
 
         const products = await response.json();
         console.log('Fetched products:', products);
+        
+        // Store all products globally for filtering
+        allProducts = products;
         
         // Render products in table
         renderProductsTable(products);

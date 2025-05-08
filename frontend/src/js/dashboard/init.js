@@ -480,6 +480,9 @@ async function loadDashboardData() {
             summaryData = await fetchDashboardSummary({
                 timeRange: currentTimeRange
             });
+            
+            // We'll use the actual data even if all values are zero (for new users)
+            console.log('Dashboard data loaded:', summaryData);
         } catch (error) {
             console.warn('API call failed, using placeholder data', error);
             // Use placeholder data if API call fails
@@ -499,32 +502,7 @@ async function loadDashboardData() {
             };
         }
 
-        console.log('Dashboard data loaded:', summaryData);
-
-        // If the API response is empty or has zero values, use placeholder data
-        if (!summaryData ||
-            (summaryData.total_orders === 0 &&
-                summaryData.total_customers === 0 &&
-                summaryData.total_spent === 0 &&
-                summaryData.products_listed === 0)) {
-            console.warn('API returned empty data, using placeholder data');
-            summaryData = {
-                total_orders: 16,
-                total_customers: 12,
-                total_spent: 1248.50,
-                products_listed: 8,
-                purchase_activity: generatePlaceholderActivityData(30, "purchase"),
-                sales_activity: generatePlaceholderActivityData(30, "sales"),
-                category_spending: [
-                    { category: "Electronics", amount: 500, percentage: 40 },
-                    { category: "Fashion", amount: 300, percentage: 25 },
-                    { category: "Home & Kitchen", amount: 250, percentage: 20 },
-                    { category: "Other", amount: 200, percentage: 15 }
-                ]
-            };
-        }
-
-        // Update UI with the fetched data
+        // Update UI with the fetched data - we'll display real data even if it's all zeros
         updateDashboardStats(summaryData);
 
         // Render activity chart directly with the data from summary response
