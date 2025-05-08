@@ -1,6 +1,6 @@
 from sqlmodel import Session, select, col, func, distinct, desc
 from datetime import datetime, timedelta
-from typing import Dict, Optional
+from typing import Dict, Optional, Literal
 
 from api.models.transaction.model import Transaction
 from api.models.item.model import Item
@@ -429,6 +429,7 @@ def get_user_sales_summary(
     purchases_statement = select(
         func.count(Transaction.transaction_id).label("total_purchases"),
         func.sum(Transaction.total_amount).label("total_spent"),
+        func.sum(Transaction.quantity_purchased).label("items_purchased"),
     ).where(
         Transaction.buyer_user_id == user_id,
         Transaction.transaction_time >= start_date,
@@ -439,9 +440,11 @@ def get_user_sales_summary(
     purchases_result = db.exec(purchases_statement).first()
 
     # Create SQLModel select statement for user's sales
+    # Now include the quantity_purchased sum to get total items sold
     sales_statement = select(
-        func.count(Transaction.transaction_id).label("total_sales"),
+        func.count(Transaction.transaction_id).label("total_sales_transactions"),
         func.sum(Transaction.total_amount).label("total_earned"),
+        func.sum(Transaction.quantity_purchased).label("items_sold"),
     ).where(
         Transaction.seller_user_id == user_id,
         Transaction.transaction_time >= start_date,
@@ -462,9 +465,26 @@ def get_user_sales_summary(
         if purchases_result and purchases_result.total_spent
         else 0
     )
-    total_sales = (
-        sales_result.total_sales if sales_result and sales_result.total_sales else 0
+    items_purchased = (
+        purchases_result.items_purchased
+        if purchases_result and purchases_result.items_purchased
+        else 0
     )
+    
+    # Get number of sales transactions
+    total_sales_transactions = (
+        sales_result.total_sales_transactions 
+        if sales_result and sales_result.total_sales_transactions 
+        else 0
+    )
+    
+    # Get total items sold (quantity-based)
+    total_sales = (
+        sales_result.items_sold 
+        if sales_result and sales_result.items_sold 
+        else 0
+    )
+    
     total_earned = (
         float(sales_result.total_earned)
         if sales_result and sales_result.total_earned
@@ -476,7 +496,161 @@ def get_user_sales_summary(
         "username": user.username,
         "total_purchases": total_purchases,
         "total_spent": total_spent,
-        "total_sales": total_sales,
+        "items_purchased": items_purchased,
+        "total_sales_transactions": total_sales_transactions,
+        "total_sales": total_sales,  # This now represents total quantity sold
         "total_earned": total_earned,
         "net_balance_change": total_earned - total_spent,
+    }
+
+
+def get_user_items_by_status(
+    db: Session,
+    user_id: int
+) -> Dict:
+    """
+    Get counts of items by status for a specific user
+    
+    Args:
+        db: Database session
+        user_id: User ID to count items for
+        
+    Returns:
+        Dictionary with counts of items by status
+    """
+    # Get user info using SQLModel select
+    user_statement = select(User).where(User.user_id == user_id)
+    user = db.exec(user_statement).first()
+    if not user:
+        return None
+    
+    # Create a query to count items by status for this user
+    status_counts = {}
+    
+    # Get counts for each possible status
+    for status in ['for_sale', 'sold', 'removed', 'draft']:
+        # Create a query to count items with this status for this user
+        statement = select(func.count(Item.item_id)).where(
+            Item.seller_user_id == user_id,
+            Item.status == status
+        )
+        
+        # Execute the query - result is directly an integer, not a tuple
+        result = db.exec(statement).first()
+        count = result if result is not None else 0
+        
+        # Store the count in our dictionary
+        status_counts[status] = count
+    
+    # Return the complete item status count information
+    return {
+        "for_sale": status_counts.get('for_sale', 0),
+        "sold": status_counts.get('sold', 0),
+        "removed": status_counts.get('removed', 0),
+        "draft": status_counts.get('draft', 0),
+        "user_id": user_id,
+        "username": user.username
+    }
+
+
+def get_seller_sales_chart_data(
+    db: Session,
+    user_id: int,
+    time_range: Literal["7_days", "30_days", "90_days", "this_year"] = "7_days",
+) -> Dict:
+    """
+    Get sales data formatted specifically for the seller sales performance chart
+    
+    Args:
+        db: Database session
+        user_id: User ID to get sales data for (the seller)
+        time_range: Time range to get data for (7_days, 30_days, 90_days, this_year)
+        
+    Returns:
+        Dictionary with formatted sales chart data
+    """
+    # Get user info
+    user_statement = select(User).where(User.user_id == user_id)
+    user = db.exec(user_statement).first()
+    if not user:
+        return None
+    
+    # Calculate date range based on time_range parameter
+    end_date = datetime.now()
+    
+    if time_range == "7_days":
+        start_date = end_date - timedelta(days=6)  # Last 7 days including today
+        date_format = "%a"  # Day name (e.g., Mon, Tue)
+    elif time_range == "30_days":
+        start_date = end_date - timedelta(days=29)  # Last 30 days
+        date_format = "%d %b"  # Day and month (e.g., 01 Jan)
+    elif time_range == "90_days":
+        start_date = end_date - timedelta(days=89)  # Last 90 days
+        date_format = "%d %b"  # Day and month (e.g., 01 Jan)
+    elif time_range == "this_year":
+        start_date = datetime(end_date.year, 1, 1)  # Start of current year
+        date_format = "%b"  # Month name (e.g., Jan, Feb)
+    else:
+        # Default to 7 days
+        start_date = end_date - timedelta(days=6)
+        date_format = "%a"
+    
+    # Create the query to get daily sales data for the seller
+    daily_sales = func.sum(Transaction.total_amount).label("amount")
+    
+    statement = select(
+        func.date_trunc("day", Transaction.transaction_time).label("date"),
+        daily_sales
+    ).where(
+        Transaction.seller_user_id == user_id,
+        Transaction.transaction_time >= start_date,
+        Transaction.transaction_time <= end_date
+    ).group_by(
+        func.date_trunc("day", Transaction.transaction_time)
+    ).order_by(
+        func.date_trunc("day", Transaction.transaction_time)
+    )
+    
+    # Execute the query
+    result = db.exec(statement).all()
+    
+    # Create a dictionary to map dates to sales amounts
+    date_to_sales = {row.date.strftime('%Y-%m-%d'): float(row.amount) if row.amount else 0 for row in result}
+    
+    # Create a list of all dates in the range
+    all_dates = []
+    current_date = start_date
+    while current_date <= end_date:
+        date_str = current_date.strftime('%Y-%m-%d')
+        all_dates.append(date_str)
+        current_date += timedelta(days=1)
+    
+    # Create the data points with proper formatting for the chart
+    data_points = []
+    sales_values = []
+    
+    for date_str in all_dates:
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+        formatted_date = date_obj.strftime(date_format)
+        amount = date_to_sales.get(date_str, 0)
+        sales_values.append(amount)
+        
+        data_points.append({
+            "date": formatted_date,
+            "amount": amount
+        })
+    
+    # Calculate summary statistics
+    total_sales = sum(sales_values)
+    average_daily_sales = total_sales / len(all_dates) if all_dates else 0
+    highest_daily_sales = max(sales_values) if sales_values else 0
+    
+    return {
+        "data": data_points,
+        "total_sales": total_sales,
+        "average_daily_sales": average_daily_sales,
+        "highest_daily_sales": highest_daily_sales,
+        "time_range": time_range,
+        "user_id": user_id,
+        "username": user.username
     }

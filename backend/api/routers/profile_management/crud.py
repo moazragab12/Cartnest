@@ -39,7 +39,7 @@ def create_item(db: Session, item_data: ItemCreate, seller_id: int) -> Item:
         price=item_data.price,
         quantity=item_data.quantity if item_data.quantity is not None else 1,
         seller_user_id=seller_id,
-        status=item_status.for_sale
+        status=item_data.status
     )
     db.add(db_item)
     db.commit()

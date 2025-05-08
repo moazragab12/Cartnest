@@ -10,6 +10,7 @@ class UserProfile(BaseModel):
     email: str
     role: UserRole
     cash_balance: float
+    created_at: datetime
 
     class Config:
         from_attributes = True
@@ -38,8 +39,13 @@ class CategorySales(BaseModel):
 class ProductPerformance(BaseModel):
     product_id: str
     product_name: str
+    description: Optional[str] = ""
+    price: float = 0
+    category: str = "Uncategorized"
+    status: Optional[str] = "active"
     sales: float
     quantity: int
+    revenue: float = 0
     growth: float
 
 

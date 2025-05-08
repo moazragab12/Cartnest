@@ -20,6 +20,347 @@
   z-index: 0;
 }
 
+/* Loading message style */
+.loading-message {
+  text-align: center;
+  padding: 30px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Toast notification styles */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+  z-index: 9999;
+}
+
+.toast-success {
+  background-color: #10B981;
+  color: white;
+}
+
+.toast-error {
+  background-color: #EF4444;
+  color: white;
+}
+
+.toast-info {
+  background-color: #0284c7;
+  color: white;
+}
+
+@keyframes toastFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toastFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Add these styles for the product update form */
+/* Update notice styling */
+.update-notice {
+  background-color: rgba(13, 153, 255, 0.1);
+  border-left: 4px solid var(--primary-color);
+  padding: 10px 15px;
+  margin-top: 10px;
+  border-radius: 0 4px 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.update-notice.has-changes {
+  background-color: rgba(245, 158, 11, 0.1);
+  border-left-color: #F59E0B;
+}
+
+.update-notice i {
+  color: var(--primary-color);
+  font-size: 16px;
+}
+
+.update-notice.has-changes i {
+  color: #F59E0B;
+}
+
+/* Modified input field styling */
+.input-modified {
+  border-color: #F59E0B !important;
+  background-color: rgba(245, 158, 11, 0.05);
+}
+
+.input-modified:focus {
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1) !important;
+}
+
+/* Change indicator styling */
+.change-indicator {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #F59E0B;
+  font-size: 12px;
+  opacity: 0.8;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+/* Form group positioning */
+#update-product-form .form-group {
+  position: relative;
+}
+
+#update-product-form .form-control {
+  padding-right: 30px; /* Make room for the change indicator */
+}
+
+/* Reset changes button */
+#reset-product-changes {
+  background-color: #f3f4f6;
+  color: var(--black-color);
+  border: 1px solid #e5e7eb;
+  margin-right: 10px;
+}
+
+#reset-product-changes:hover {
+  background-color: #e5e7eb;
+}
+
+/* Readonly field styling for category */
+.readonly-field-text {
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  background-color: #f9fafb;
+  color: var(--black-color);
+  font-size: 13px;
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+/* Product Status Cards */
+.product-tags {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  opacity: 0.5;
+}
+
+.product-tag {
+  position: relative;
+  animation: float 3s infinite ease-in-out;
+}
+
+.product-tag:nth-child(1) {
+  animation-delay: 0s;
+  bottom: 0;
+  right: 0;
+}
+
+.product-tag:nth-child(2) {
+  animation-delay: 0.5s;
+  bottom: 10px;
+  right: 10px;
+}
+
+.product-tag:nth-child(3) {
+  animation-delay: 1s;
+  bottom: 5px;
+  right: 20px;
+}
+
+/* X marks animation */
+.x-marks {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  opacity: 1;
+}
+
+.x-mark {
+  position: relative;
+  font-size: 14px;
+  color: rgba(239, 68, 68, 0.7);
+  animation: fadeMove 3s infinite ease-in-out;
+}
+
+.x-mark:nth-child(1) {
+  animation-delay: 0s;
+  bottom: 0;
+  right: 0;
+}
+
+.x-mark:nth-child(2) {
+  animation-delay: 0.7s;
+  bottom: 10px;
+  right: 10px;
+}
+
+.x-mark:nth-child(3) {
+  animation-delay: 1.4s;
+  bottom: 5px;
+  right: 20px;
+}
+
+@keyframes fadeMove {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
+  50% { transform: translate(-5px, -5px) rotate(15deg); opacity: 0.7; }
+  100% { transform: translate(-10px, -10px) rotate(30deg); opacity: 0; }
+}
+
+/* Coin stack animation */
+.coin-stack {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.6;
+}
+
+.coin {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  margin: -5px 0;
+  animation: coinPulse 2s infinite ease-in-out;
+}
+
+.coin:nth-child(1) { animation-delay: 0s; }
+.coin:nth-child(2) { animation-delay: 0.3s; }
+.coin:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes coinPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Archive boxes animation */
+.archive-boxes {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  opacity: 0.5;
+}
+
+.archive-box {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  background-color: rgba(239, 68, 68, 0.3);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  animation: rotate 4s infinite linear;
+  margin: 2px;
+}
+
+.archive-box:nth-child(1) {
+  animation-delay: 0s;
+  bottom: 0;
+  right: 5px;
+}
+
+.archive-box:nth-child(2) {
+  animation-delay: 1s;
+  bottom: 5px;
+  right: 0;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Pencil lines animation */
+.pencil-lines {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  opacity: 0.5;
+}
+
+.pencil-line {
+  height: 2px;
+  width: 20px;
+  background-color: rgba(234, 88, 12, 0.5);
+  margin: 4px 0;
+  animation: drawLine 2s infinite ease-in-out;
+  transform-origin: left;
+}
+
+.pencil-line:nth-child(1) {
+  animation-delay: 0s;
+  width: 15px;
+}
+
+.pencil-line:nth-child(2) {
+  animation-delay: 0.3s;
+  width: 20px;
+}
+
+.pencil-line:nth-child(3) {
+  animation-delay: 0.6s;
+  width: 10px;
+}
+
+@keyframes drawLine {
+  0% { transform: scaleX(0.3); opacity: 0.3; }
+  50% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(0.3); opacity: 0.3; }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Card colors for product status */
+.stat-card.removed-card .stat-icon {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+}
+
+.stat-card.draft-card .stat-icon {
+  background-color: rgba(234, 88, 12, 0.1);
+  color: #EA580C;
+}
+
 .stat-card.orders-card::before {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%230d99ff"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/></svg>');
   animation: floatingItems 4s ease-in-out infinite;
@@ -1238,6 +1579,132 @@ body {
 
 .order-action:hover {
   opacity: 0.8;
+}
+
+/* Transaction Table Styles */
+.transaction-table-container {
+  margin-top: 0;
+  overflow-x: auto;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+.transactions-table th {
+  background-color: #f9fafb;
+  font-weight: 500;
+  text-align: left;
+  padding: 12px 16px;
+  color: #6b7280;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.transactions-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eaeaea;
+  color: #4b5563;
+  vertical-align: middle;
+}
+
+.transaction-id {
+  font-weight: 500;
+  color: #374151;
+}
+
+.transaction-type {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.transaction-type.sold {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+}
+
+.transaction-type.purchased {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #0d99ff;
+  color: white;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+/* Pagination Styles */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.transaction-count {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background-color: #F3F4F6;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.pagination-btn:hover:not(.active) {
+  background-color: #E5E7EB;
+}
+
+.pagination-btn.prev,
+.pagination-btn.next {
+  width: 32px;
+}
+
+/* Make the deposit button blue */
+#transactions-tab .dashboard-header-actions .btn-primary {
+  background-color: #0d99ff;
+  color: white;
+  border: none;
 }
 
 /* Button Styles */
