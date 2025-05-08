@@ -22,7 +22,7 @@ load_dotenv(dotenv_path)
 
 SECRET_KEY = os.getenv("SECRET_KEY", "defaultsecret")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 7 * 24 * 60))  # Default to 1 week (7 days * 24 hours * 60 minutes)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Update tokenUrl to match the app.py configuration
@@ -37,8 +37,11 @@ def verify_password(plain_password: str, hashed_password: str):
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     current_time = datetime.now(timezone.utc)
-    # Use exactly 30 minutes for token expiration
-    expire = current_time + timedelta(minutes=30)
+    if expires_delta:
+        expire = current_time + expires_delta
+    else:
+        # Use ACCESS_TOKEN_EXPIRE_MINUTES from environment variable
+        expire = current_time + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     # Store expiration as a UTC timestamp to avoid timezone confusion
     to_encode.update({"exp": expire.timestamp()})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM), expire
