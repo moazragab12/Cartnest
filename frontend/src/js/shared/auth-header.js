@@ -213,7 +213,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     else if (currentPath.includes('/product/') || currentPath.includes('\\product\\')) {
       basePath = '../../../public/resources/images/svg/';
     }
-    // Case 4: Any page under src/pages
+    // Case 4: Cart page
+    else if (currentPath.includes('/cart/') || currentPath.includes('\\cart\\')) {
+      basePath = '../../../public/resources/images/svg/';
+    }
+    // Case 5: Any page under src/pages
     else if (currentPath.includes('/src/pages/') || currentPath.includes('\\src\\pages\\')) {
       // Split by both forward and backward slashes to handle Windows paths
       const pathParts = currentPath.split(/[\/\\]/);
