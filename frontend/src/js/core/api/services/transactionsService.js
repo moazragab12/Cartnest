@@ -43,8 +43,37 @@ const getTransactionById = async (transactionId) => {
  * @returns {Promise<object>} Created transaction
  */
 const createTransaction = async (transactionData) => {
+    console.log("Transaction data received:", JSON.stringify(transactionData));
+    
+    if (!transactionData) {
+        throw new Error('Transaction data is required');
+    }
+    
+    if (transactionData.item_id === undefined || transactionData.item_id === null) {
+        throw new Error('Item ID is required for purchase transaction');
+    }
+    
+    // Convert item_id to number if it's a string but contains only digits
+    if (typeof transactionData.item_id === 'string' && /^\d+$/.test(transactionData.item_id)) {
+        transactionData.item_id = parseInt(transactionData.item_id, 10);
+    }
+    
+    // Ensure quantity is a number
+    if (typeof transactionData.quantity === 'string') {
+        transactionData.quantity = parseInt(transactionData.quantity, 10);
+    }
+    
+    // Default quantity to 1 if not provided or invalid
+    if (!transactionData.quantity || isNaN(transactionData.quantity)) {
+        transactionData.quantity = 1;
+    }
+    
     try {
-        return await apiClient.post(API_ENDPOINTS.transactions.purchase, transactionData);
+        // Ensure we're using the correct purchase endpoint
+        console.log(`Creating transaction with item_id: ${transactionData.item_id}, quantity: ${transactionData.quantity}`);
+        const result = await apiClient.post(API_ENDPOINTS.transactions.purchase, transactionData);
+        console.log("Transaction created successfully:", result);
+        return result;
     } catch (error) {
         console.error('Create transaction error:', error);
         throw error;

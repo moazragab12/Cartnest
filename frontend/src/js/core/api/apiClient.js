@@ -13,6 +13,9 @@ const API_BASE_URL = 'http://localhost:8000';
  * @throws {Error} If the response is not OK
  */
 const handleResponse = async (response) => {
+    // Clone the response before reading it to avoid "body already read" errors
+    const responseClone = response.clone();
+    
     try {
         const data = await response.json();
         
@@ -23,11 +26,21 @@ const handleResponse = async (response) => {
         
         return data;
     } catch (jsonError) {
-        // If JSON parsing fails, try to get text
+        // If JSON parsing fails, use the cloned response to get text
         if (!response.ok) {
-            const textResponse = await response.text();
-            throw new Error(textResponse || 'An error occurred');
+            try {
+                const textResponse = await responseClone.text();
+                throw new Error(textResponse || 'An error occurred');
+            } catch (textError) {
+                throw new Error('Failed to process response');
+            }
         }
+        
+        // For successful responses that aren't JSON, return empty object
+        if (response.ok) {
+            return {};
+        }
+        
         throw jsonError;
     }
 };

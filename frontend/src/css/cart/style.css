@@ -1328,3 +1328,91 @@ body.popup-open {
 .payment-message p {
   margin: 5px 0;
 }
+
+/* Login Error Overlay Styles */
+.login-error-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.login-error-container {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  animation: slideUp 0.4s ease;
+}
+
+.login-error-gif {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 15px;
+  border-radius: var(--border-radius-md);
+}
+
+.login-error-message h2 {
+  color: var(--error-color);
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.login-error-message p {
+  color: var(--black-color);
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.login-redirect-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  padding: 12px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: all 0.2s ease;
+}
+
+.login-redirect-button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(12, 152, 255, 0.3);
+}
+
+.error-close-button {
+  background-color: transparent;
+  color: var(--black-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: 12px 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.error-close-button:hover {
+  background-color: var(--background-color);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
