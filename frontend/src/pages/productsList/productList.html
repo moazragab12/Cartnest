@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="../../css/shared/product-card.css" />
     <link rel="stylesheet" href="../../css/shared/notifications.css" />
     <link rel="stylesheet" href="../../css/productList/style.css" />
+    <link rel="stylesheet" href="../../css/shared/search.css" />
     <!-- New animations CSS -->
     <link rel="stylesheet" href="../../css/productList/animations.css" />
     <link
@@ -64,6 +65,9 @@
     ></script>
     <!-- Auth Header JS - Added from index page for consistent behavior -->
     <script src="../../js/index/auth-header.js" defer></script>
+
+    <!-- Search Functionality JS -->
+    <script src="../../js/shared/search.js" defer></script>
   </head>
 
   <body>
@@ -97,11 +101,14 @@
         </a>
       </div>
       <div class="search-box">
-        <i class="fas fa-search search-icon"></i>
-        <input
-          type="text"
-          placeholder="Search essentials, groceries and more..."
-        />
+        <form id="search-form">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            placeholder="Search essentials, groceries and more..."
+          />
+        </form>
+        <!-- Search results will be dynamically added here -->
       </div>
       <div class="header-links">
         <a href="../auth/auth.html" class="sign-in-link" id="auth-link">

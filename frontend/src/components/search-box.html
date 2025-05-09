@@ -1,0 +1,34 @@
+<!-- Search Box Component - Include this snippet on any page -->
+<div class="search-box" id="global-search-box">
+  <form id="search-form" action="/search" method="GET">
+    <i class="fas fa-search search-icon"></i>
+    <input
+      type="text"
+      id="search-input"
+      name="q"
+      placeholder="Search essentials, groceries and more..."
+      autocomplete="off"
+    />
+  </form>
+
+  <!-- Search Results Container -->
+  <div class="search-results-container" id="search-results-container">
+    <!-- Results will be populated via JavaScript -->
+    <div class="search-loading" id="search-loading">
+      <div class="search-loading-spinner"></div>
+      <div>Searching...</div>
+    </div>
+    <ul class="search-results-list" id="search-results-list">
+      <!-- Search results will appear here -->
+    </ul>
+    <div class="no-results" id="search-no-results" style="display: none">
+      No products found. Try different keywords.
+    </div>
+    <div class="search-error" id="search-error" style="display: none">
+      Something went wrong. Please try again.
+    </div>
+    <div class="view-all-results" id="view-all-results" style="display: none">
+      <a href="/search" id="view-all-link">View all matching products</a>
+    </div>
+  </div>
+</div>
