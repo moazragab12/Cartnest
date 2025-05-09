@@ -1,6 +1,9 @@
 // filepath: d:\college\Senior 1\Spring 25\Parallel\Project\MarketPlace\frontend\src\js\dashboard\controllers\TransactionsController.js
 import { getTransactions, getAllItems, getAllUsers } from '../../../core/api/services/transactionsService.js';
 
+// Define API base URL for direct API calls
+const API_BASE_URL = 'http://localhost:8000/api/v0';
+
 /**
  * Controller for transactions functionality
  * Handles data fetching and processing for transaction data
@@ -180,8 +183,7 @@ class TransactionsController {
         const payload = JSON.parse(atob(base64));
         
         console.log('Token payload:', payload);
-        
-        // Look for username in the token payload
+          // Look for username in the token payload
         const username = payload.sub;
         console.log('Username from token:', username);
         
@@ -199,6 +201,11 @@ class TransactionsController {
         else if (username === 'Omaar') {
           this.currentUserId = 1;
           console.log('Current user is Omaar, using ID:', this.currentUserId);
+        }
+        // For Mamon (seen in the logs), use ID 5
+        else if (username === 'Mamon') {
+          this.currentUserId = 5;
+          console.log('Current user is Mamon, using ID:', this.currentUserId);
         }
         // Use our user map to look up the ID if available
         else if (username && this.usersMap.size > 0) {
@@ -439,13 +446,12 @@ class TransactionsController {
       console.log('Failed to load users from API');
     }
   }
-
   /**
    * Get item details by item ID
    * @param {number} itemId - The ID of the item to fetch
    * @returns {object} Item details
    */
-  getItemDetails(itemId) {
+  async getItemDetails(itemId) {
     // Make sure itemId is a number
     const id = Number(itemId);
     console.log(`Looking up item ${id} in map, exists: ${this.itemsMap.has(id)}`);
@@ -457,17 +463,57 @@ class TransactionsController {
       return item;
     }
     
-    console.warn(`Item ${id} not found in map`);
-    // Return a fallback if not found
-    return { name: `Item ${id}` };
+    console.warn(`Item ${id} not found in map, attempting to fetch from API`);
+    
+    // If item isn't in the map, we'll try to fetch it directly via API
+    try {
+      // We need to fetch item from API and add to map
+      const itemDetailsUrl = `${API_BASE_URL}/search/items/${id}`;
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        throw new Error('No authentication token available');
+      }
+      
+      const response = await fetch(itemDetailsUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch item details: ${response.status} ${response.statusText}`);
+      }
+      
+      const itemData = await response.json();
+      
+      // Extract the needed data from the response
+      const simplifiedItem = {
+        item_id: itemData.item_id,
+        name: itemData.name,
+        price: itemData.price,
+        category: itemData.category
+      };
+      
+      // Add to our map
+      this.itemsMap.set(id, simplifiedItem);
+      
+      return simplifiedItem;
+    } catch (error) {
+      console.error(`Error fetching item ${id} details:`, error);
+      
+      // Return a fallback if not found
+      return { item_id: id, name: `Item ${id}`, price: 0, category: 'Unknown' };
+    }
   }
-
   /**
    * Get user details by user ID
    * @param {number} userId - The ID of the user to fetch
    * @returns {object} User details
    */
-  getUserDetails(userId) {
+  async getUserDetails(userId) {
     // Make sure userId is a number
     const id = Number(userId);
     console.log(`Looking up user ${id} in map, exists: ${this.usersMap.has(id)}`);
@@ -481,11 +527,55 @@ class TransactionsController {
     
     console.warn(`User ${id} not found in map, attempting to fetch from API`);
     
-    // Return a placeholder while we try to fetch the user
-    // This will be shown temporarily until we get the actual data
-    return { username: `User ${id}` };
-  }
-
+    // If user isn't in the map, we'll try to fetch it directly via API
+    try {
+      // Use the cache if we've already tried to fetch this user
+      if (this.userCache.has(id)) {
+        return this.userCache.get(id);
+      }
+      
+      // We need to fetch user from API and add to map
+      const userDetailsUrl = `${API_BASE_URL}/search/users/${id}`;
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        throw new Error('No authentication token available');
+      }
+      
+      const response = await fetch(userDetailsUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch user details: ${response.status} ${response.statusText}`);
+      }
+      
+      const userData = await response.json();
+      
+      // Add to our maps
+      this.usersMap.set(id, userData);
+      this.userCache.set(id, userData);
+      
+      return userData;
+    } catch (error) {
+      console.error(`Error fetching user ${id} details:`, error);
+      
+      // Create a placeholder user with the ID
+      const placeholderUser = { 
+        user_id: id, 
+        username: `User ${id}` 
+      };
+      
+      // Cache this placeholder to avoid repeated failed API calls
+      this.userCache.set(id, placeholderUser);
+      
+      return placeholderUser;
+    }
+  }  
   /**
    * Render transactions in the table
    */
@@ -500,85 +590,103 @@ class TransactionsController {
     
     console.log(`Starting to render ${this.transactionData.transactions.length} transactions`);
     
-    // Get current user ID from auth token if not already set
-    if (!this.currentUserId) {
-      this.getCurrentUserId();
-      console.log('Retrieved current user ID:', this.currentUserId);
-    }
-    
     // Process each transaction and add to table
     for (const transaction of this.transactionData.transactions) {
-      // Convert IDs to numbers to ensure proper comparison
-      const buyerUserId = Number(transaction.buyer_user_id);
-      const sellerUserId = Number(transaction.seller_user_id);
-      const currentUserId = Number(this.currentUserId);
-      
-      console.log(`Processing transaction ${transaction.transaction_id} - buyer: ${buyerUserId}, seller: ${sellerUserId}, current user: ${currentUserId}`);
-      
-      // Determine if the current user is the buyer or seller
-      const isBuyer = buyerUserId === currentUserId;
-      const isSeller = sellerUserId === currentUserId;
-      
-      // Set transaction type based on user role
-      let transactionType = '';
-      let transactionTypeClass = '';
-      let otherUserId = null;
-      
-      if (isBuyer) {
-        transactionType = 'Purchased';
-        transactionTypeClass = 'purchased';
-        otherUserId = sellerUserId;
-        console.log(`Current user is buyer, other user (seller) is: ${otherUserId}`);
-      } else if (isSeller) {
-        transactionType = 'Sold';
-        transactionTypeClass = 'sold';
-        otherUserId = buyerUserId;
-        console.log(`Current user is seller, other user (buyer) is: ${otherUserId}`);
-      } else {
-        // Skip transactions that don't involve the current user
-        console.log(`Skipping transaction ${transaction.transaction_id} - not related to current user`);
-        continue;
+      try {
+        // Convert IDs to numbers for comparison
+        const buyerUserId = Number(transaction.buyer_user_id);
+        const sellerUserId = Number(transaction.seller_user_id);
+        
+        console.log(`Processing transaction ${transaction.transaction_id} - buyer: ${buyerUserId}, seller: ${sellerUserId}`);
+        
+        // Get current filter tab (all, sold, purchased)
+        const activeFilter = document.querySelector('.tab-item[data-transactiontab].active');
+        const filterType = activeFilter ? activeFilter.getAttribute('data-transactiontab') : 'all';
+          // Determine if the current user is the buyer or seller
+        const currentUserId = Number(this.currentUserId);
+        const isBuyer = buyerUserId === currentUserId;
+        const isSeller = sellerUserId === currentUserId;
+        
+        // Set transaction type based on user's role in the transaction
+        let transactionType = 'Sold';
+        let transactionTypeClass = 'sold';
+        
+        // If the current user is the buyer, it's a purchase
+        if (isBuyer) {
+          transactionType = 'Purchased';
+          transactionTypeClass = 'purchased';
+        }
+        
+        // Skip transactions based on current filter (only if filter is not "all")
+        if (filterType === 'sent' && !isSeller) {
+          // In "Sold" tab, only show transactions where user was seller
+          console.log(`Skipping transaction ${transaction.transaction_id} - filter is "sold" but user was not seller`);
+          continue;
+        }
+        if (filterType === 'received' && !isBuyer) {
+          // In "Purchased" tab, only show transactions where user was buyer
+          console.log(`Skipping transaction ${transaction.transaction_id} - filter is "purchased" but user was not buyer`);
+          continue;
+        }
+          // Get buyer and seller details
+        const [buyerDetails, sellerDetails] = await Promise.all([
+          this.getUserDetails(buyerUserId),
+          this.getUserDetails(sellerUserId)
+        ]);
+        
+        const buyerName = buyerDetails.username || `User ${buyerUserId}`;
+        const sellerName = sellerDetails.username || `User ${sellerUserId}`;
+        
+        // Show the counterparty in the User column:
+        // If I'm the buyer, show the seller; if I'm the seller, show the buyer
+        let displayedUser, displayedUserInitials;
+        if (isBuyer) {
+          // If I'm the buyer, show the seller
+          displayedUser = sellerName;
+          displayedUserInitials = this.getInitials(sellerName);
+        } else {
+          // If I'm the seller (or viewing all transactions), show the buyer
+          displayedUser = buyerName;
+          displayedUserInitials = this.getInitials(buyerName);
+        }
+        
+        // Get item details
+        const itemDetails = await this.getItemDetails(transaction.item_id);
+        const itemName = itemDetails.name || `Item ${transaction.item_id}`;
+        
+        // Format date
+        const transactionDate = new Date(transaction.transaction_time);
+        const formattedDate = transactionDate.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+        
+        // Create table row
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="transaction-id">#TRX-${transaction.transaction_id}</td>
+          <td>${formattedDate}</td>
+          <td>${transaction.item_id}</td>
+          <td>${itemName}</td>
+          <td><span class="transaction-type ${transactionTypeClass}">${transactionType}</span></td>
+          <td>
+            <div class="user-info">
+              <div class="user-avatar">${displayedUserInitials}</div>
+              <span>${displayedUser}</span>
+            </div>
+          </td>
+          <td>${transaction.quantity_purchased}</td>
+          <td>$${parseFloat(transaction.purchase_price).toFixed(2)}</td>
+          <td>$${parseFloat(transaction.total_amount).toFixed(2)}</td>
+        `;
+        
+        // Add the row to the table
+        this.transactionsTableBody.appendChild(row);
+      } catch (error) {
+        console.error(`Error processing transaction ${transaction.transaction_id}:`, error);
+        // Continue with the next transaction if there's an error
       }
-      
-      // Get item details from our mapping
-      const itemDetails = this.getItemDetails(transaction.item_id);
-      const itemName = itemDetails.name || `Item ${transaction.item_id}`;
-      
-      // Get other user details from our mapping
-      const otherUserDetails = this.getUserDetails(otherUserId);
-      const otherUserName = otherUserDetails.username || `User ${otherUserId}`;
-      console.log(`Other user details for transaction ${transaction.transaction_id}:`, otherUserDetails);
-      const otherUserInitials = this.getInitials(otherUserName);
-      
-      // Format date
-      const transactionDate = new Date(transaction.transaction_time);
-      const formattedDate = transactionDate.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-      
-      // Create table row
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td class="transaction-id">#TRX-${transaction.transaction_id}</td>
-        <td>${formattedDate}</td>
-        <td>${transaction.item_id}</td>
-        <td>${itemName}</td>
-        <td><span class="transaction-type ${transactionTypeClass}">${transactionType}</span></td>
-        <td>
-          <div class="user-info">
-            <div class="user-avatar">${otherUserInitials}</div>
-            <span>${otherUserName}</span>
-          </div>
-        </td>
-        <td>${transaction.quantity_purchased}</td>
-        <td>$${parseFloat(transaction.purchase_price).toFixed(2)}</td>
-        <td>$${parseFloat(transaction.total_amount).toFixed(2)}</td>
-      `;
-      
-      // Add the row to the table
-      this.transactionsTableBody.appendChild(row);
     }
     
     // Update transaction count
