@@ -76,7 +76,7 @@ const createCategoryCard = (category, index, usedGradients) => {
                 ${firstLetter}
             </div>
             <h3 class="category-title">${category.name}</h3>
-            <div class="category-count">items</div>
+            <div class="category-count"></div>
         </div>
         <div class="card-highlight"></div>
     `;

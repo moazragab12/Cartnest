@@ -400,12 +400,11 @@ function initAddProductForm() {
     // Get the form elements
     const addProductForm = document.getElementById('add-product-tab');
     if (!addProductForm) return;
-    
     const productNameInput = addProductForm.querySelector('input[placeholder="Enter product name"]');
     const productDescriptionInput = addProductForm.querySelector('textarea[placeholder="Enter detailed product description"]');
     const productPriceInput = addProductForm.querySelector('input[placeholder="0.00"]');
     const productQuantityInput = addProductForm.querySelector('input[placeholder="0"]');
-    const productCategorySelect = addProductForm.querySelector('select');
+    const productCategorySelect = addProductForm.querySelector('input[placeholder="Enter product category"]');
     const browseFilesBtn = document.getElementById('browse-files');
     const productImageInput = document.getElementById('product_image');
     
@@ -486,7 +485,7 @@ function initAddProductForm() {
             if (!formInputs.description) emptyFields.push('Product Description');
             if (!formInputs.price || isNaN(formInputs.price) || formInputs.price <= 0) emptyFields.push('Price');
             if (!formInputs.quantity || isNaN(formInputs.quantity) || formInputs.quantity < 0) emptyFields.push('Quantity');
-            if (!formInputs.category || formInputs.category === "Select a category") emptyFields.push('Category');
+            if (!formInputs.category) emptyFields.push('Category');
             
             // If any field is empty, show error and return
             if (emptyFields.length > 0) {
@@ -552,13 +551,12 @@ function initAddProductForm() {
             setTimeout(() => {
                 successToast.remove();
             }, 3000);
-            
-            // Reset form
+              // Reset form
             if (productNameInput) productNameInput.value = '';
             if (productDescriptionInput) productDescriptionInput.value = '';
             if (productPriceInput) productPriceInput.value = '';
             if (productQuantityInput) productQuantityInput.value = '';
-            if (productCategorySelect) productCategorySelect.selectedIndex = 0;
+            if (productCategorySelect) productCategorySelect.value = '';
             if (productImageInput) productImageInput.value = '';
             
             // Clear preview
@@ -667,18 +665,11 @@ function populateUpdateProductForm(product) {
     document.getElementById('update_product_description').value = product.description;
     document.getElementById('update_product_price').value = product.price;
     document.getElementById('update_product_quantity').value = product.quantity;
-    
-    // Set category
+      // Set category
     const categoryField = document.getElementById('update_product_category');
     if (categoryField) {
-        // Find and select the correct option
-        const options = categoryField.options;
-        for (let i = 0; i < options.length; i++) {
-            if (options[i].value.toLowerCase() === product.category.toLowerCase()) {
-                categoryField.selectedIndex = i;
-                break;
-            }
-        }
+        // Set the category value directly
+        categoryField.value = product.category;
     }
     
     // Set status
