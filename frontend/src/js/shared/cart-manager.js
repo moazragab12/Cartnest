@@ -542,8 +542,13 @@ function updateCartBadge(animate = false) {
   return cartManager.updateCartBadge(animate);
 }
 
+function getTotalQuantity() {
+  return cartManager.getTotalQuantity();
+}
+
 // Export both the singleton and the backwards compatibility functions
-export { cartManager, addToCart, getCart, updateCartBadge };
+export { cartManager, addToCart, getCart, updateCartBadge, getTotalQuantity };
 
 // Also add to window for non-module scripts
 window.cartManager = cartManager;
+window.getCartCount = getTotalQuantity; // For backward compatibility

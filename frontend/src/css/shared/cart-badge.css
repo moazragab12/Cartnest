@@ -1,0 +1,64 @@
+/* Cart Badge Styling */
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff3b30; /* Bright red for visibility */
+  color: white !important; /* Ensure text is always white */
+  font-size: 12px;
+  font-weight: 600;
+  height: 20px;
+  width: 20px;
+  min-width: 20px; /* Ensure consistent width */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(255, 59, 48, 0.5);
+  transform: scale(1);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  z-index: 5; /* Ensure badge appears above other elements */
+}
+
+/* Animation for new items added to cart */
+.cart-badge.animate {
+  animation: badgePulse 0.75s ease-out;
+}
+
+@keyframes badgePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+    box-shadow: 0 3px 8px rgba(255, 59, 48, 0.6);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Cart badge hover effect */
+.cart-link:hover .cart-badge {
+  background: #ff1f1f;
+  box-shadow: 0 3px 8px rgba(255, 59, 48, 0.7);
+}
+
+/* Badge glow effect for visual feedback */
+.cart-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: -1;
+  opacity: 0;
+}
+
+/* Badge glow animation */
+.cart-badge.animate::before {
+  animation: badgeGlow 0.6s ease-out;
+}

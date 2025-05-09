@@ -1,0 +1,108 @@
+/* SVG Icon fixes with maximum specificity to ensure they override any other styles */
+.header-links .logout-link .icon-svg,
+.dashboard-container ~ header .header-links .logout-link .icon-svg,
+.dashboard-header .header-links .logout-link .icon-svg,
+body .header .header-links .logout-link .icon-svg,
+.productsList .header .header-links .logout-link .icon-svg,
+.product-page .header .header-links .logout-link .icon-svg {
+  filter: brightness(0) invert(1) !important; /* Make it white by default like other icons */
+  width: 24px !important;
+  height: 24px !important;
+  transition: transform 0.3s ease, filter 0.3s ease !important;
+}
+
+.header-links .logout-link:hover .icon-svg,
+.dashboard-container ~ header .header-links .logout-link:hover .icon-svg,
+.dashboard-header .header-links .logout-link:hover .icon-svg,
+body .header .header-links .logout-link:hover .icon-svg,
+.productsList .header .header-links .logout-link:hover .icon-svg,
+.product-page .header .header-links .logout-link:hover .icon-svg {
+  filter: brightness(0) invert(0.6) !important; /* Grey hover effect */
+  transform: translateY(-2px) !important; /* Add slight upward animation */
+}
+
+/* General header icon styles with maximum specificity */
+.header-links a .icon-svg,
+.dashboard-container ~ header .header-links a .icon-svg,
+header.header .header-links a .icon-svg,
+body .header .header-links a .icon-svg,
+.productsList .header .header-links a .icon-svg,
+.product-page .header .header-links a .icon-svg {
+  filter: brightness(0) invert(1) !important; /* White by default */
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-block !important;
+  margin-right: 5px !important;
+  vertical-align: middle !important;
+}
+
+.header-links a:hover .icon-svg,
+.dashboard-container ~ header .header-links a:hover .icon-svg,
+header.header .header-links a:hover .icon-svg,
+body .header .header-links a:hover .icon-svg,
+.productsList .header .header-links a:hover .icon-svg,
+.product-page .header .header-links a:hover .icon-svg {
+  filter: brightness(0) invert(0.6) !important; /* Grey hover effect that keeps icons visible */
+  transform: translateY(-2px) !important;
+}
+
+/* Ensure cart link has position: relative for proper badge positioning */
+.productsList .header .cart-link,
+.product-page .header .cart-link,
+.cart-page .header .cart-link,
+.dashboard-header .cart-link,
+header.header .cart-link,
+body .header .cart-link {
+  position: relative !important;
+}
+
+/* Fix for cart badge across all pages - with higher specificity */
+.dashboard-header .cart-badge,
+.dashboard-container ~ header .cart-badge,
+header.header .cart-badge,
+.productsList .header .cart-badge,
+.product-page .header .cart-badge,
+.cart-page .header .cart-badge,
+body .header .cart-badge {
+  position: absolute !important;
+  top: -8px !important;
+  right: -8px !important;
+  background: #ff3b30 !important; 
+  color: white !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  height: 20px !important;
+  width: 20px !important;
+  min-width: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  z-index: 10 !important;
+  box-shadow: 0 2px 5px rgba(255, 59, 48, 0.5) !important;
+  transition: transform 0.3s ease !important;
+}
+
+/* Animation for cart badge across all pages */
+.dashboard-header .cart-badge.animate,
+.dashboard-container ~ header .cart-badge.animate,
+header.header .cart-badge.animate,
+.productsList .header .cart-badge.animate,
+.product-page .header .cart-badge.animate,
+.cart-page .header .cart-badge.animate,
+body .header .cart-badge.animate {
+  animation: badgePulse 0.75s ease-out !important;
+}
+
+@keyframes badgePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+    box-shadow: 0 3px 8px rgba(255, 59, 48, 0.6);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
