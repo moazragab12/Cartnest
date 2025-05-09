@@ -12,10 +12,13 @@
     <link rel="stylesheet" href="../../css/cart/style.css" />
     <link rel="stylesheet" href="../../css/cart/success-popup.css" />
     <link rel="stylesheet" href="../../css/shared/notifications.css" />
+    <link rel="stylesheet" href="../../css/shared/search.css" />
     <script type="module" src="../../js/cart/script.js" defer></script>
     <script type="module" src="../../js/cart/checkout.js" defer></script>
     <script src="../../js/shared/notifications.js" defer></script>
     <title>Shopping Cart | Shopify</title>
+    <!-- Search Functionality JS -->
+    <script src="../../js/shared/search.js" defer></script>
   </head>
   <body>
     <!-- Header -->
@@ -48,11 +51,14 @@
         </a>
       </div>
       <div class="search-box">
-        <i class="fas fa-search search-icon"></i>
-        <input
-          type="text"
-          placeholder="Search essentials, groceries and more..."
-        />
+        <form id="search-form">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            placeholder="Search essentials, groceries and more..."
+          />
+        </form>
+        <!-- Search results will be dynamically added here -->
       </div>
       <div class="header-links">
         <a href="./src/pages/Sign_in.html" class="sign-in-link">
