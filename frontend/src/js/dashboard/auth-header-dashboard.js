@@ -9,16 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('Dashboard header links not found');
       return;
     }
-    
-    // First check if any SVG icons have incorrect paths
+      // First check if any SVG icons have incorrect paths
     const iconImages = headerLinks.querySelectorAll('.icon-svg');
     iconImages.forEach(icon => {
       // Check if the image failed to load
       if (icon.complete && icon.naturalWidth === 0) {
         console.log('Found broken SVG icon, attempting to fix path:', icon.src);
-        // Try to fix the path
+        // Try to fix the path - use absolute path with /frontend prefix for consistency
         const fileName = icon.src.split('/').pop();
-        icon.src = `../../../public/resources/images/svg/${fileName}`;
+        icon.src = `/frontend/public/resources/images/svg/${fileName}`;
       }
       
       // Make sure the SVG icon is visible against the gradient background

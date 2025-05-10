@@ -179,11 +179,10 @@ function renderProductsTable(products) {
             statusText = 'Out of Stock';
         } else if (product.quantity <= 3 && product.status === 'for_sale') {
             statusClass = 'status-processing';
-            statusText = 'Low Stock';
-        }
+            statusText = 'Low Stock';        }
         
-        // Get image for product (using a placeholder for now)
-        const productImage = getProductImageByCategory(product.category);
+        // Get image for product using the product ID for consistent image selection
+        const productImage = getProductImageByCategory(product.category, product.item_id);
         
         // Create row HTML
         const row = document.createElement('tr');
@@ -223,18 +222,32 @@ function renderProductsTable(products) {
     }
 }
 
-// Helper function to get a product image based on category
-function getProductImageByCategory(category) {
-    const categoryMap = {
-        'electronics': '../../public/resources/images/iphone.png',
-        'fashion': '../../public/resources/images/Hoodie.jpg',
-        'home & kitchen': '../../public/resources/images/kitchen.jpg',
-        'beauty': '../../public/resources/images/beauty.jpg',
-        'groceries': '../../public/resources/images/groceries.jpg',
-        'fruits': '../../public/resources/images/fruit.jpg'
-    };
+// Helper function to get a product image based on product ID (for consistency with the rest of the app)
+function getProductImageByCategory(category, productId) {
+    // If product ID is provided, use it to determine the image (for consistency across the application)
+    if (productId) {
+        // Total number of available product thumbnail images (1 to 27)
+        const totalImages = 27;
+        
+        // Use product ID to get a consistent "random" selection
+        // Convert productId to a number and get a value between 1 and totalImages (inclusive)
+        const imageNumber = ((Number(productId) || 0) % totalImages) + 1;
+        
+        // Return the path to the image - use absolute path with /frontend prefix for consistency
+        return `/frontend/public/resources/images/products/${imageNumber}-thumbnail.jpg`;
+    }
     
-    return categoryMap[category.toLowerCase()] || '../../public/resources/images/product-placeholder.png';
+    // Fallback to category-based images if no product ID is provided
+    // Use absolute paths with /frontend prefix for consistency across the app
+    const categoryMap = {
+        'electronics': '/frontend/public/resources/images/iphone.png',
+        'fashion': '/frontend/public/resources/images/Hoodie.jpg',
+        'home & kitchen': '/frontend/public/resources/images/kitchen.jpg',
+        'beauty': '/frontend/public/resources/images/beauty.jpg',
+        'groceries': '/frontend/public/resources/images/groceries.jpg',
+        'fruits': '/frontend/public/resources/images/fruit.jpg'
+    };    
+    return categoryMap[category.toLowerCase()] || '/frontend/public/resources/images/product-placeholder.png';
 }
 
 // Function to update product counts in tabs and stats
@@ -685,10 +698,9 @@ function populateUpdateProductForm(product) {
         }
     }
     
-    // Set product image if available
-    const productImg = document.getElementById('update-product-img');
+    // Set product image if available    const productImg = document.getElementById('update-product-img');
     if (productImg) {
-        productImg.src = getProductImageByCategory(product.category);
+        productImg.src = getProductImageByCategory(product.category, product.item_id);
         productImg.alt = product.name;
     }
     
