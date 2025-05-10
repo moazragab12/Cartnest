@@ -15,14 +15,17 @@ document.addEventListener('DOMContentLoaded', function() {
   if (transactionsTab) {
     transactionsTab.addEventListener('click', function() {
       console.log('Transactions tab clicked');
+      // Reset the transactions controller to ensure fresh data
+      transactionsController.currentUserId = null;
       initializeTransactionsTab();
     });
   }
-  
-  // Check if we're already on the transactions tab
+    // Check if we're already on the transactions tab
   const isTransactionsTabActive = document.querySelector('#transactions-tab.active');
   if (isTransactionsTabActive) {
     console.log('Transactions tab is already active');
+    // Also reset the controller when initializing from an already active tab
+    transactionsController.currentUserId = null;
     initializeTransactionsTab();
   }
   
@@ -36,10 +39,18 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeTransactionsTab() {
   console.log('Initializing transactions tab');
   
-  // Delay the initialization slightly to ensure the tab is visible
+  // First, ensure any previous data is cleared from DOM
+  const transactionsTableBody = document.getElementById('transactions-table-body');
+  if (transactionsTableBody) {
+    transactionsTableBody.innerHTML = '<tr><td colspan="9" class="loading-message">Preparing transactions...</td></tr>';
+  }
+  
+  // Delay the initialization to ensure the tab is visible and DOM is ready
   setTimeout(() => {
+    // Force a fresh controller initialization
+    console.log('Starting controller initialization');
     transactionsController.init();
-  }, 100);
+  }, 300); // Increased delay to give more time for setup
 }
 
 /**

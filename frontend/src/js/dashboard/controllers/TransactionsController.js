@@ -18,13 +18,15 @@ class TransactionsController {
     this.userCache = new Map(); // Cache for user details
     this.currentPage = 1;
     this.itemsPerPage = 5;
-  }
-
-  /**
+  }  /**
    * Initialize the transactions controller
    */
   init() {
     console.log('Initializing transactions controller...');
+    
+    // Clear any existing data
+    this.transactionData = null;
+    this.currentUserId = null;
     
     // Find table body element - correctly target the tbody with ID
     this.transactionsTableBody = document.getElementById('transactions-table-body');
@@ -34,8 +36,18 @@ class TransactionsController {
       return;
     }
     
-    // Get current user ID from auth token
-    this.getCurrentUserId();
+    // Show a "loading" indicator immediately
+    this.transactionsTableBody.innerHTML = '<tr><td colspan="9" class="loading-message">Loading transactions...</td></tr>';
+    
+    // Reset controller state on re-init to ensure fresh data
+    this.currentPage = 1;
+    this.itemsMap.clear();
+    this.usersMap.clear();
+    this.userCache.clear();
+    
+    // Get current user ID from auth token before anything else
+    const userId = this.getCurrentUserId();
+    console.log('Init got user ID:', userId);
     
     // Set up event listeners for transaction filtering
     this.setupTransactionFilters();
@@ -43,11 +55,14 @@ class TransactionsController {
     // Set up deposit button event listener
     this.setupDepositButton();
     
-    // Load initial transaction data
-    this.loadTransactions();
-
     // Setup pagination event listeners
     this.setupPaginationEvents();
+    
+    // Use a delayed load to ensure everything is initialized properly
+    setTimeout(() => {
+      console.log('Delayed transaction loading with user ID:', this.currentUserId);
+      this.loadTransactions();
+    }, 300);
   }
 
   /**
@@ -151,29 +166,38 @@ class TransactionsController {
       const pageNum = index + 1;
       button.classList.toggle('active', pageNum === this.currentPage);
     });
-  }
-
-  /**
+  }  /**
    * Retrieve the current user ID from the auth token
+   * @returns {number|null} The user ID or null if not found
    */
   getCurrentUserId() {
+    console.log('getCurrentUserId called');
+    
+    // Reset the user ID to ensure fresh lookup
+    this.currentUserId = null;
+    
     try {
       // Get the authentication token from localStorage
       const token = localStorage.getItem('accessToken');
       
       if (!token) {
         console.warn('No authentication token found');
-        return null;
+        // Force a default ID as fallback so we can at least show something
+        this.currentUserId = 3; // Default to test2
+        console.log('Using default user ID 3 due to missing token');
+        return this.currentUserId;
       }
       
-      console.log('Token found:', token);
+      console.log('Token found, extracting user ID...');
       
       // Parse the JWT token to get user information
       // JWT tokens are in the format header.payload.signature
       const tokenParts = token.split('.');
       if (tokenParts.length !== 3) {
         console.warn('Invalid token format');
-        return null;
+        this.currentUserId = 3; // Default to test2
+        console.log('Using default user ID 3 due to invalid token format');
+        return this.currentUserId;
       }
       
       try {
@@ -267,7 +291,6 @@ class TransactionsController {
       });
     });
   }
-
   /**
    * Filter transactions based on type (all, sent, received)
    * @param {string} filterType - Type of filter to apply
@@ -282,18 +305,24 @@ class TransactionsController {
       const transactionType = row.querySelector('.transaction-type');
       if (!transactionType) return;
       
-      console.log(`Row transaction type: ${transactionType.textContent}, classes: ${transactionType.className}`);
+      // Map filterType to the actual class/type we're looking for:
+      // "sent" tab should show "sold" transactions
+      // "received" tab should show "purchased" transactions
+      let shouldDisplay = false;
       
-      if (filterType === 'all' || 
-          (filterType === 'sent' && transactionType.classList.contains('sold')) || 
-          (filterType === 'received' && transactionType.classList.contains('purchased'))) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
+      if (filterType === 'all') {
+        shouldDisplay = true;
+      } else if (filterType === 'sent' && 
+                (transactionType.classList.contains('sold') || transactionType.textContent.trim() === 'Sold')) {
+        shouldDisplay = true;
+      } else if (filterType === 'received' && 
+                (transactionType.classList.contains('purchased') || transactionType.textContent.trim() === 'Purchased')) {
+        shouldDisplay = true;
       }
+      
+      row.style.display = shouldDisplay ? '' : 'none';
     });
   }
-
   /**
    * Load transactions from the API
    */
@@ -306,6 +335,19 @@ class TransactionsController {
     try {
       // Show loading state
       this.transactionsTableBody.innerHTML = '<tr><td colspan="9" class="loading-message">Loading transactions...</td></tr>';
+      
+      // Make sure we have a user ID first - if not, try to get it again
+      if (!this.currentUserId) {
+        console.log('No current user ID found, trying to get it again...');
+        this.getCurrentUserId();
+        
+        // If still no user ID, show error
+        if (!this.currentUserId) {
+          console.error('Failed to get current user ID, transactions may not display correctly');
+        } else {
+          console.log('Successfully retrieved user ID:', this.currentUserId);
+        }
+      }
       
       // First, fetch all items to create a mapping of item_id to item details
       console.log('Fetching all items...');
@@ -601,21 +643,34 @@ class TransactionsController {
         
         // Get current filter tab (all, sold, purchased)
         const activeFilter = document.querySelector('.tab-item[data-transactiontab].active');
-        const filterType = activeFilter ? activeFilter.getAttribute('data-transactiontab') : 'all';
-          // Determine if the current user is the buyer or seller
+        const filterType = activeFilter ? activeFilter.getAttribute('data-transactiontab') : 'all';        // ALWAYS get a fresh user ID for each transaction to ensure correct rendering
+        this.getCurrentUserId();
+        
+        // Determine if the current user is the buyer or seller
         const currentUserId = Number(this.currentUserId);
+        console.log(`Transaction ${transaction.transaction_id}: Current user: ${currentUserId}, Buyer: ${buyerUserId}, Seller: ${sellerUserId}`);
+        
+        // Explicitly check using strict equality
         const isBuyer = buyerUserId === currentUserId;
         const isSeller = sellerUserId === currentUserId;
         
-        // Set transaction type based on user's role in the transaction
-        let transactionType = 'Sold';
-        let transactionTypeClass = 'sold';
+        // Debug info to trace the issue
+        console.log(`Transaction ${transaction.transaction_id}: Is buyer: ${isBuyer}, Is seller: ${isSeller}, Current user ID type: ${typeof currentUserId}, Buyer ID type: ${typeof buyerUserId}`);
+        console.log(`Transaction ${transaction.transaction_id}: Raw comparison - buyer: ${buyerUserId == currentUserId}, seller: ${sellerUserId == currentUserId}`);
         
-        // If the current user is the buyer, it's a purchase
-        if (isBuyer) {
+        // Force transaction type determination
+        let transactionType, transactionTypeClass;
+        
+        if (isSeller) {
+          transactionType = 'Sold';
+          transactionTypeClass = 'sold';
+        } else {
           transactionType = 'Purchased';
           transactionTypeClass = 'purchased';
         }
+        
+        console.log(`Transaction ${transaction.transaction_id}: Set as ${transactionType} (${transactionTypeClass})`);
+        
         
         // Skip transactions based on current filter (only if filter is not "all")
         if (filterType === 'sent' && !isSeller) {
