@@ -48,15 +48,13 @@ async function fetchProductsByCategory(category) {
  */
 function createProductCard(product) {
     const productCard = document.createElement('div');
-    productCard.className = 'product-card';
-    
-    // Create image
+    productCard.className = 'product-card';    // Create image
     const img = document.createElement('img');
-    img.src = product.image_url || '../../public/resources/images/bedroom.jpg';
+    img.src = product.image_url || '/frontend/public/resources/images/bedroom.jpg';
     img.alt = product.name;
     img.addEventListener('error', () => {
         // Fallback if image fails to load
-        img.src = '../../public/resources/images/bedroom.jpg';
+        img.src = '/frontend/public/resources/images/bedroom.jpg';
     });
     productCard.appendChild(img);
     

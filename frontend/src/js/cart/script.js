@@ -159,13 +159,25 @@ async function loadCart() {
         quantityOptions += `<option value="${i}" ${
           itemQuantity === i ? "selected" : ""
         }>${i}</option>`;
+      }      // Determine product image based on product ID for consistency across the app
+      let imageSrc;
+      if (itemData.item_id) {
+        // Total number of available product thumbnail images (1 to 27)
+        const totalImages = 27;
+        // Use product ID to get a consistent "random" selection
+        const imageNumber = ((Number(itemData.item_id) || 0) % totalImages) + 1;
+        // Use the same image generation logic as in other parts of the app
+        imageSrc = `/frontend/public/resources/images/products/${imageNumber}-thumbnail.jpg`;
+      } else {
+        // Fallback to category-based images if no product ID is available
+        imageSrc = `/frontend/public/resources/images/${
+          itemData.category ? itemData.category.toLowerCase() : "default"
+        }.png`;
       }
 
       // Fill in the item HTML
       itemElement.innerHTML = `
-  <img src="/public/resources/images/${
-    itemData.category ? itemData.category.toLowerCase() : "default"
-  }.png" alt="${itemData.name}" />
+  <img src="${imageSrc}" alt="${itemData.name}" onerror="this.src='/frontend/public/resources/images/products/smartwatch.jpg'" />
   <div class="item-details">
       <p><span><strong>${itemData.name || "Unnamed Product"}</strong></span></p>
       <p>${

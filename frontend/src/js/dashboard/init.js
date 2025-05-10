@@ -402,17 +402,29 @@ async function loadBestSellingProducts() {
                         const growthSign = growth >= 0 ? '+' : '';
 
                         const productRow = document.createElement('div');
-                        productRow.className = 'product-item';
-
-                        // Determine which image to use based on product name
-                        let imageSrc = '../../public/resources/images/iphone.png';
-
-                        if (product.product_name.toLowerCase().includes('watch')) {
-                            imageSrc = '../../public/resources/images/watch.png';
-                        } else if (product.product_name.toLowerCase().includes('hoodie') ||
-                            product.product_name.toLowerCase().includes('shirt') ||
-                            product.product_name.toLowerCase().includes('cloth')) {
-                            imageSrc = '../../public/resources/images/Hoodie.jpg';
+                        productRow.className = 'product-item';                        // Determine product image based on product ID for consistency across the app
+                        let imageSrc;
+                        
+                        if (product.product_id) {
+                            // Total number of available product thumbnail images (1 to 27)
+                            const totalImages = 27;
+                            
+                            // Use product ID to get a consistent "random" selection
+                            // Convert product_id to a number and get a value between 1 and totalImages (inclusive)
+                            const imageNumber = ((Number(product.product_id) || 0) % totalImages) + 1;
+                              // Use the same image generation logic as in other parts of the app
+                            imageSrc = `/frontend/public/resources/images/products/${imageNumber}-thumbnail.jpg`;                        } else {
+                            // Fallback to category-based images if no product ID is available
+                            imageSrc = '/frontend/public/resources/images/iphone.png';
+                            
+                            // Basic category detection from product name
+                            if (product.product_name.toLowerCase().includes('watch')) {
+                                imageSrc = '/frontend/public/resources/images/watch.png';
+                            } else if (product.product_name.toLowerCase().includes('hoodie') ||
+                                product.product_name.toLowerCase().includes('shirt') ||
+                                product.product_name.toLowerCase().includes('cloth')) {
+                                imageSrc = '/frontend/public/resources/images/Hoodie.jpg';
+                            }
                         }
 
                         productRow.innerHTML = `

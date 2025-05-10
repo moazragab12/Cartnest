@@ -200,33 +200,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('Current path:', currentPath);
     
     // Check for specific page patterns
-    
-    // Case 1: Dashboard page
+      // Case 1: Dashboard page
     if (currentPath.includes('/Dashboard/') || currentPath.includes('\\Dashboard\\')) {
-      basePath = '../../../public/resources/images/svg/';
+      basePath = '/frontend/public/resources/images/svg/';
     }
     // Case 2: Product list page
     else if (currentPath.includes('/productsList/') || currentPath.includes('\\productsList\\')) {
-      basePath = '../../../public/resources/images/svg/';
+      basePath = '/frontend/public/resources/images/svg/';
     }
     // Case 3: Product detail page 
     else if (currentPath.includes('/product/') || currentPath.includes('\\product\\')) {
-      basePath = '../../../public/resources/images/svg/';
+      basePath = '/frontend/public/resources/images/svg/';
     }
     // Case 4: Cart page
     else if (currentPath.includes('/cart/') || currentPath.includes('\\cart\\')) {
-      basePath = '../../../public/resources/images/svg/';
-    }
-    // Case 5: Any page under src/pages
+      basePath = '/frontend/public/resources/images/svg/';
+    }    // Case 5: Any page under src/pages
     else if (currentPath.includes('/src/pages/') || currentPath.includes('\\src\\pages\\')) {
       // Split by both forward and backward slashes to handle Windows paths
       const pathParts = currentPath.split(/[\/\\]/);
       const pagesIndex = pathParts.findIndex(part => part === 'pages');
       
       if (pagesIndex !== -1) {
-        // Count directories from pages to current location
-        const levelsDeep = pathParts.length - pagesIndex - 1;
-        basePath = '../'.repeat(levelsDeep) + '../../../public/resources/images/svg/';
+        // Use absolute path for consistency
+        basePath = '/frontend/public/resources/images/svg/';
       } else {
         // Fallback for other pages under src
         basePath = '../../../public/resources/images/svg/';

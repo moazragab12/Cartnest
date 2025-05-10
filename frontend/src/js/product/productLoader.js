@@ -183,8 +183,7 @@ class ProductLoader {
   }  /**
    * Update product images with consistently randomized product images
    * @param {number} itemId - The product ID used for deterministic image selection
-   */
-  updateProductImages(itemId) {
+   */  updateProductImages(itemId) {
     // Base path for the product thumbnail images
     const basePath = "/frontend/public/resources/images/products/";
     
@@ -208,10 +207,9 @@ class ProductLoader {
         if (mainImages[i]) {
           mainImages[i].src = imageUrl;
           mainImages[i].alt = `${this.productData.name} view ${i+1}`;
-          
-          // Add error handling for missing images
+            // Add error handling for missing images
           mainImages[i].onerror = function() {
-            this.src = `${basePath}smartwatch.jpg`;
+            this.src = `/frontend/public/resources/images/products/smartwatch.jpg`;
           };
         }
         
@@ -222,7 +220,7 @@ class ProductLoader {
           
           // Add error handling for missing images
           thumbnails[i].onerror = function() {
-            this.src = `${basePath}smartwatch.jpg`;
+            this.src = `/frontend/public/resources/images/products/smartwatch.jpg`;
           };
         }
       }

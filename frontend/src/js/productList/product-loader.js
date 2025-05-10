@@ -24,10 +24,9 @@ class ProductLoader {
       seller_id: null,
       min_quantity: null,
       featured: false,
-    };
-    this.pagination = {
+    };    this.pagination = {
       currentPage: 1,
-      itemsPerPage: 12, // Default items per page
+      itemsPerPage: 6, // Default items per page
       totalPages: 1,
     };
     this.productGrid = document.querySelector(".product-grid");
@@ -72,10 +71,13 @@ class ProductLoader {
       this.setupCartButtonListeners();
 
       // Setup feature box (Featured) listener
-      this.setupFeatureBoxListener();
-
-      // Setup items per page selector listener
+      this.setupFeatureBoxListener();      // Setup items per page selector listener
       this.setupItemsPerPageListener();
+      
+      // Set default value for items per page dropdown to match the default pagination setting
+      if (this.itemsPerPageSelect) {
+        this.itemsPerPageSelect.value = this.pagination.itemsPerPage.toString();
+      }
 
       // Setup pagination listeners
       this.setupPaginationListeners();
@@ -314,12 +316,14 @@ class ProductLoader {
     
     console.log("Updated URL with filters:", newURL);
   }
-  
-  /**
+    /**
    * Set up listener for items per page selector
    */
   setupItemsPerPageListener() {
     if (this.itemsPerPageSelect) {
+      // Set default value for items per page dropdown to match the default pagination setting
+      this.itemsPerPageSelect.value = this.pagination.itemsPerPage.toString();
+      
       this.itemsPerPageSelect.addEventListener("change", () => {
         // Update items per page
         this.pagination.itemsPerPage = parseInt(this.itemsPerPageSelect.value);
@@ -841,16 +845,13 @@ class ProductLoader {
     // Add category badge if product is new
     let categoryBadge = isNewProduct
       ? `<span class="category-badge">New</span>`
-      : "";
-
-    // Get static image based on product category or name
+      : "";    // Get static image based on product category or name
     // This will completely replace the dynamic image_url from API
     const imagePath = this.getStaticProductImage(product);    // Create the product card HTML
     card.innerHTML = `
       ${categoryBadge}
-      ${!inStock ? '<span class="out-of-stock-badge">Out of Stock</span>' : ""}
-      <div class="product-image">
-        <img src="${imagePath}" alt="${product.name}" loading="lazy" onerror="this.src='../../../public/resources/images/products/smartwatch.jpg'">
+      ${!inStock ? '<span class="out-of-stock-badge">Out of Stock</span>' : ""}      <div class="product-image">
+        <img src="${imagePath}" alt="${product.name}" loading="lazy" onerror="this.src='/frontend/public/resources/images/products/smartwatch.jpg'">
       </div>
       <div class="product-details">
         <div class="product-info">
@@ -925,10 +926,9 @@ class ProductLoader {
    * Get appropriate static image path for a product based on category or name
    * @param {Object} product - Product data from API
    * @returns {string} - Path to static image
-   */
-  getStaticProductImage(product) {
-    // Base path for images
-    const basePath = "../../../public/resources/images/";
+   */  getStaticProductImage(product) {
+    // Base path for images - use absolute path with /frontend prefix for consistency across the app
+    const basePath = "/frontend/public/resources/images/";
     
     // Total number of available product thumbnail images (1 to 27)
     const totalImages = 27;
@@ -943,7 +943,7 @@ class ProductLoader {
     return imagePath;
     
     // Note: In the actual HTML, we use onerror to handle missing images
-    // <img src="${imagePath}" alt="${product.name}" loading="lazy" onerror="this.src='${basePath}products/smartwatch.jpg'">
+    // <img src="${imagePath}" alt="${product.name}" loading="lazy" onerror="this.src='/frontend/public/resources/images/products/smartwatch.jpg'">
   }
 
   /**

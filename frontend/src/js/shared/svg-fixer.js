@@ -21,29 +21,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Determine the current page context
         const currentPath = window.location.pathname;
         let newPath;
-        
-        if (currentPath.includes('/Dashboard/') || currentPath.includes('\\Dashboard\\')) {
-          newPath = '../../../public/resources/images/svg/' + fileName;
+          if (currentPath.includes('/Dashboard/') || currentPath.includes('\\Dashboard\\')) {
+          newPath = '/frontend/public/resources/images/svg/' + fileName;
         } 
         else if (currentPath.includes('/productsList/') || currentPath.includes('\\productsList\\')) {
-          newPath = '../../../public/resources/images/svg/' + fileName;
+          newPath = '/frontend/public/resources/images/svg/' + fileName;
         }
         else if (currentPath.includes('/product/') || currentPath.includes('\\product\\')) {
-          newPath = '../../../public/resources/images/svg/' + fileName;
-        }
-        else if (currentPath.includes('/src/pages/')) {
+          newPath = '/frontend/public/resources/images/svg/' + fileName;
+        }        else if (currentPath.includes('/src/pages/')) {
           // Count the number of directories deep we are and generate path accordingly
           const pathParts = currentPath.split('/');
           const pagesIndex = pathParts.indexOf('pages');
           if (pagesIndex !== -1) {
             const levelsDeep = pathParts.length - pagesIndex - 1;
-            newPath = '../'.repeat(levelsDeep) + '../../../public/resources/images/svg/' + fileName;
+            newPath = '/frontend/public/resources/images/svg/' + fileName;
           } else {
-            newPath = '../../../public/resources/images/svg/' + fileName;
+            newPath = '/frontend/public/resources/images/svg/' + fileName;
           }
         }
         else {
-          newPath = './public/resources/images/svg/' + fileName;
+          newPath = '/frontend/public/resources/images/svg/' + fileName;
         }
         
         // Update the source

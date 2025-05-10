@@ -14,8 +14,7 @@ const API_BASE_URL = 'http://localhost:8000';
  */
 function createProductCardHTML(product) {  // Total number of available product thumbnail images (1 to 27)
   const totalImages = 27;
-  
-  // Use product ID to get a consistent "random" selection
+    // Use product ID to get a consistent "random" selection
   // Convert product.item_id to a number and get a value between 1 and totalImages (inclusive)
   const imageNumber = ((Number(product.item_id) || 0) % totalImages) + 1;
   const imageUrl = `/frontend/public/resources/images/products/${imageNumber}-thumbnail.jpg`;
