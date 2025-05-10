@@ -1182,7 +1182,7 @@ body {
 }
 
 .dashboard-container {
-  /* Increased from 1200px */
+  max-width: 1400px; /* Added explicit max-width */
   margin: 20px auto;
   /* Reduced top/bottom margin from 40px to 20px */
   display: grid;
@@ -1192,6 +1192,8 @@ body {
   /* Reduced gap from 30px to 20px */
   padding: 0 15px;
   /* Reduced side padding from 20px to 15px */
+  align-items: start; /* Ensures all grid items are aligned to the start */
+  min-height: calc(100vh - 120px); /* Gives the container minimum height */
 }
 
 /* Sidebar Styles */
@@ -1200,9 +1202,12 @@ body {
   border-radius: var(--border-radius-md);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   height: fit-content;
-  overflow: hidden;
+  max-height: calc(100vh - 40px); /* Limit maximum height to viewport minus margins */
+  overflow-y: auto; /* Allow scrolling if sidebar is too tall */
+  overflow-x: hidden;
   position: sticky;
-  top: 146px;
+  top: 20px; /* Changed from 146px to better stick near the top of the page */
+  align-self: start; /* Ensures the sidebar aligns at the start of its grid area */
 }
 
 .user-profile {
@@ -1355,6 +1360,8 @@ body {
   flex-direction: column;
   gap: 20px;
   /* Reduced from 30px */
+  height: 100%;
+  min-height: 50vh; /* Ensures minimum height for content area */
 }
 
 .dashboard-header {
@@ -2020,22 +2027,25 @@ body {
 @media (max-width: 991px) {
   .dashboard-container {
     grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr; /* Added explicit row template */
   }
-
   .dashboard-sidebar {
-    position: static;
+    position: relative; /* Changed from static to relative */
+    width: 100%; /* Make sidebar full width on small screens */
     margin-bottom: 20px;
     /* Reduced from 30px */
+    top: 0; /* Reset sticky position on mobile */
+    border-radius: 8px; /* Ensure consistent border radius */
   }
 
   .user-profile {
     padding: 16px;
     /* Reduced from 20px */
   }
-
   .sidebar-nav {
     display: flex;
-    overflow-x: auto;
+    flex-direction: column; /* Keep vertical orientation even on mobile */
+    overflow-x: visible; /* Prevents horizontal scrolling */
     padding: 0;
   }
 
@@ -2055,6 +2065,29 @@ body {
 
   .account-settings-section {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Medium screen breakpoint for tablets */
+@media (min-width: 768px) and (max-width: 991px) {
+  .dashboard-container {
+    grid-template-columns: 200px 1fr; /* Keep two-column layout on tablets */
+    gap: 15px;
+  }
+  
+  .dashboard-sidebar {
+    position: sticky;
+    top: 20px;
+    width: auto;
+  }
+  
+  .user-profile {
+    padding: 15px;
+  }
+  
+  .profile-image img {
+    width: 60px;
+    height: 60px;
   }
 }
 

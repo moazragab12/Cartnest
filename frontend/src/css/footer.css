@@ -2,9 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap');
 
 /* ====================================
-   FOOTER - NEW SHOPIFY STYLE
+   FOOTER - NEW Cartnest STYLE
    ==================================== */
-.shopify-footer {
+.Cartnest-footer {
   background-color: #2d3436;
   color: #ffffff;
   width: 100vw;
@@ -229,7 +229,7 @@
 }
 
 /* Make sure the footer stays at the bottom */
-.shopify-footer {
+.Cartnest-footer {
   margin-top: auto;
 }
 

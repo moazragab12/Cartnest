@@ -104,7 +104,7 @@ class ProductLoader {
     if (!this.productData) return;
 
     // Update page title
-    document.title = `${this.productData.name} - Shopify`;
+    document.title = `${this.productData.name} - Cartnest`;
 
     // Update product title
     const productTitle = document.querySelector('.product-title');

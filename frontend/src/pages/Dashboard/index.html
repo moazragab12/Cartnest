@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Dashboard | Shopify</title>
+    <title>User Dashboard | Cartnest</title>
     <!-- CSS Files -->
     <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="../../css/shared/cart-badge.css" />
     <link rel="stylesheet" href="../../css/shared/header-fixes.css" />
     <link rel="stylesheet" href="../../css/shared/notifications.css" />
+    <link rel="stylesheet" href="../../css/dashboard/seller-fix.css" />
     <script src="../../js/shared/search.js" defer></script>
     <script src="../../js/shared/auth-header.js" defer></script>
     <script src="../../js/dashboard/auth-header-dashboard.js" defer></script>
@@ -52,7 +53,7 @@
                 />
               </svg>
             </div>
-            <h1 class="logo">Shopify</h1>
+            <h1 class="logo">Cartnest</h1>
           </div>
         </a>
       </div>
@@ -89,7 +90,7 @@
     </header>
 
     <!-- Dashboard Main Content -->
-    <div class="dashboard-container">
+    <div class="dashboard-container" style="width: 100%">
       <!-- Sidebar -->
       <div class="dashboard-sidebar">
         <div class="user-profile">
@@ -197,7 +198,11 @@
       <!-- Dashboard Content -->
       <div class="dashboard-content">
         <!-- Dashboard Tab -->
-        <div class="content-section active" id="dashboard-tab">
+        <div
+          class="content-section active"
+          id="dashboard-tab"
+          style="overflow-x: hidden"
+        >
           <div class="dashboard-header">
             <h2 class="dashboard-title">Dashboard</h2>
             <div class="dashboard-header-actions">
@@ -547,9 +552,8 @@
             </div>
           </div>
         </div>
-
         <!-- Orders Tab -->
-        <div class="content-section" id="orders-tab">
+        <div class="content-section" id="orders-tab" style="overflow-x: hidden">
           <div class="dashboard-header">
             <h2 class="dashboard-title">My Orders</h2>
             <div class="dashboard-header-actions"></div>
@@ -608,9 +612,12 @@
             </div>
           </div>
         </div>
-
         <!-- Transactions Tab -->
-        <div class="content-section" id="transactions-tab">
+        <div
+          class="content-section"
+          id="transactions-tab"
+          style="overflow-x: hidden"
+        >
           <div class="dashboard-header">
             <h2 class="dashboard-title">Transactions</h2>
             <div class="dashboard-header-actions">
@@ -808,23 +815,7 @@
                   </tr>
                 </thead>
                 <tbody id="transactions-table-body">
-                  <tr>
-                    <td class="transaction-id">#TRX-9854</td>
-                    <td>May 3, 2025</td>
-                    <td>105</td>
-                    <td>Smart Watch</td>
-                    <td><span class="transaction-type sold">Sold</span></td>
-                    <td>
-                      <div class="user-info">
-                        <div class="user-avatar">EM</div>
-                        <span>Emily Martinez</span>
-                      </div>
-                    </td>
-                    <td>1</td>
-                    <td>$150.00</td>
-                    <td>$150.00</td>
-                  </tr>
-                  <!-- The rest of the static rows will be replaced by dynamic content -->
+                  <!-- Transaction rows will be dynamically populated by JavaScript -->
                 </tbody>
               </table>
               <div class="pagination-container">
@@ -845,7 +836,11 @@
           </div>
         </div>
         <!-- Seller Dashboard Tab -->
-        <div class="content-section" id="seller-dashboard-tab">
+        <div
+          class="content-section"
+          id="seller-dashboard-tab"
+          style="overflow-x: hidden"
+        >
           <div class="dashboard-header">
             <h2 class="dashboard-title">Seller Dashboard</h2>
             <div class="dashboard-header-actions">
@@ -862,7 +857,7 @@
           </div>
 
           <!-- Seller Stats -->
-          <div class="stats-grid">
+          <div class="stats-grid" style="max-width: 100%">
             <div class="stat-card products-card">
               <div class="stat-icon blue">
                 <i class="fas fa-box"></i>
@@ -1038,9 +1033,12 @@
             </div>
           </div>
         </div>
-
         <!-- My Products Tab -->
-        <div class="content-section" id="products-tab">
+        <div
+          class="content-section"
+          id="products-tab"
+          style="overflow-x: hidden"
+        >
           <div class="dashboard-header">
             <h2 class="dashboard-title">My Products</h2>
             <div class="dashboard-header-actions">
@@ -1162,9 +1160,12 @@
             </div>
           </div>
         </div>
-
         <!-- Add Product Tab -->
-        <div class="content-section" id="add-product-tab">
+        <div
+          class="content-section"
+          id="add-product-tab"
+          style="overflow-x: hidden"
+        >
           <div class="dashboard-header">
             <h2 class="dashboard-title">Add New Product</h2>
             <div class="dashboard-header-actions">
@@ -1247,7 +1248,8 @@
                           required
                         />
                       </div>
-                    </div>                    <div class="form-group">
+                    </div>
+                    <div class="form-group">
                       <label class="form-label" for="product_category"
                         >Category</label
                       >
@@ -1423,7 +1425,8 @@
                           required
                         />
                       </div>
-                    </div>                    <div class="form-group">
+                    </div>
+                    <div class="form-group">
                       <label class="form-label" for="update_product_category"
                         >Category</label
                       >
@@ -1570,9 +1573,12 @@
             </div>
           </div>
         </div>
-
         <!-- Profile Tab -->
-        <div class="content-section" id="profile-tab">
+        <div
+          class="content-section"
+          id="profile-tab"
+          style="overflow-x: hidden"
+        >
           <div class="dashboard-header">
             <h2 class="dashboard-title">My Profile</h2>
           </div>
@@ -1693,9 +1699,12 @@
             </div>
           </div>
         </div>
-
         <!-- Addresses Tab -->
-        <div class="content-section" id="address-tab">
+        <div
+          class="content-section"
+          id="address-tab"
+          style="overflow-x: hidden"
+        >
           <div class="dashboard-header">
             <h2 class="dashboard-title">My Addresses</h2>
             <div class="dashboard-header-actions">
@@ -1823,9 +1832,12 @@
             </div>
           </div>
         </div>
-
         <!-- Payment Methods Tab -->
-        <div class="content-section" id="payment-tab">
+        <div
+          class="content-section"
+          id="payment-tab"
+          style="overflow-x: hidden"
+        >
           <div class="dashboard-header">
             <h2 class="dashboard-title">Payment Methods</h2>
             <div class="dashboard-header-actions">
@@ -1984,9 +1996,12 @@
             </div>
           </div>
         </div>
-
         <!-- Security Tab -->
-        <div class="content-section" id="security-tab">
+        <div
+          class="content-section"
+          id="security-tab"
+          style="overflow-x: hidden"
+        >
           <div class="dashboard-header">
             <h2 class="dashboard-title">Security Settings</h2>
           </div>

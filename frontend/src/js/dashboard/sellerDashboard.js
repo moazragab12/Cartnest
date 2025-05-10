@@ -254,7 +254,7 @@ async function fetchProductStatusCounts() {
         
         // Set all cards to error state
         Object.values(cards).forEach(card => {
-          if (card) card.textContent = 'Error';
+          if (card) card.textContent = '0';
         });
       }
     }
