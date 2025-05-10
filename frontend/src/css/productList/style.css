@@ -87,47 +87,25 @@ a {
   }
 }
 
-/* Enhanced sidebar with better scrolling behavior and cleaner design */
+/* Sidebar styles are now managed in sidebar-filters.css */
 .sidebar {
-  width: 280px;
-  padding: 1.5rem;
+  /* Setting these properties to allow sidebar-filters.css to control them */
+  width: var(--sidebar-width, 340px);
+  padding: 2rem;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  border-radius: 12px;
+  border-radius: var(--sidebar-border-radius, 16px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
   position: sticky;
-  top: 90px;
-  /* Start without scrollbar, will be dynamic via JS */
-  max-height: fit-content;
-  overflow-y: hidden;
-  overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: #0d99ff #f1f5f9;
-  border-left: 3px solid #0d99ff;
+  top: 100px;
+  height: auto;
+  overflow: visible;
+  border-left: 4px solid var(--sidebar-accent, #0d99ff);
   transition: all 0.3s ease;
-
-  /* Custom scrollbar for webkit browsers */
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #0d99ff;
-    border-radius: 10px;
-  }
 }
 
-/* When sidebar needs scrolling (class added via JS) */
-.sidebar.needs-scroll {
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
-}
+/* Removing scrollbar classes - no longer needed */
 
 /* Remove distracting animated wave effect */
 .sidebar::after {
@@ -371,21 +349,21 @@ summary {
 }
 
 details {
-  margin-bottom: 1.2rem;
+  margin-bottom: 2rem;
   transition: all 0.3s ease;
 }
 
 /* Enhanced summary with smooth transition and hover effect */
 summary {
-  padding: 0.7rem 0.5rem;
+  padding: 1rem 0.75rem;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1rem;
   cursor: pointer;
   color: #2d3748;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 6px;
+  border-radius: 8px;
   transition: all 0.3s ease;
   position: relative;
   background-color: rgba(255, 255, 255, 0.6);
@@ -393,7 +371,7 @@ summary {
 
 summary:hover {
   background-color: rgba(13, 153, 255, 0.05);
-  padding-left: 0.8rem;
+  padding-left: 1rem;
 }
 
 summary::after {
@@ -1289,11 +1267,11 @@ input[type="checkbox"]:checked {
 
 /* Animation for new linkable cards */
 @keyframes cardAppear {
-  from { 
+  from {
     opacity: 0;
     transform: translateY(10px);
   }
-  to { 
+  to {
     opacity: 1;
     transform: translateY(0);
   }

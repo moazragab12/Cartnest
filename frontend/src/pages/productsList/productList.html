@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="../../css/shared/header-fixes.css" />
     <!-- New animations CSS -->
     <link rel="stylesheet" href="../../css/productList/animations.css" />
+    <!-- New sidebar filters CSS -->
+    <link rel="stylesheet" href="../../css/productList/sidebar-filters.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -162,7 +164,20 @@
     </nav>
     <main class="container">
       <aside class="sidebar">
-        <details id="category-details">
+        <div class="status">
+          <div class="status-header">
+            <div class="status-dot"></div>
+            <span>Status</span>
+          </div>
+          <div class="status-text">
+            <button class="btn btn-sm">Sale</button>
+            Same day delivery
+          </div>
+        </div>
+
+        <hr />
+
+        <details id="category-details" open>
           <summary>Category</summary>
           <ul id="category-list">
             <li class="loading-categories">
@@ -172,8 +187,10 @@
           </ul>
           <a class="see-all">See all</a>
         </details>
+
         <hr />
-        <details>
+
+        <details open>
           <summary>Price range</summary>
           <div class="price-range-filter">
             <div class="price-inputs">
@@ -190,37 +207,87 @@
             <button class="apply-btn">Apply</button>
           </div>
         </details>
+
         <hr />
-        <details>
-          <summary>Brands</summary>
+        <details open>
+          <summary>Brand</summary>
           <ul>
             <li>
-              <input type="checkbox" id="samsung" />
-              <label for="samsung">Samsung</label>
-            </li>
-            <li>
               <input type="checkbox" id="apple" />
-              <label for="apple">Apple</label>
+              <label for="apple">Apple <span class="count">99</span></label>
             </li>
             <li>
-              <input type="checkbox" id="huawei" />
-              <label for="huawei">Huawei</label>
-            </li>
-            <li>
-              <input type="checkbox" id="poco" />
-              <label for="poco">Poco</label>
-            </li>
-            <li>
-              <input type="checkbox" id="lenovo" />
-              <label for="lenovo">Lenovo</label>
-            </li>
-            <li>
-              <input type="checkbox" id="sony" />
-              <label for="sony">Sony</label>
+              <input type="checkbox" id="samsung" />
+              <label for="samsung">Samsung <span class="count">99</span></label>
             </li>
             <li>
               <input type="checkbox" id="xiaomi" />
-              <label for="xiaomi">Xiaomi</label>
+              <label for="xiaomi">Xiaomi <span class="count">99</span></label>
+            </li>
+            <li>
+              <input type="checkbox" id="oppo" />
+              <label for="oppo">Oppo <span class="count">99</span></label>
+            </li>
+            <li>
+              <input type="checkbox" id="poco" />
+              <label for="poco">Poco <span class="count">99</span></label>
+            </li>
+            <li>
+              <input type="checkbox" id="lenovo" />
+              <label for="lenovo">Lenovo <span class="count">99</span></label>
+            </li>
+            <li>
+              <input type="checkbox" id="sony" />
+              <label for="sony">Sony <span class="count">99</span></label>
+            </li>
+          </ul>
+          <a class="see-all">See all</a>
+        </details>
+        <hr />
+        <details>
+          <summary>Size</summary>
+          <ul>
+            <li>
+              <input type="checkbox" id="size-2-7" />
+              <label for="size-2-7"
+                >2.7 inch <span class="count">99</span></label
+              >
+            </li>
+            <li>
+              <input type="checkbox" id="size-3-0" />
+              <label for="size-3-0"
+                >3.0 inch <span class="count">99</span></label
+              >
+            </li>
+            <li>
+              <input type="checkbox" id="size-4-0" />
+              <label for="size-4-0"
+                >4.0 inch <span class="count">99</span></label
+              >
+            </li>
+            <li>
+              <input type="checkbox" id="size-4-3" />
+              <label for="size-4-3"
+                >4.3 inch <span class="count">99</span></label
+              >
+            </li>
+            <li>
+              <input type="checkbox" id="size-4-7" />
+              <label for="size-4-7"
+                >4.7 inch <span class="count">99</span></label
+              >
+            </li>
+            <li>
+              <input type="checkbox" id="size-5-0" />
+              <label for="size-5-0"
+                >5.0 inch <span class="count">99</span></label
+              >
+            </li>
+            <li>
+              <input type="checkbox" id="size-5-5" />
+              <label for="size-5-5"
+                >5.5 inch & above <span class="count">99</span></label
+              >
             </li>
           </ul>
           <a class="see-all">See all</a>
@@ -228,34 +295,43 @@
         <hr />
 
         <details>
-          <summary>Features</summary>
-          <ul>
+          <summary>Color</summary>
+          <ul class="color-list">
             <li>
-              <input type="checkbox" id="metallic" />
-              <label for="metallic">Metallic</label>
+              <input type="checkbox" id="color-green" />
+              <label for="color-green">
+                <span class="color-dot" style="background-color: green"></span>
+                Green <span class="count">99</span>
+              </label>
             </li>
             <li>
-              <input type="checkbox" id="plastic-cover" />
-              <label for="plastic-cover">Plastic cover</label>
+              <input type="checkbox" id="color-red" />
+              <label for="color-red">
+                <span
+                  class="color-dot"
+                  style="background-color: #ff3333"
+                ></span>
+                Coral Red <span class="count">99</span>
+              </label>
             </li>
             <li>
-              <input type="checkbox" id="ram-8gb" />
-              <label for="ram-8gb">8GB Ram</label>
+              <input type="checkbox" id="color-lightblue" />
+              <label for="color-lightblue">
+                <span
+                  class="color-dot"
+                  style="background-color: #0d99ff"
+                ></span>
+                Light Blue <span class="count">99</span>
+              </label>
             </li>
             <li>
-              <input type="checkbox" id="super-power" />
-              <label for="super-power">Super power</label>
-            </li>
-            <li>
-              <input type="checkbox" id="large-memory" />
-              <label for="large-memory">Large Memory</label>
-            </li>
-            <li>
-              <input type="checkbox" id="waterproof" />
-              <label for="waterproof">Waterproof</label>
+              <input type="checkbox" id="color-black" />
+              <label for="color-black">
+                <span class="color-dot" style="background-color: black"></span>
+                Black <span class="count">99</span>
+              </label>
             </li>
           </ul>
-          <a class="see-all">See all</a>
         </details>
 
         <hr />
@@ -264,14 +340,18 @@
           <summary>Condition</summary>
           <ul>
             <li>
-              <input type="checkbox" id="new" /> <label for="new">New</label>
+              <input type="checkbox" id="new" />
+              <label for="new">New <span class="count">99</span></label>
             </li>
             <li>
               <input type="checkbox" id="refurbished" />
-              <label for="refurbished">Refurbished</label>
+              <label for="refurbished"
+                >Refurbished <span class="count">99</span></label
+              >
             </li>
             <li>
-              <input type="checkbox" id="used" /> <label for="used">Used</label>
+              <input type="checkbox" id="used" />
+              <label for="used">Used <span class="count">99</span></label>
             </li>
           </ul>
         </details>

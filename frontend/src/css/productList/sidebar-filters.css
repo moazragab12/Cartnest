@@ -1,0 +1,718 @@
+/**
+ * Modern Sidebar Filters
+ * A clean, accessible and modern sidebar implementation
+ */
+
+/* Sidebar container */
+.sidebar {
+  --sidebar-width: 350px;
+  --sidebar-accent: #0d99ff;
+  --sidebar-background: #ffffff;
+  --sidebar-text: #1e293b;
+  --sidebar-text-secondary: #64748b;
+  --sidebar-border-radius: 8px;
+
+  width: var(--sidebar-width);
+  padding: 2rem;
+  background-color: var(--sidebar-background);
+  border-radius: var(--sidebar-border-radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  position: sticky;
+  top: 100px;
+  height: auto;
+  /* Completely remove scrolling capability */
+  overflow: visible;
+  border-left: 12px solid var(--sidebar-accent);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10; /* Ensure sidebar appears above other elements */
+  margin-right: 1.5rem;
+}
+
+/* No scrollbar styles since scrollbar has been removed */
+
+/* Filter section styles */
+details {
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  overflow: visible;
+  transition: all 0.3s ease;
+}
+
+/* Clean, accessible summary element */
+summary {
+  padding: 1rem 0.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--sidebar-text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  user-select: none;
+
+  /* Remove default focus outline and replace with custom styling */
+  outline: none;
+}
+
+/* Accessible focus states */
+summary:focus-visible {
+  box-shadow: 0 0 0 2px var(--sidebar-background),
+    0 0 0 4px var(--sidebar-accent);
+}
+
+summary:hover {
+  color: var(--sidebar-accent);
+}
+
+/* Modern, minimal chevron icon with fixed positioning */
+summary::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #94a3b8;
+  border-bottom: 2px solid #94a3b8;
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  margin-top: -7px;
+}
+
+summary:hover::after {
+  border-color: var(--sidebar-accent);
+}
+
+details[open] summary::after {
+  transform: rotate(-135deg);
+  margin-top: -3px;
+}
+
+/* Clean minimal divider */
+hr {
+  border: none;
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 1.5rem 0;
+  opacity: 0.6;
+}
+
+/* Category list with clean styling */
+#category-list {
+  list-style-type: none;
+  padding: 0.5rem 0;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#category-list li {
+  padding: 0.625rem 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--sidebar-text-secondary);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+#category-list li:hover {
+  background-color: rgba(13, 153, 255, 0.04);
+  color: var(--sidebar-text);
+}
+
+/* Clean "See all" link with subtle animation */
+.see-all {
+  display: flex;
+  align-items: center;
+  color: var(--sidebar-accent);
+  font-size: 0.85rem;
+  padding: 0.625rem;
+  margin: 0.5rem 0 0.25rem 0;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.see-all::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  margin-left: 0.375rem;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z' clip-rule='evenodd' /%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z' clip-rule='evenodd' /%3E%3C/svg%3E");
+  mask-size: cover;
+  -webkit-mask-size: cover;
+  background-color: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.see-all:hover {
+  color: var(--sidebar-accent);
+  background-color: rgba(13, 153, 255, 0.05);
+}
+
+.see-all:hover::after {
+  transform: translateX(3px);
+}
+
+/* Accessible focus state */
+.see-all:focus-visible {
+  outline: 2px solid var(--sidebar-accent);
+  outline-offset: 1px;
+}
+
+/* Price range filter with clean design */
+.price-range-filter {
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.price-inputs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+/* Form field container */
+.field {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+}
+
+/* Field label */
+.field span {
+  font-size: 0.8rem;
+  color: var(--sidebar-text-secondary);
+  margin-bottom: 0.375rem;
+  font-weight: 500;
+}
+
+/* Input styling */
+.field input {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.625rem;
+  font-size: 0.9rem;
+  color: var(--sidebar-text);
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+
+  /* Remove number input spinners */
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Remove spinner buttons in all browsers */
+.field input::-webkit-outer-spin-button,
+.field input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+/* Focus states for accessibility */
+.field input:focus {
+  outline: none;
+  border-color: var(--sidebar-accent);
+  box-shadow: 0 0 0 2px rgba(13, 153, 255, 0.1);
+}
+
+.field input:hover:not(:focus) {
+  border-color: #cbd5e1;
+}
+
+/* Simple dash separator */
+.separator {
+  margin: 0 6px;
+  color: var(--sidebar-text-secondary);
+  font-size: 0.9rem;
+  align-self: flex-end;
+  margin-bottom: 10px;
+}
+
+/* Clean, accessible button */
+.apply-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--sidebar-accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: center;
+}
+
+.apply-btn:hover {
+  background-color: #0081db;
+  box-shadow: 0 2px 5px rgba(13, 153, 255, 0.2);
+}
+
+.apply-btn:active {
+  transform: translateY(1px);
+}
+
+/* Accessible focus state */
+.apply-btn:focus-visible {
+  outline: 2px solid #0081db;
+  outline-offset: 2px;
+}
+
+/* Modern, accessible checkbox styling */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 4px;
+  margin-right: 10px;
+  position: relative;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+/* Checked state */
+input[type="checkbox"]:checked {
+  background-color: var(--sidebar-accent);
+  border-color: var(--sidebar-accent);
+}
+
+/* Checkmark */
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Accessible focus states */
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--sidebar-accent);
+  outline-offset: 1px;
+}
+
+/* Hover state */
+input[type="checkbox"]:hover:not(:checked) {
+  border-color: var(--sidebar-accent);
+}
+
+/* Brand list and Features list */
+ul {
+  list-style-type: none;
+  padding: 0.5rem 0;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+ul li {
+  padding: 0.55rem 0.8rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #4b5563;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+ul li:hover {
+  background-color: rgba(13, 153, 255, 0.08);
+  transform: translateX(3px);
+}
+
+ul li label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  font-weight: 500;
+  user-select: none; /* Prevent text selection when clicking */
+  position: relative; /* Ensure proper positioning */
+}
+
+/* Color dots in color filter */
+.color-dot {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  margin-right: 12px;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.color-dot::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+input[type="checkbox"]:checked + label .color-dot::after {
+  border-color: #0d99ff;
+}
+
+li:hover .color-dot {
+  transform: scale(1.1);
+}
+
+/* Color list specific styles */
+.color-list li {
+  padding: 0.65rem 0.8rem;
+}
+
+.color-list input[type="checkbox"]:checked + label .color-dot {
+  transform: scale(1.15);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.color-list input[type="checkbox"]:checked + label .color-dot::after {
+  border-color: var(--sidebar-accent);
+  border-width: 2px;
+}
+
+/* Count badge */
+.count {
+  background-color: #f1f5f9;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-left: auto;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+}
+
+li:hover .count {
+  background-color: rgba(13, 153, 255, 0.1);
+  color: #0d99ff;
+  border-color: rgba(13, 153, 255, 0.2);
+}
+
+/* Star ratings */
+.stars {
+  color: #f59e0b;
+  letter-spacing: 2px;
+  position: relative;
+  font-size: 1rem;
+  display: inline-block;
+}
+
+/* Use a solid color for better cross-browser compatibility */
+.rating-list .stars {
+  color: #ffc107;
+}
+
+/* Clear filters button */
+.clear-filters {
+  padding-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.clear-filters-btn {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid rgba(13, 153, 255, 0.2);
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #0d99ff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.01em;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.clear-filters-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(13, 153, 255, 0.1) 0%,
+    rgba(13, 153, 255, 0.05) 100%
+  );
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.clear-filters-btn:hover {
+  border-color: #0d99ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 153, 255, 0.15);
+}
+
+.clear-filters-btn:hover::before {
+  opacity: 1;
+}
+
+.clear-filters-btn:active {
+  transform: translateY(0);
+}
+
+/* Status section at the top of sidebar */
+.status {
+  background: linear-gradient(
+    135deg,
+    rgba(13, 153, 255, 0.08) 0%,
+    rgba(13, 153, 255, 0.03) 100%
+  );
+  border: 1px solid rgba(13, 153, 255, 0.15);
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.status::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(
+    circle,
+    rgba(13, 153, 255, 0.2) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.status-header span {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  background-color: #0d99ff;
+  border-radius: 50%;
+  margin-right: 10px;
+  position: relative;
+}
+
+.status-dot::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  background: rgba(13, 153, 255, 0.3);
+  z-index: -1;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+}
+
+.status-text {
+  font-size: 0.95rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status .btn {
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background-color: #0d99ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(13, 153, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.status .btn:hover {
+  background-color: #0081db;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(13, 153, 255, 0.4);
+}
+
+/* Loading indicator for categories */
+.loading-categories {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.spinner-sm {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(13, 153, 255, 0.3);
+  border-top: 2px solid #0d99ff;
+  border-radius: 50%;
+  margin-right: 10px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Fix for collapsed content in details elements with improved animation */
+details[open] > *:not(summary) {
+  animation: content-expand 0.3s ease-out;
+  transform-origin: top;
+  will-change: transform, opacity;
+}
+
+@keyframes content-expand {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fix for responsive issues when sidebar is displayed on smaller screens */
+@media screen and (max-width: 1024px) {
+  .sidebar {
+    --sidebar-width: 280px;
+    padding: 1.25rem;
+  }
+}
+
+/* Ensure proper spacing for ratings section */
+.rating-list li {
+  gap: 8px;
+}
+
+.rating-list .count {
+  min-width: 50px;
+}
+
+/* Fix for Firefox checkbox appearance */
+@-moz-document url-prefix() {
+  input[type="checkbox"] {
+    background-color: #ffffff;
+  }
+
+  input[type="checkbox"]:checked {
+    background-color: var(--sidebar-accent);
+  }
+}
+
+/* Safari-specific fixes */
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) {
+    input[type="checkbox"] {
+      margin-top: 2px;
+    }
+  }
+}
+
+/* We don't need overflow-anchor since we're not scrolling */
+
+/* Mobile optimizations */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    --sidebar-width: 100%;
+    position: relative;
+    top: 0;
+    height: auto;
+    margin-bottom: 2rem;
+    margin-right: 0;
+    padding: 1.5rem;
+    overflow: visible; /* Ensure no scrolling on mobile */
+    border-left: none;
+    border-top: 4px solid var(--sidebar-accent);
+  }
+
+  /* Improve tap targets on mobile */
+  ul li {
+    padding: 0.875rem 1rem;
+  }
+
+  summary {
+    padding: 1.25rem 1rem;
+  }
+
+  .apply-btn {
+    padding: 1rem;
+  }
+}
