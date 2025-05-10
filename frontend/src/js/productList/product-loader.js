@@ -921,8 +921,7 @@ class ProductLoader {
     });
 
     return wrapper;
-  }
-  /**
+  }  /**
    * Get appropriate static image path for a product based on category or name
    * @param {Object} product - Product data from API
    * @returns {string} - Path to static image
@@ -931,8 +930,13 @@ class ProductLoader {
     // Base path for images
     const basePath = "../../../public/resources/images/";
     
-    // Use the product ID to get the first thumbnail image
-    const imagePath = `${basePath}products/${product.item_id}-thumbnail.jpg`;
+    // Total number of available product thumbnail images (1 to 27)
+    const totalImages = 27;
+    
+    // Use product ID to get a consistent "random" selection
+    // Convert product.item_id to a number and get a value between 1 and totalImages (inclusive)
+    const imageNumber = ((Number(product.item_id) || 0) % totalImages) + 1;
+    const imagePath = `${basePath}products/${imageNumber}-thumbnail.jpg`;
     
     // Add fallback logic for products without thumbnail images
     // We'll add an onerror handler to the img tag in the HTML

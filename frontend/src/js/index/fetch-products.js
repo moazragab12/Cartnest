@@ -45,16 +45,23 @@ function createProductCard(product) {
         categoryBadge.className = 'category-badge';
         categoryBadge.textContent = product.category;
         productCard.appendChild(categoryBadge);
-    }    
-    // Create product image container
+    }    // Create product image container
     const productImage = document.createElement('div');
     productImage.className = 'product-image';
-      // Create image element with real product thumbnail 
+    
+    // Create image element with a consistently randomized product thumbnail
+    // Total number of available product thumbnail images (1 to 27)
+    const totalImages = 27;
+    
+    // Use product ID to get a consistent "random" selection
+    // Convert product.item_id to a number and get a value between 1 and totalImages (inclusive)
+    const imageNumber = ((Number(product.item_id) || 0) % totalImages) + 1;
+    
     const img = document.createElement('img');
-    img.src = `./public/resources/images/products/${product.item_id}-thumbnail.jpg`;
+    img.src = `./public/resources/images/products/${imageNumber}-thumbnail.jpg`;
     img.alt = product.name;
     img.addEventListener('error', () => {
-        // Fallback if product-specific image fails to load
+        // Fallback if image fails to load
         img.src = './public/resources/images/products/smartwatch.jpg';
     });
     

@@ -180,15 +180,21 @@ class ProductLoader {
         descriptionElements[i].textContent = descriptionLines[i];
       }
     }
-  }
-
-  /**
-   * Update product images with real thumbnail images
-   * @param {number} itemId - The product ID to load images for
+  }  /**
+   * Update product images with consistently randomized product images
+   * @param {number} itemId - The product ID used for deterministic image selection
    */
   updateProductImages(itemId) {
     // Base path for the product thumbnail images
     const basePath = "/frontend/public/resources/images/products/";
+    
+    // Total number of available product thumbnail images (1 to 27)
+    const totalImages = 27;
+    
+    // Use product ID to get a consistent "random" selection
+    // Convert itemId to a number and get a value between 1 and totalImages (inclusive)
+    const imageNumber = ((Number(itemId) || 0) % totalImages) + 1;
+    const imageUrl = `${basePath}${imageNumber}-thumbnail.jpg`;
     
     // Get all main image elements
     const mainImages = document.querySelectorAll('.image-container img');
@@ -196,10 +202,8 @@ class ProductLoader {
     const thumbnails = document.querySelectorAll('.thumbnail img');
     
     if (mainImages.length > 0 && thumbnails.length > 0) {
-      // Update images with the real product thumbnails based on item_id
+      // Update all images with the same selected image for consistency
       for (let i = 0; i < Math.min(mainImages.length, 6); i++) {
-        const imageUrl = `${basePath}${itemId}-thumbnail.jpg`;
-        
         // Update main image
         if (mainImages[i]) {
           mainImages[i].src = imageUrl;
