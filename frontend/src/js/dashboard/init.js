@@ -412,7 +412,8 @@ async function loadBestSellingProducts() {
                             // Use product ID to get a consistent "random" selection
                             // Convert product_id to a number and get a value between 1 and totalImages (inclusive)
                             const imageNumber = ((Number(product.product_id) || 0) % totalImages) + 1;
-                              // Use the same image generation logic as in other parts of the app
+                            
+                            // Use the same image generation logic as in other parts of the app
                             imageSrc = `/frontend/public/resources/images/products/${imageNumber}-thumbnail.jpg`;                        } else {
                             // Fallback to category-based images if no product ID is available
                             imageSrc = '/frontend/public/resources/images/iphone.png';

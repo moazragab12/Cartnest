@@ -179,7 +179,8 @@ function renderProductsTable(products) {
             statusText = 'Out of Stock';
         } else if (product.quantity <= 3 && product.status === 'for_sale') {
             statusClass = 'status-processing';
-            statusText = 'Low Stock';        }
+            statusText = 'Low Stock';
+        }
         
         // Get image for product using the product ID for consistent image selection
         const productImage = getProductImageByCategory(product.category, product.item_id);

@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="../../css/shared/header-fixes.css" />
     <link rel="stylesheet" href="../../css/shared/notifications.css" />
     <link rel="stylesheet" href="../../css/dashboard/seller-fix.css" />
+    <link rel="stylesheet" href="../../css/dashboard/profile-enhancement.css" />
     <script src="../../js/shared/search.js" defer></script>
     <script src="../../js/shared/auth-header.js" defer></script>
     <script src="../../js/dashboard/auth-header-dashboard.js" defer></script>
@@ -96,7 +97,7 @@
         <div class="user-profile">
           <div class="profile-image">
             <img
-              src="../../../public/resources/images/user profile.jpg"
+              src="../../../public/resources/images/user.gif"
               alt="User Profile"
             />
           </div>
@@ -1583,7 +1584,72 @@
             <h2 class="dashboard-title">My Profile</h2>
           </div>
 
-          <div class="dashboard-card">
+          <div class="dashboard-card profile-section">
+            <!-- Floating particles background -->
+            <div class="profile-background">
+              <!-- Initial particles - more will be added dynamically by JS -->
+              <div
+                class="floating-particle"
+                style="
+                  --duration: 7s;
+                  --distance-x: 20px;
+                  --distance-y: -15px;
+                  width: 10px;
+                  height: 10px;
+                  top: 20%;
+                  left: 15%;
+                "
+              ></div>
+              <div
+                class="floating-particle"
+                style="
+                  --duration: 9s;
+                  --distance-x: -20px;
+                  --distance-y: 25px;
+                  width: 8px;
+                  height: 8px;
+                  top: 30%;
+                  left: 60%;
+                "
+              ></div>
+              <div
+                class="floating-particle"
+                style="
+                  --duration: 11s;
+                  --distance-x: 15px;
+                  --distance-y: 20px;
+                  width: 12px;
+                  height: 12px;
+                  top: 70%;
+                  left: 25%;
+                "
+              ></div>
+              <div
+                class="floating-particle"
+                style="
+                  --duration: 8s;
+                  --distance-x: -15px;
+                  --distance-y: -22px;
+                  width: 6px;
+                  height: 6px;
+                  top: 40%;
+                  left: 80%;
+                "
+              ></div>
+              <div
+                class="floating-particle"
+                style="
+                  --duration: 10s;
+                  --distance-x: 22px;
+                  --distance-y: -18px;
+                  width: 9px;
+                  height: 9px;
+                  top: 80%;
+                  left: 40%;
+                "
+              ></div>
+            </div>
+
             <div class="card-header">
               <h3 class="card-title">
                 <i class="fas fa-user"></i> Account Information
@@ -1593,28 +1659,21 @@
               <div style="display: flex; gap: 30px; margin-bottom: 30px">
                 <!-- Profile Image and Balance Card -->
                 <div style="text-align: center; flex-basis: 220px">
-                  <div
-                    style="
-                      width: 120px;
-                      height: 120px;
-                      border-radius: 50%;
-                      overflow: hidden;
-                      margin: 0 auto 15px;
-                    "
-                  >
-                    <img
-                      src="../../public/resources/images/review-1.jpg"
-                      alt="Profile Photo"
-                      style="width: 100%; height: 100%; object-fit: cover"
-                    />
+                  <div class="profile-photo-container">
+                    <div class="profile-photo-inner">
+                      <img
+                        src="../../../public/resources/images/user.gif"
+                        alt="Profile Photo"
+                      />
+                    </div>
                   </div>
                   <button
                     class="btn btn-outline btn-sm"
-                    style="margin-bottom: 20px"
+                    style="margin-bottom: 20px; position: relative; z-index: 5"
                   >
                     <i class="fas fa-camera"></i> Change Photo
                   </button>
-                  <div class="card work">
+                  <div class="card work enhanced-card">
                     <div class="img-section">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -1631,7 +1690,9 @@
                     </div>
                     <div class="card-desc">
                       <div class="card-header">
-                        <div class="card-title">Balance</div>
+                        <div class="card-title" style="color: whitesmoke">
+                          Balance
+                        </div>
                       </div>
                       <div class="card-time">$1,248.50</div>
                       <p class="recent">
@@ -1647,43 +1708,49 @@
                 </div>
 
                 <!-- Account Details Form -->
-                <div style="flex-grow: 1">
+                <div style="flex-grow: 1" class="profile-info-card">
                   <form id="profile-form">
-                    <div class="form-group">
-                      <label class="form-label" for="username">Username</label>
+                    <div class="form-group enhanced-form-group">
+                      <label
+                        class="form-label enhanced-form-label"
+                        for="username"
+                        >Username</label
+                      >
                       <input
                         type="text"
-                        class="form-control"
+                        class="form-control enhanced-form-control"
                         id="username"
                         value="johndoe"
                         readonly
-                        style="background-color: #f9fafb; cursor: not-allowed"
+                        style="cursor: not-allowed"
                       />
                     </div>
 
-                    <div class="form-group">
-                      <label class="form-label" for="email"
+                    <div class="form-group enhanced-form-group">
+                      <label class="form-label enhanced-form-label" for="email"
                         >Email Address</label
                       >
                       <input
                         type="email"
-                        class="form-control"
+                        class="form-control enhanced-form-control"
                         id="email"
                         value="john.doe@example.com"
                         readonly
-                        style="background-color: #f9fafb; cursor: not-allowed"
+                        style="cursor: not-allowed"
                       />
                     </div>
 
-                    <div class="form-group">
-                      <label class="form-label">Member Since</label>
+                    <div class="form-group enhanced-form-group">
+                      <label class="form-label enhanced-form-label"
+                        >Member Since</label
+                      >
                       <div
                         style="display: flex; align-items: center; gap: 10px"
                       >
                         <div
                           id="member-since-date"
-                          class="form-control"
-                          style="background-color: #f9fafb; cursor: not-allowed"
+                          class="form-control enhanced-form-control"
+                          style="cursor: not-allowed"
                         >
                           Loading...
                         </div>
@@ -2216,6 +2283,7 @@
     <script type="module" src="../../js/dashboard/profile.js"></script>
     <script type="module" src="../../js/dashboard/badgeUpdater.js"></script>
     <script src="../../js/dashboard/logout-helper.js"></script>
+    <script src="../../js/dashboard/profile-enhancement.js"></script>
     <script>
       // Additional inline scripts can go here
     </script>
