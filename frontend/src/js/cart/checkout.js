@@ -69,8 +69,10 @@ function showLoginRequiredError() {
   // Create the error container
   const errorContainer = document.createElement("div");
   errorContainer.className = "login-error-container";
-  // Add the error GIF  const gifImage = document.createElement("img");
-  gifImage.src = "/frontend/public/resources/gifs/error (2).gif";
+  
+  // Add the error GIF
+  const gifImage = document.createElement("img");
+  gifImage.src = "../../../public/resources/gifs/error (2).gif";
   gifImage.alt = "Login Required Error";
   gifImage.className = "login-error-gif";
 

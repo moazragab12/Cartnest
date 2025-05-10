@@ -112,55 +112,36 @@ document.addEventListener("DOMContentLoaded", function () {
       listItem.className = "search-result-item";
 
       // Format price with 2 decimal places
-      const formattedPrice = parseFloat(item.price).toFixed(2);
-      // Get an appropriate product image based on category or use a fallback
+      const formattedPrice = parseFloat(item.price).toFixed(2);      // Get a consistent "random" product image based on item ID
       let productImage;
-
-      // Try to determine a relevant product image based on category or name
-      if (
-        (item.category && item.category.toLowerCase().includes("phone")) ||
-        (item.name && item.name.toLowerCase().includes("phone")) ||
-        (item.name && item.name.toLowerCase().includes("iphone"))
-      ) {
-        productImage =
-          basePath + "public/resources/images/products/iphone-blue.jpg";
-      } else if (
-        (item.category && item.category.toLowerCase().includes("watch")) ||
-        (item.name && item.name.toLowerCase().includes("watch"))
-      ) {
-        productImage =
-          basePath + "public/resources/images/products/smartwatch.jpg";
-      } else if (
-        (item.category && item.category.toLowerCase().includes("headphone")) ||
-        (item.name && item.name.toLowerCase().includes("headphone")) ||
-        (item.name && item.name.toLowerCase().includes("earphone"))
-      ) {
-        productImage =
-          basePath + "public/resources/images/products/headphones.jpg";
-      } else if (
-        (item.category && item.category.toLowerCase().includes("sunglass")) ||
-        (item.name && item.name.toLowerCase().includes("sunglass")) ||
-        (item.name && item.name.toLowerCase().includes("glass"))
-      ) {
-        productImage =
-          basePath + "public/resources/images/products/sunglasses.jpg";
+      
+      // Use the item_id to generate a consistent image number for each product
+      // This ensures the same product always shows the same image
+      let imageNumber = 1; // Default to first image
+      
+      if (item.item_id) {
+        // Use the last digits of the item_id to determine image number
+        // Convert to number and use modulo to get a number between 1-27
+        const idNumber = parseInt(item.item_id.toString().slice(-2), 10) || 0;
+        imageNumber = (idNumber % 27) + 1; // Range: 1-27
       } else {
-        // Default fallback image
-        productImage =
-          basePath + "public/resources/images/products/smartwatch.jpg";
+        // If no item_id available, generate a random number
+        imageNumber = Math.floor(Math.random() * 27) + 1;
       }
+      
+      // Use the determined image
+      productImage = `${basePath}public/resources/images/products/${imageNumber}-thumbnail.jpg`;
 
       // Truncate description to keep it short in the dropdown
       const shortDescription = item.description
         ? item.description.length > 80
           ? item.description.substring(0, 80) + "..."
           : item.description
-        : "No description available";
-      listItem.innerHTML = `
+        : "No description available";      listItem.innerHTML = `
         <a href="${basePath}src/pages/product/product.html?id=${item.item_id}">
           <div class="search-result-content">
             <div class="search-result-image">
-              <img src="${productImage}" alt="${item.name}" onerror="this.src='${basePath}public/resources/images/products/smartwatch.jpg'">
+              <img src="${productImage}" alt="${item.name}" onerror="this.src='${basePath}public/resources/images/products/1-thumbnail.jpg'">
             </div>
             <div class="search-result-info">
               <div class="search-result-name">${item.name}</div>
