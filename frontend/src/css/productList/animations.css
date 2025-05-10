@@ -2,65 +2,62 @@
 
 :root {
   --filter-bg-color: rgba(255, 255, 255, 0.85);
-  --filter-accent: #0D99FF;
+  --filter-accent: #0d99ff;
   --filter-accent-hover: #0b87e0;
   --filter-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   --animation-duration: 0.4s;
   --btn-transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Enhanced Sidebar with Dynamic Moving Background */
+/* Enhanced Sidebar - No scrollbar, full height display */
 .sidebar {
   background: var(--filter-bg-color);
   backdrop-filter: blur(10px);
   border-radius: 16px;
   box-shadow: var(--filter-shadow);
   position: sticky;
-  top: 90px;
-  height: fit-content;
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
-  scroll-behavior: smooth;
+  top: 100px;
+  height: auto;
+  /* Removed max-height and overflow styles */
   transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   z-index: 100;
-  padding: 1.8rem;
+  padding: 2rem;
   transform-style: preserve-3d;
-  will-change: transform, opacity; /* Performance optimization for animations */
+  will-change: opacity; /* Performance optimization for animations */
   border: 1px solid rgba(203, 213, 225, 0.4);
+  overflow: visible;
 }
 
-/* Custom scrollbar for the sidebar */
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-  background: rgba(241, 245, 249, 0.5);
-  border-radius: 10px;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-  background: rgba(203, 213, 225, 0.8);
-  border-radius: 10px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.8);
-}
+/* Removed custom scrollbar styles as they're no longer needed */
 
 /* Dynamic moving background for sidebar with enhanced animation */
 .sidebar::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(ellipse at 10% 20%, rgba(13, 153, 255, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 90% 50%, rgba(117, 203, 255, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 30% 80%, rgba(76, 181, 255, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 10%, rgba(13, 153, 255, 0.05) 0%, transparent 40%);
+  background: radial-gradient(
+      ellipse at 10% 20%,
+      rgba(13, 153, 255, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 90% 50%,
+      rgba(117, 203, 255, 0.08) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 30% 80%,
+      rgba(76, 181, 255, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 70% 10%,
+      rgba(13, 153, 255, 0.05) 0%,
+      transparent 40%
+    );
   z-index: -1;
   border-radius: 16px;
   opacity: 0.8;
@@ -91,7 +88,11 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
   animation: stickySlideIn 0.6s forwards;
   border: 1px solid rgba(203, 213, 225, 0.6);
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.85)
+  );
 }
 
 @keyframes stickySlideIn {
@@ -131,7 +132,7 @@ summary {
 
 /* Plus/minus indicator with enhanced 3D rotation */
 summary::after {
-  content: '+';
+  content: "+";
   font-size: 1.4rem;
   font-weight: 400;
   color: var(--filter-accent);
@@ -143,13 +144,17 @@ summary::after {
 }
 
 details[open] summary::after {
-  content: '−';
+  content: "−";
   transform: rotate(180deg) scale(1.1);
 }
 
 /* Enhanced hover effect with 3D transform */
 summary:hover {
-  background: linear-gradient(to right, rgba(237, 242, 247, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%);
+  background: linear-gradient(
+    to right,
+    rgba(237, 242, 247, 0.8) 0%,
+    rgba(255, 255, 255, 0.8) 100%
+  );
   padding-left: 1.2rem;
   color: var(--filter-accent);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -162,32 +167,6 @@ summary::-webkit-details-marker {
 }
 
 /* Enhanced animated line indicator with gradient shimmer */
-summary::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  height: 60%;
-  width: 4px;
-  background: linear-gradient(to bottom, var(--filter-accent), #75cbff);
-  border-radius: 0 4px 4px 0;
-  transform: translateY(-50%) scaleY(0);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  opacity: 0;
-}
-
-summary:hover::before {
-  transform: translateY(-50%) scaleY(1);
-  opacity: 1;
-}
-
-details[open] summary::before {
-  transform: translateY(-50%) scaleY(1);
-  opacity: 1;
-  background: linear-gradient(to bottom, var(--filter-accent), #75cbff);
-  box-shadow: 0 0 10px rgba(13, 153, 255, 0.3);
-  animation: pulse 2s infinite alternate;
-}
 
 @keyframes pulse {
   0% {
@@ -246,7 +225,7 @@ input[type="checkbox"]:checked {
 }
 
 input[type="checkbox"]:checked::after {
-  content: '✓';
+  content: "✓";
   color: white;
   position: absolute;
   top: 50%;
@@ -296,7 +275,8 @@ input[type="checkbox"]:hover {
   transition: all 0.3s ease;
 }
 
-.range-slider-min, .range-slider-max {
+.range-slider-min,
+.range-slider-max {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
@@ -362,7 +342,7 @@ input[type="checkbox"]:hover {
 }
 
 .apply-btn::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
@@ -434,13 +414,18 @@ input[type="checkbox"]:hover {
 }
 
 .clear-filters-btn:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.7), transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.7),
+    transparent
+  );
   transform: translateX(-100%);
   transition: transform 0.6s ease;
 }
@@ -463,7 +448,14 @@ input[type="checkbox"]:hover {
   transition: all 0.1s ease;
 }
 
-/* For enhanced interaction across the entire sidebar */
+/* Sidebar container for proper layout and animation */
+.sidebar-container {
+  display: block;
+  margin-right: 1.5rem;
+  position: relative;
+}
+
+/* Animation effect for sidebar */
 .sidebar-container.sticky-activated {
   animation: subtleGlow 4s infinite alternate;
 }
