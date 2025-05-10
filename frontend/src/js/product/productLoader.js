@@ -97,7 +97,6 @@ class ProductLoader {
       return null;
     }
   }
-
   /**
    * Update the UI with product data
    */
@@ -112,6 +111,9 @@ class ProductLoader {
     if (productTitle) {
       productTitle.textContent = this.productData.name;
     }
+    
+    // Update product images with real images from the item_id
+    this.updateProductImages(this.productData.item_id);
 
     // Update breadcrumb navigation
     const breadcrumb = document.querySelector('.breadcrumb');
@@ -176,6 +178,49 @@ class ProductLoader {
       // Update each description point
       for (let i = 0; i < Math.min(descriptionElements.length, descriptionLines.length); i++) {
         descriptionElements[i].textContent = descriptionLines[i];
+      }
+    }
+  }
+
+  /**
+   * Update product images with real thumbnail images
+   * @param {number} itemId - The product ID to load images for
+   */
+  updateProductImages(itemId) {
+    // Base path for the product thumbnail images
+    const basePath = "/frontend/public/resources/images/products/";
+    
+    // Get all main image elements
+    const mainImages = document.querySelectorAll('.image-container img');
+    // Get all thumbnail elements
+    const thumbnails = document.querySelectorAll('.thumbnail img');
+    
+    if (mainImages.length > 0 && thumbnails.length > 0) {
+      // Update images with the real product thumbnails based on item_id
+      for (let i = 0; i < Math.min(mainImages.length, 6); i++) {
+        const imageUrl = `${basePath}${itemId}-thumbnail.jpg`;
+        
+        // Update main image
+        if (mainImages[i]) {
+          mainImages[i].src = imageUrl;
+          mainImages[i].alt = `${this.productData.name} view ${i+1}`;
+          
+          // Add error handling for missing images
+          mainImages[i].onerror = function() {
+            this.src = `${basePath}smartwatch.jpg`;
+          };
+        }
+        
+        // Update thumbnail
+        if (thumbnails[i]) {
+          thumbnails[i].src = imageUrl;
+          thumbnails[i].alt = `${this.productData.name} thumbnail ${i+1}`;
+          
+          // Add error handling for missing images
+          thumbnails[i].onerror = function() {
+            this.src = `${basePath}smartwatch.jpg`;
+          };
+        }
       }
     }
   }

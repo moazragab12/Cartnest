@@ -45,19 +45,17 @@ function createProductCard(product) {
         categoryBadge.className = 'category-badge';
         categoryBadge.textContent = product.category;
         productCard.appendChild(categoryBadge);
-    }
-    
+    }    
     // Create product image container
     const productImage = document.createElement('div');
     productImage.className = 'product-image';
-    
-    // Create image element with placeholder or actual image
+      // Create image element with real product thumbnail 
     const img = document.createElement('img');
-    img.src = product.image_url || './public/resources/images/bedroom.jpg';
+    img.src = `./public/resources/images/products/${product.item_id}-thumbnail.jpg`;
     img.alt = product.name;
     img.addEventListener('error', () => {
-        // Fallback if image fails to load
-        img.src = './public/resources/images/bedroom.jpg';
+        // Fallback if product-specific image fails to load
+        img.src = './public/resources/images/products/smartwatch.jpg';
     });
     
     productImage.appendChild(img);

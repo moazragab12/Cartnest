@@ -1182,7 +1182,6 @@ body {
 }
 
 .dashboard-container {
-  max-width: 1400px;
   /* Increased from 1200px */
   margin: 20px auto;
   /* Reduced top/bottom margin from 40px to 20px */

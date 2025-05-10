@@ -77,12 +77,11 @@ class User(SQLModel, table=True):
         )
     )
     
-    
-    # updated_at, nullable, timestamp.
+      # updated_at, nullable, timestamp.
     updated_at: datetime = Field(
         sa_column = Column(
             DateTime(timezone = True),
-            default_server = func.now(),
+            server_default = func.now(),
             onupdate = func.now()
         )
     )

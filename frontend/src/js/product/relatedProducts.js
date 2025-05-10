@@ -13,8 +13,8 @@ const API_BASE_URL = 'http://localhost:8000';
  * @returns {string} HTML string for the product card
  */
 function createProductCardHTML(product) {
-  // Product images - use a default if not available
-  const imageUrl = product.image_url || 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-o9WGCQlihd4S4ImCBQU3KoujUhB82K.png';
+  // Product images - use item_id to get the first thumbnail
+  const imageUrl = `/frontend/public/resources/images/products/${product.item_id}-thumbnail.jpg`;
   
   // Format the price with 2 decimal places
   const formattedPrice = product.price.toFixed(2);
@@ -42,10 +42,9 @@ function createProductCardHTML(product) {
   return `
     <div class="card-product-card">
       ${discountBadgeHTML}
-      ${badgeHTML}
-      <div class="card-product-image">
+      ${badgeHTML}      <div class="card-product-image">
         <a href="${productUrl}" aria-label="View ${product.name} details">
-          <img src="${imageUrl}" alt="${product.name}">
+          <img src="${imageUrl}" alt="${product.name}" onerror="this.src='/frontend/public/resources/images/products/smartwatch.jpg'">
         </a>
       </div>
       <div class="card-product-content">

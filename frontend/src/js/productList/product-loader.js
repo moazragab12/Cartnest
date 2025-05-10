@@ -845,14 +845,12 @@ class ProductLoader {
 
     // Get static image based on product category or name
     // This will completely replace the dynamic image_url from API
-    const imagePath = this.getStaticProductImage(product);
-
-    // Create the product card HTML
+    const imagePath = this.getStaticProductImage(product);    // Create the product card HTML
     card.innerHTML = `
       ${categoryBadge}
       ${!inStock ? '<span class="out-of-stock-badge">Out of Stock</span>' : ""}
       <div class="product-image">
-        <img src="${imagePath}" alt="${product.name}" loading="lazy">
+        <img src="${imagePath}" alt="${product.name}" loading="lazy" onerror="this.src='../../../public/resources/images/products/smartwatch.jpg'">
       </div>
       <div class="product-details">
         <div class="product-info">
@@ -924,7 +922,6 @@ class ProductLoader {
 
     return wrapper;
   }
-
   /**
    * Get appropriate static image path for a product based on category or name
    * @param {Object} product - Product data from API
@@ -934,64 +931,15 @@ class ProductLoader {
     // Base path for images
     const basePath = "../../../public/resources/images/";
     
-    // First check if product has a category that matches our images
-    if (product.category) {
-      const category = product.category.toLowerCase();
-      
-      // Match by category
-      if (category.includes('fashion') || category.includes('clothing') || category.includes('apparel')) {
-        return `${basePath}fashion.png`;
-      }
-    }
+    // Use the product ID to get the first thumbnail image
+    const imagePath = `${basePath}products/${product.item_id}-thumbnail.jpg`;
     
-    // Match by product name
-    const name = product.name.toLowerCase();
+    // Add fallback logic for products without thumbnail images
+    // We'll add an onerror handler to the img tag in the HTML
+    return imagePath;
     
-    if (name.includes('iphone') || name.includes('phone') || name.includes('apple')) {
-      if (name.includes('blue')) {
-        return `${basePath}products/iphone-blue.jpg`;
-      }
-      return `${basePath}products/iphone-black.jpg`;
-    } else if (name.includes('headphone') || name.includes('earphone') || name.includes('audio')) {
-      if (name.includes('premium')) {
-        return `${basePath}products/headphones-premium.jpg`;
-      }
-      return `${basePath}products/headphones.jpg`;
-    } else if (name.includes('watch') || name.includes('time') || name.includes('clock')) {
-      if (name.includes('black')) {
-        return `${basePath}products/smart-watch-black.jpg`;
-      }
-      return `${basePath}products/smartwatch.jpg`;
-    } else if (name.includes('glass') || name.includes('sunglass') || name.includes('eyewear')) {
-      return `${basePath}products/sunglasses.jpg`;
-    } else if (name.includes('bag') || name.includes('backpack') || name.includes('purse')) {
-      return `${basePath}bag1.jpg`;
-    } else if (name.includes('shirt') || name.includes('tee')) {
-      return `${basePath}tshirt.jpg`;
-    } else if (name.includes('hoodie') || name.includes('sweater') || name.includes('sweatshirt')) {
-      return `${basePath}Hoodie.jpg`;
-    } else if (name.includes('bedroom') || name.includes('interior') || name.includes('furniture')) {
-      return `${basePath}bedroom.jpg`;
-    }
-    
-    // Default images based on item_id to ensure variety
-    const imageOptions = [
-      'bag1.jpg',
-      'bedroom.jpg',
-      'fashion.png',
-      'Hoodie.jpg',
-      'iphone.png',
-      'tshirt.jpg',
-      'watch.png',
-      'products/headphones.jpg',
-      'products/iphone-black.jpg',
-      'products/smartwatch.jpg',
-      'products/sunglasses.jpg'
-    ];
-    
-    // Use the product ID to consistently select an image
-    const imageIndex = product.item_id % imageOptions.length;
-    return `${basePath}${imageOptions[imageIndex]}`;
+    // Note: In the actual HTML, we use onerror to handle missing images
+    // <img src="${imagePath}" alt="${product.name}" loading="lazy" onerror="this.src='${basePath}products/smartwatch.jpg'">
   }
 
   /**
