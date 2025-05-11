@@ -1,0 +1,71 @@
+name: MarketPlace CI/CD Basic
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+jobs:
+  # Very basic file checks
+  basic-checks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check backend structure
+      run: |
+        echo "Checking backend structure..."
+        if [ -d "backend" ]; then
+          echo "✅ Backend directory exists"
+        else
+          echo "⚠️ Backend directory not found"
+        fi
+        
+        if [ -f "backend/requirements.txt" ]; then
+          echo "✅ Requirements file exists"
+        else
+          echo "⚠️ Requirements file not found"
+        fi
+
+    - name: Check frontend structure
+      run: |
+        echo "Checking frontend structure..."
+        if [ -d "frontend" ]; then
+          echo "✅ Frontend directory exists"
+        else
+          echo "⚠️ Frontend directory not found"
+        fi
+        
+        echo "Counting HTML files..."
+        HTML_COUNT=$(find frontend -name "*.html" | wc -l)
+        echo "Found $HTML_COUNT HTML files"
+        
+        echo "Counting CSS files..."
+        CSS_COUNT=$(find frontend -name "*.css" | wc -l)
+        echo "Found $CSS_COUNT CSS files"
+        
+        echo "Counting JS files..."
+        JS_COUNT=$(find frontend -name "*.js" | wc -l)
+        echo "Found $JS_COUNT JS files"
+        
+  # Basic Docker validation (just check if Dockerfile exists)
+  docker-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Validate Docker configuration
+      run: |
+        if [ -f "backend/Dockerfile" ]; then
+          echo "✅ Dockerfile exists"
+        else
+          echo "⚠️ Dockerfile not found"
+        fi
+        
+        if [ -f "backend/docker-compose.yml" ]; then
+          echo "✅ docker-compose.yml exists"
+        else
+          echo "⚠️ docker-compose.yml not found"
+        fi

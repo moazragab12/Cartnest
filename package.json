@@ -1,0 +1,14 @@
+{
+  "name": "cartnest-marketplace",
+  "version": "1.0.0",
+  "description": "Cartnest MarketPlace application",
+  "scripts": {
+    "lint:css": "stylelint 'frontend/src/css/**/*.css'",
+    "lint:html": "html-validate frontend/src/**/*.html"
+  },
+  "devDependencies": {
+    "html-validate": "^7.18.0",
+    "stylelint": "^15.10.2",
+    "stylelint-config-standard": "^34.0.0"
+  }
+}
