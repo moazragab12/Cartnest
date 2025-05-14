@@ -8,7 +8,7 @@
 /* Main Header - Full width with background gradient and sticky position */
 .header {
   display: flex;
-  padding: 15px 50px; /* Adjusted horizontal padding */
+  padding: 15px 100px; /* Adjusted horizontal padding */
   justify-content: space-between;
   align-items: center;
   margin: 0;

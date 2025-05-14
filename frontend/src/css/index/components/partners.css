@@ -2,13 +2,14 @@
    PARTNERS SECTION
    ==================================== */
 .partners-section {
-  padding: var(--spacing-section) 10px;
+  
   background-color: var(--tag-color);
   overflow: hidden;
   position: relative;
   width: calc(100% - 20px);
   max-width: 100%;
   box-sizing: border-box;
+  padding: 0;
 }
 
 .partners-marquee {

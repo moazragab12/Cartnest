@@ -43,7 +43,7 @@ section {
 .featured-products-section,
 .categories-section,
 .popular-products-section {
-  margin: 10px var(--body-margin);
+  margin: 0 var(--body-margin);
   width: calc(100% - 2 * var(--body-margin));
 }
 

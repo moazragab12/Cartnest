@@ -24,7 +24,8 @@ class ProductLoader {
       seller_id: null,
       min_quantity: null,
       featured: false,
-    };    this.pagination = {
+    };
+    this.pagination = {
       currentPage: 1,
       itemsPerPage: 6, // Default items per page
       totalPages: 1,
@@ -38,10 +39,10 @@ class ProductLoader {
     );
     this.itemsPerPageSelect = document.querySelector(".items-per-page");
     this.paginationContainer = document.querySelector(".pagination");
-    
+
     // Animation variables
     this.animationsEnabled = true;
-    
+
     // Flag to control whether URL parameters are parsed on initial load
     // Changed to true to enable URL parameter filtering
     this.parseUrlParamsOnLoad = true;
@@ -54,10 +55,10 @@ class ProductLoader {
     try {
       // Ensure all filter details elements are closed initially
       this.closeAllFilterSections();
-      
+
       // Parse URL query parameters
       this.parseQueryParams();
-      
+
       // Fetch categories first
       await this.fetchCategories();
 
@@ -71,9 +72,9 @@ class ProductLoader {
       this.setupCartButtonListeners();
 
       // Setup feature box (Featured) listener
-      this.setupFeatureBoxListener();      // Setup items per page selector listener
+      this.setupFeatureBoxListener(); // Setup items per page selector listener
       this.setupItemsPerPageListener();
-      
+
       // Set default value for items per page dropdown to match the default pagination setting
       if (this.itemsPerPageSelect) {
         this.itemsPerPageSelect.value = this.pagination.itemsPerPage.toString();
@@ -81,13 +82,13 @@ class ProductLoader {
 
       // Setup pagination listeners
       this.setupPaginationListeners();
-      
+
       // Setup search input listener
       this.setupSearchInputListener();
-      
+
       // Add animation to header on page load
       this.initHeaderAnimation();
-      
+
       // Reset feature box to default option if no specific filters are set
       if (this.featureBox && !this.hasActiveFilters()) {
         this.featureBox.value = "0"; // Default to regular products, not featured
@@ -96,7 +97,7 @@ class ProductLoader {
       console.error("Error initializing product loader:", error);
     }
   }
-  
+
   /**
    * Check if there are any active filters
    */
@@ -111,17 +112,17 @@ class ProductLoader {
       this.currentFilters.featured === true
     );
   }
-  
+
   /**
    * Close all filter details sections
    */
   closeAllFilterSections() {
-    const filterSections = document.querySelectorAll('.sidebar details');
-    filterSections.forEach(section => {
+    const filterSections = document.querySelectorAll(".sidebar details");
+    filterSections.forEach((section) => {
       // Remove the 'open' attribute to close the details element
-      section.removeAttribute('open');
+      section.removeAttribute("open");
     });
-    
+
     console.log("All filter sections closed");
   }
 
@@ -130,65 +131,82 @@ class ProductLoader {
    */
   parseQueryParams() {
     const urlParams = new URLSearchParams(window.location.search);
-    
+
     // Map URL parameters to filter properties
-    if (urlParams.has('name')) this.currentFilters.name = urlParams.get('name');
-    if (urlParams.has('category')) this.currentFilters.category = urlParams.get('category');
-    if (urlParams.has('min_price')) this.currentFilters.min_price = parseFloat(urlParams.get('min_price'));
-    if (urlParams.has('max_price')) this.currentFilters.max_price = parseFloat(urlParams.get('max_price'));
-    if (urlParams.has('status')) this.currentFilters.status = urlParams.get('status');
-    if (urlParams.has('seller_id')) this.currentFilters.seller_id = parseInt(urlParams.get('seller_id'));
-    if (urlParams.has('min_quantity')) this.currentFilters.min_quantity = parseInt(urlParams.get('min_quantity'));
-    
+    if (urlParams.has("name")) this.currentFilters.name = urlParams.get("name");
+    if (urlParams.has("category"))
+      this.currentFilters.category = urlParams.get("category");
+    if (urlParams.has("min_price"))
+      this.currentFilters.min_price = parseFloat(urlParams.get("min_price"));
+    if (urlParams.has("max_price"))
+      this.currentFilters.max_price = parseFloat(urlParams.get("max_price"));
+    if (urlParams.has("status"))
+      this.currentFilters.status = urlParams.get("status");
+    if (urlParams.has("seller_id"))
+      this.currentFilters.seller_id = parseInt(urlParams.get("seller_id"));
+    if (urlParams.has("min_quantity"))
+      this.currentFilters.min_quantity = parseInt(
+        urlParams.get("min_quantity")
+      );
+
     // Update UI based on URL parameters
     this.updateFilterUIFromParams();
-    
+
     console.log("Parsed URL parameters:", this.currentFilters);
   }
-  
+
   /**
    * Update filter UI elements based on parsed URL parameters
    */
   updateFilterUIFromParams() {
     // Update search input if name parameter exists
     if (this.currentFilters.name) {
-      const searchInput = document.querySelector('.search-box input');
+      const searchInput = document.querySelector(".search-box input");
       if (searchInput) searchInput.value = this.currentFilters.name;
     }
-    
+
     // Update price range inputs if price parameters exist
     if (this.currentFilters.min_price !== null) {
-      const minPriceInput = document.querySelector('.price-range-filter .input-min');
+      const minPriceInput = document.querySelector(
+        ".price-range-filter .input-min"
+      );
       if (minPriceInput) minPriceInput.value = this.currentFilters.min_price;
     }
-    
+
     if (this.currentFilters.max_price !== null) {
-      const maxPriceInput = document.querySelector('.price-range-filter .input-max');
+      const maxPriceInput = document.querySelector(
+        ".price-range-filter .input-max"
+      );
       if (maxPriceInput) maxPriceInput.value = this.currentFilters.max_price;
     }
-    
+
     // If we have URL parameters, open the relevant filter sections
     if (this.hasActiveFilters()) {
       this.openRelevantFilterSections();
     }
-    
+
     // Note: Category checkboxes will be updated after categories are fetched
   }
-  
+
   /**
    * Open filter sections that are relevant to current URL parameters
    */
   openRelevantFilterSections() {
     // Open price filter section if price parameters exist
-    if (this.currentFilters.min_price !== null || this.currentFilters.max_price !== null) {
-      const priceDetails = document.querySelector('.sidebar details:nth-of-type(2)'); // Price is the second filter
-      if (priceDetails) priceDetails.setAttribute('open', '');
+    if (
+      this.currentFilters.min_price !== null ||
+      this.currentFilters.max_price !== null
+    ) {
+      const priceDetails = document.querySelector(
+        ".sidebar details:nth-of-type(2)"
+      ); // Price is the second filter
+      if (priceDetails) priceDetails.setAttribute("open", "");
     }
-    
+
     // Open category filter section if category parameter exists
     if (this.currentFilters.category) {
-      const categoryDetails = document.getElementById('category-details');
-      if (categoryDetails) categoryDetails.setAttribute('open', '');
+      const categoryDetails = document.getElementById("category-details");
+      if (categoryDetails) categoryDetails.setAttribute("open", "");
     }
   }
 
@@ -197,35 +215,35 @@ class ProductLoader {
    */
   initHeaderAnimation() {
     if (!this.animationsEnabled) return;
-    
+
     // Add animation classes to header elements
-    const header = document.querySelector('.header');
+    const header = document.querySelector(".header");
     if (header) {
-      header.classList.add('animate-header');
-      
+      header.classList.add("animate-header");
+
       // Logo animation
-      const logo = header.querySelector('.logo-container');
+      const logo = header.querySelector(".logo-container");
       if (logo) {
-        logo.classList.add('logo-animation');
+        logo.classList.add("logo-animation");
       }
-      
+
       // Search box animation
-      const searchBox = header.querySelector('.search-box');
+      const searchBox = header.querySelector(".search-box");
       if (searchBox) {
-        searchBox.classList.add('search-box-animation');
+        searchBox.classList.add("search-box-animation");
       }
     }
-    
+
     // Add animation to navbar categories
-    const navbar = document.querySelector('.navbar');
+    const navbar = document.querySelector(".navbar");
     if (navbar) {
-      navbar.classList.add('navbar-animation');
-      
+      navbar.classList.add("navbar-animation");
+
       // Staggered animation for navbar items
-      const navItems = navbar.querySelectorAll('a');
+      const navItems = navbar.querySelectorAll("a");
       navItems.forEach((item, index) => {
         item.style.animationDelay = `${0.1 * index}s`;
-        item.classList.add('nav-item-animation');
+        item.classList.add("nav-item-animation");
       });
     }
   }
@@ -234,26 +252,26 @@ class ProductLoader {
    * Set up listener for the search input
    */
   setupSearchInputListener() {
-    const searchInput = document.querySelector('.search-box input');
-    const searchIcon = document.querySelector('.search-box .search-icon');
-    
+    const searchInput = document.querySelector(".search-box input");
+    const searchIcon = document.querySelector(".search-box .search-icon");
+
     if (searchInput) {
       // Debounce function to prevent too many requests
       let searchTimeout;
-      
-      searchInput.addEventListener('input', (e) => {
+
+      searchInput.addEventListener("input", (e) => {
         clearTimeout(searchTimeout);
-        
+
         searchTimeout = setTimeout(() => {
           const searchTerm = e.target.value.trim();
           if (searchTerm.length > 2) {
             // Update filter and URL
             this.currentFilters.name = searchTerm;
             this.updateURLWithFilters();
-            
+
             // Reset to first page when searching
             this.pagination.currentPage = 1;
-            
+
             // Fetch products with the search term
             this.fetchProducts();
           } else if (searchTerm.length === 0 && this.currentFilters.name) {
@@ -264,10 +282,10 @@ class ProductLoader {
           }
         }, 500); // 500ms debounce
       });
-      
+
       // Handle search icon click
       if (searchIcon) {
-        searchIcon.addEventListener('click', () => {
+        searchIcon.addEventListener("click", () => {
           const searchTerm = searchInput.value.trim();
           if (searchTerm.length > 0) {
             this.currentFilters.name = searchTerm;
@@ -277,10 +295,10 @@ class ProductLoader {
           }
         });
       }
-      
+
       // Handle Enter key in search box
-      searchInput.addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') {
+      searchInput.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") {
           const searchTerm = e.target.value.trim();
           if (searchTerm.length > 0) {
             this.currentFilters.name = searchTerm;
@@ -298,32 +316,42 @@ class ProductLoader {
    */
   updateURLWithFilters() {
     const params = new URLSearchParams();
-    
+
     // Add non-null filters to URL parameters
-    if (this.currentFilters.name) params.set('name', this.currentFilters.name);
-    if (this.currentFilters.category) params.set('category', this.currentFilters.category);
-    if (this.currentFilters.min_price !== null) params.set('min_price', this.currentFilters.min_price);
-    if (this.currentFilters.max_price !== null) params.set('max_price', this.currentFilters.max_price);
-    if (this.currentFilters.status && this.currentFilters.status !== 'for_sale') {
-      params.set('status', this.currentFilters.status);
+    if (this.currentFilters.name) params.set("name", this.currentFilters.name);
+    if (this.currentFilters.category)
+      params.set("category", this.currentFilters.category);
+    if (this.currentFilters.min_price !== null)
+      params.set("min_price", this.currentFilters.min_price);
+    if (this.currentFilters.max_price !== null)
+      params.set("max_price", this.currentFilters.max_price);
+    if (
+      this.currentFilters.status &&
+      this.currentFilters.status !== "for_sale"
+    ) {
+      params.set("status", this.currentFilters.status);
     }
-    if (this.currentFilters.seller_id) params.set('seller_id', this.currentFilters.seller_id);
-    if (this.currentFilters.min_quantity) params.set('min_quantity', this.currentFilters.min_quantity);
-    
+    if (this.currentFilters.seller_id)
+      params.set("seller_id", this.currentFilters.seller_id);
+    if (this.currentFilters.min_quantity)
+      params.set("min_quantity", this.currentFilters.min_quantity);
+
     // Update URL without reloading the page
-    const newURL = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
-    history.pushState({}, '', newURL);
-    
+    const newURL = `${window.location.pathname}${
+      params.toString() ? "?" + params.toString() : ""
+    }`;
+    history.pushState({}, "", newURL);
+
     console.log("Updated URL with filters:", newURL);
   }
-    /**
+  /**
    * Set up listener for items per page selector
    */
   setupItemsPerPageListener() {
     if (this.itemsPerPageSelect) {
       // Set default value for items per page dropdown to match the default pagination setting
       this.itemsPerPageSelect.value = this.pagination.itemsPerPage.toString();
-      
+
       this.itemsPerPageSelect.addEventListener("change", () => {
         // Update items per page
         this.pagination.itemsPerPage = parseInt(this.itemsPerPageSelect.value);
@@ -508,7 +536,9 @@ class ProductLoader {
       params.append("days", days);
       params.append("limit", limit);
 
-      const url = `${this.apiBaseUrl}${this.itemsEndpoint}recent?${params.toString()}`;
+      const url = `${this.apiBaseUrl}${
+        this.itemsEndpoint
+      }recent?${params.toString()}`;
       console.log(`Fetching recent items from the last ${days} days:`, url);
 
       const response = await fetch(url);
@@ -569,7 +599,7 @@ class ProductLoader {
    */
   updateCategoryFilters() {
     // Find the category details element - first details element in the sidebar
-    const categoryDetails = document.getElementById('category-details');
+    const categoryDetails = document.getElementById("category-details");
 
     if (!categoryDetails) {
       console.error("Category details element not found");
@@ -601,9 +631,10 @@ class ProductLoader {
     sortedCategories.forEach((category) => {
       const li = document.createElement("li");
       const categoryId = category.name.toLowerCase().replace(/\s+/g, "-");
-      
+
       // Check the box if this category matches the one in URL parameters
-      const isChecked = this.currentFilters.category === category.name ? 'checked' : '';
+      const isChecked =
+        this.currentFilters.category === category.name ? "checked" : "";
 
       li.innerHTML = `
         <input type="checkbox" id="${categoryId}" data-category="${category.name}" ${isChecked}>
@@ -620,13 +651,13 @@ class ProductLoader {
     newCheckboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", () => this.applyFilters());
     });
-    
+
     // Add animation to categories if enabled
     if (this.animationsEnabled) {
-      const categoryItems = categoryList.querySelectorAll('li');
+      const categoryItems = categoryList.querySelectorAll("li");
       categoryItems.forEach((item, index) => {
         item.style.animationDelay = `${0.05 * index}s`;
-        item.classList.add('category-item-animation');
+        item.classList.add("category-item-animation");
       });
     }
   }
@@ -641,18 +672,27 @@ class ProductLoader {
 
       // Set up query parameters based on currentFilters
       const params = new URLSearchParams();
-      
+
       // Add filters to query params
-      if (this.currentFilters.name) params.set('name', this.currentFilters.name);
-      if (this.currentFilters.category) params.set('category', this.currentFilters.category);
-      if (this.currentFilters.min_price !== null) params.set('min_price', this.currentFilters.min_price);
-      if (this.currentFilters.max_price !== null) params.set('max_price', this.currentFilters.max_price);
-      if (this.currentFilters.status) params.set('status', this.currentFilters.status);
-      if (this.currentFilters.seller_id) params.set('seller_id', this.currentFilters.seller_id);
-      if (this.currentFilters.min_quantity) params.set('min_quantity', this.currentFilters.min_quantity);
+      if (this.currentFilters.name)
+        params.set("name", this.currentFilters.name);
+      if (this.currentFilters.category)
+        params.set("category", this.currentFilters.category);
+      if (this.currentFilters.min_price !== null)
+        params.set("min_price", this.currentFilters.min_price);
+      if (this.currentFilters.max_price !== null)
+        params.set("max_price", this.currentFilters.max_price);
+      if (this.currentFilters.status)
+        params.set("status", this.currentFilters.status);
+      if (this.currentFilters.seller_id)
+        params.set("seller_id", this.currentFilters.seller_id);
+      if (this.currentFilters.min_quantity)
+        params.set("min_quantity", this.currentFilters.min_quantity);
 
       // Use the search endpoint for all product fetching
-      const url = `${this.apiBaseUrl}${this.searchEndpoint}?${params.toString()}`;
+      const url = `${this.apiBaseUrl}${
+        this.searchEndpoint
+      }?${params.toString()}`;
       console.log("Fetching products with filters:", url);
 
       const response = await fetch(url);
@@ -669,10 +709,10 @@ class ProductLoader {
 
       // Apply pagination
       this.applyPagination();
-      
+
       // Always update the URL with current filters
       this.updateURLWithFilters();
-      
+
       return this.products;
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -716,13 +756,13 @@ class ProductLoader {
     }
 
     categoryTitle.textContent = displayText;
-    
+
     // Add an animation to the product count on update
     if (this.animationsEnabled) {
-      categoryTitle.classList.remove('count-update-animation');
+      categoryTitle.classList.remove("count-update-animation");
       // Trigger reflow to restart animation
       void categoryTitle.offsetWidth;
-      categoryTitle.classList.add('count-update-animation');
+      categoryTitle.classList.add("count-update-animation");
     }
   }
 
@@ -759,9 +799,7 @@ class ProductLoader {
       // Add event listener to retry button
       const retryBtn = this.productGrid.querySelector(".retry-btn");
       if (retryBtn) {
-        retryBtn.addEventListener("click", () =>
-          this.fetchProducts()
-        );
+        retryBtn.addEventListener("click", () => this.fetchProducts());
       }
     }
   }
@@ -787,13 +825,13 @@ class ProductLoader {
     // Create and append product cards
     this.products.forEach((product, index) => {
       const productCard = this.createProductCard(product);
-      
+
       // Add staggered animation to cards if enabled
       if (this.animationsEnabled) {
         productCard.style.animationDelay = `${0.05 * (index % 4)}s`;
-        productCard.classList.add('product-card-animation');
+        productCard.classList.add("product-card-animation");
       }
-      
+
       this.productGrid.appendChild(productCard);
     });
   }
@@ -807,7 +845,7 @@ class ProductLoader {
     // Create wrapper div that will contain the card
     const wrapper = document.createElement("div");
     wrapper.className = "product-card-wrapper";
-    
+
     // Create the actual product card
     const card = document.createElement("div");
     card.className = "product-card";
@@ -817,7 +855,7 @@ class ProductLoader {
     const cardLink = document.createElement("a");
     cardLink.href = `http://127.0.0.1:5500/frontend/src/pages/product/product.html?id=${product.item_id}`;
     cardLink.className = "product-card-link";
-    
+
     // Determine if product is in stock
     const inStock = product.quantity > 0;
 
@@ -845,15 +883,19 @@ class ProductLoader {
     // Add category badge if product is new
     let categoryBadge = isNewProduct
       ? `<span class="category-badge">New</span>`
-      : "";    // Get static image based on product category or name
+      : ""; // Get static image based on product category or name
     // This will completely replace the dynamic image_url from API
-    const imagePath = this.getStaticProductImage(product);    // Create the product card HTML
+    const imagePath = this.getStaticProductImage(product); // Create the product card HTML
     card.innerHTML = `
       ${categoryBadge}
-      ${!inStock ? '<span class="out-of-stock-badge">Out of Stock</span>' : ""}      <div class="product-image">
-        <img src="${imagePath}" alt="${product.name}" loading="lazy" onerror="this.src='/frontend/public/resources/images/products/smartwatch.jpg'">
+      ${
+        !inStock ? '<span class="out-of-stock-badge">Out of Stock</span>' : ""
+      }      <div class="product-image">
+        <img src="${imagePath}" alt="${
+      product.name
+    }" loading="lazy" onerror="this.src='/frontend/public/resources/images/products/smartwatch.jpg'">
       </div>
-      <div class="product-details">
+      <div class="product-content">
         <div class="product-info">
           <h3 class="product-title">${product.name}</h3>
           <div class="product-category">${
@@ -906,42 +948,43 @@ class ProductLoader {
         </div>
       </div>
     `;
-    
+
     // Append the card to the link
     cardLink.appendChild(card);
-    
+
     // Append the link to the wrapper
     wrapper.appendChild(cardLink);
-    
+
     // Add click event handler to prevent navigation when clicking on the cart button
-    wrapper.addEventListener('click', (event) => {
+    wrapper.addEventListener("click", (event) => {
       // If the click was on the cart button or its children, prevent navigation
-      if (event.target.closest('.cart-button')) {
+      if (event.target.closest(".cart-button")) {
         event.preventDefault();
       }
     });
 
     return wrapper;
-  }  /**
+  }
+  /**
    * Get appropriate static image path for a product based on category or name
    * @param {Object} product - Product data from API
    * @returns {string} - Path to static image
-   */  getStaticProductImage(product) {
+   */ getStaticProductImage(product) {
     // Base path for images - use absolute path with /frontend prefix for consistency across the app
     const basePath = "/frontend/public/resources/images/";
-    
+
     // Total number of available product thumbnail images (1 to 27)
     const totalImages = 27;
-    
+
     // Use product ID to get a consistent "random" selection
     // Convert product.item_id to a number and get a value between 1 and totalImages (inclusive)
     const imageNumber = ((Number(product.item_id) || 0) % totalImages) + 1;
     const imagePath = `${basePath}products/${imageNumber}-thumbnail.jpg`;
-    
+
     // Add fallback logic for products without thumbnail images
     // We'll add an onerror handler to the img tag in the HTML
     return imagePath;
-    
+
     // Note: In the actual HTML, we use onerror to handle missing images
     // <img src="${imagePath}" alt="${product.name}" loading="lazy" onerror="this.src='/frontend/public/resources/images/products/smartwatch.jpg'">
   }
@@ -986,11 +1029,11 @@ class ProductLoader {
           minPriceInput.value = "0";
           maxPriceInput.value = "999";
         }
-        
+
         // Reset search input
-        const searchInput = document.querySelector('.search-box input');
+        const searchInput = document.querySelector(".search-box input");
         if (searchInput) {
-          searchInput.value = '';
+          searchInput.value = "";
         }
 
         // Reset all filters
@@ -1004,31 +1047,35 @@ class ProductLoader {
           min_quantity: null,
           featured: false,
         };
-        
+
         // Update URL to remove parameters
         this.updateURLWithFilters();
-        
+
         // Close all filter sections
         this.closeAllFilterSections();
 
         // Apply the reset filters
         this.fetchProducts();
-        
+
         // Show animation on clear button
         if (this.animationsEnabled && clearFiltersBtn) {
-          clearFiltersBtn.classList.add('clear-filters-animation');
+          clearFiltersBtn.classList.add("clear-filters-animation");
           setTimeout(() => {
-            clearFiltersBtn.classList.remove('clear-filters-animation');
+            clearFiltersBtn.classList.remove("clear-filters-animation");
           }, 500);
         }
       });
     }
-    
+
     // Add detail open/close listeners for tracking
-    const detailElements = document.querySelectorAll('.sidebar details');
-    detailElements.forEach(detail => {
-      detail.addEventListener('toggle', () => {
-        console.log(`Filter section "${detail.querySelector('summary')?.textContent.trim()}" is now ${detail.open ? 'open' : 'closed'}`);
+    const detailElements = document.querySelectorAll(".sidebar details");
+    detailElements.forEach((detail) => {
+      detail.addEventListener("toggle", () => {
+        console.log(
+          `Filter section "${detail
+            .querySelector("summary")
+            ?.textContent.trim()}" is now ${detail.open ? "open" : "closed"}`
+        );
       });
     });
   }
@@ -1041,11 +1088,13 @@ class ProductLoader {
     const categoryCheckboxes = document.querySelectorAll(
       '.sidebar details:nth-of-type(1) input[type="checkbox"]:checked'
     );
-    
+
     // Single category selection logic - last checked category applies
     if (categoryCheckboxes.length > 0) {
-      const lastCheckedCategory = categoryCheckboxes[categoryCheckboxes.length - 1];
-      this.currentFilters.category = lastCheckedCategory.dataset.category || lastCheckedCategory.id;
+      const lastCheckedCategory =
+        categoryCheckboxes[categoryCheckboxes.length - 1];
+      this.currentFilters.category =
+        lastCheckedCategory.dataset.category || lastCheckedCategory.id;
     } else {
       this.currentFilters.category = null;
     }
@@ -1061,7 +1110,7 @@ class ProductLoader {
     // Update current filters
     this.currentFilters.min_price = minPrice;
     this.currentFilters.max_price = maxPrice;
-    
+
     // Update URL with current filters
     this.updateURLWithFilters();
 
@@ -1110,21 +1159,27 @@ class ProductLoader {
 
       // Use cartManager from shared scripts
       const result = cartManager.addToCart(cartProduct, 1);
-      
+
       // Show a consistent notification matching the index page style
       if (window.notifications) {
         // Highlight product name in notification, matching index page format
-        window.notifications.success(`${product.name} added to your cart!`, 5000, {
-          productName: product.name
-        });
-        
+        window.notifications.success(
+          `${product.name} added to your cart!`,
+          5000,
+          {
+            productName: product.name,
+          }
+        );
+
         // Add cart badge animation
         cartManager.updateCartBadge(true);
       }
     } catch (error) {
       console.error("Error adding product to cart:", error);
       if (window.notifications) {
-        window.notifications.error("Couldn't add item to cart. Please try again.");
+        window.notifications.error(
+          "Couldn't add item to cart. Please try again."
+        );
       }
     }
   }
