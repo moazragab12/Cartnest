@@ -1,12 +1,55 @@
 /* ====================================
-  PRODUCT CARDS - MODERN DESIGN
+  PRODUCT CARDS - MODERN DESIGN (Improved UI + Character Stars)
   ==================================== */
+
+:root {
+  /* Card Base */
+  --card-bg: #ffffff;
+  --card-radius: 16px;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.09);
+  --card-border-width: 1px;
+  --card-border-color: #e9ecef;
+
+  /* Product Image */
+  --image-bg: #f8f9fa;
+
+  /* Badges */
+  --badge-text-color: #ffffff;
+  --discount-badge-bg: #343a40;
+  --category-badge-bg: linear-gradient(135deg, #0052d4 0%, #0b8ce0 100%);
+
+  /* Text Content */
+  --text-color-dark: #212529;
+  --text-color-muted: #6c757d;
+  --text-color-light: #868e96;
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Rating (Character Stars Style) */
+  --star-font-size: 18px; /* Size of the ★ and ☆ characters */
+  --star-color-filled: #FFB700; /* Color for filled stars ★ */
+  --star-color-empty: #ced4da;  /* Color for empty stars ☆ - slightly darker for better visibility */
+  --star-color-half-filled: var(--star-color-filled); /* Default: half-filled looks like filled */
+  --rating-text-font-size: 14px; /* Font size for the (123) review count */
+
+  /* Purchase Area & Borders */
+  --border-color-light: #dee2e6;
+
+  /* Buttons */
+  --button-bg-default: #f8f9fa;
+  --button-shadow-default: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --button-bg-hover-gradient: linear-gradient(90deg, #0b8ce0 0%, #1a78c8 100%);
+  --button-icon-color-default: #495057;
+  --button-icon-color-hover: #ffffff;
+
+  /* General Iconography */
+  --icon-color-default: var(--button-icon-color-default);
+  --icon-color-hover: var(--button-icon-color-hover);
+}
 
 /* ----------------
   1. PRODUCT GRID LAYOUT - moved to layout-fixes.css
   ---------------- */
-/* All grid layout properties (grid-template-columns, gap, etc.) moved to layout-fixes.css */
-/* This ensures centralized control of layout properties */
 
 /* ----------------
   2. PRODUCT CARD BASE
@@ -15,21 +58,20 @@
   width: 100%;
   min-height: 430px;
   position: relative;
-  background: var(--card-bg, #ffffff);
-  border-radius: var(--card-radius, 12px);
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
   text-align: left;
-  box-shadow: var(--card-shadow, 0 2px 10px rgba(0, 0, 0, 0.04));
-  transition: all 0.3s ease;
+  box-shadow: var(--card-shadow);
+  transition: all 0.25s ease-in-out;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--card-border, #f0f0f0);
+  border: var(--card-border-width) solid var(--card-border-color);
 }
 
-/* Product card hover effect */
 .product-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--card-shadow-hover, 0 8px 20px rgba(0, 0, 0, 0.08));
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* ----------------
@@ -38,148 +80,171 @@
 .product-image {
   width: 100%;
   height: 280px;
-  border-radius: var(--card-radius, 12px) var(--card-radius, 12px) 0 0;
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
   overflow: hidden;
   position: relative;
-  background-color: var(--image-bg, #fafafa);
+  background-color: var(--image-bg);
 }
 
 .product-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* Image zoom effect on hover */
 .product-card:hover .product-image img {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 /* ----------------
   4. PRODUCT BADGES
   ---------------- */
-/* Common badge styles */
 .discount-badge,
 .category-badge {
   position: absolute;
-  top: 12px;
-  padding: 4px 12px;
-  font-size: 12px;
+  top: 16px;
+  padding: 5px 14px;
+  font-size: 11.5px;
   border-radius: 20px;
   font-weight: 600;
   z-index: 2;
-  color: #ffffff;
+  color: var(--badge-text-color);
+  font-family: var(--font-family-base);
 }
 
-/* Discount badge - left side */
 .discount-badge {
-  left: 12px;
-  background: var(--discount-badge-bg, #252525);
-  padding: 4px 10px;
+  left: 16px;
+  background: var(--discount-badge-bg);
 }
 
-/* Category badge - right side */
 .category-badge {
-  right: 12px;
-  background: var(
-    --gradient-primary,
-    linear-gradient(135deg, #005ade 0%, #0d99ff 100%)
-  );
-  backdrop-filter: blur(4px);
+  right: 16px;
+  background: var(--category-badge-bg);
+  backdrop-filter: blur(5px);
 }
 
 /* ----------------
   5. PRODUCT CONTENT STRUCTURE
   ---------------- */
-/* Product content container */
 .product-content {
   display: flex;
   flex-direction: column;
-  padding: 18px 22px;
+  padding: 20px 24px;
   flex-grow: 1;
 }
 
-/* Product details container */
 .product-details {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-/* Product info container */
 .product-info {
   flex: 1;
-  margin-bottom: 14px;
+  margin-bottom: 16px; /* Space below the general info block (title, rating, description) */
 }
 
 /* ----------------
   6. PRODUCT TEXT CONTENT
   ---------------- */
-/* Product title */
 .product-title {
-  font-size: 17px;
+  font-size: 16.5px;
   font-weight: 600;
-  color: var(--text-dark, #252525);
-  margin-bottom: 8px;
+  color: var(--text-color-dark);
+  margin-bottom: 8px; /* Space between title and rating */
   white-space: normal;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
-  line-height: 1.4;
-  min-height: 48px;
-  letter-spacing: -0.01em;
+  line-height: 1.45;
+  min-height: calc(1.45em * 2);
+  letter-spacing: -0.005em;
+  font-family: var(--font-family-base);
 }
 
-/* Product description */
 .product-description {
-  font-size: 14.5px;
-  color: var(--text-muted, #767676);
+  font-size: 14px;
+  color: var(--text-color-muted);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
-  line-height: 1.45;
-  margin-bottom: 10px;
+  line-height: 1.5;
+  /* margin-bottom is removed here, as .rating-display will handle its own bottom margin */
+  font-family: var(--font-family-base);
 }
 
 /* ----------------
-  7. PRODUCT RATING
+  7. PRODUCT RATING (Character Stars Style - Final)
   ---------------- */
-.product-rating {
+.rating-display {
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-bottom: 10px;
+  gap: 8px; /* Space between stars group and review count */
+  margin-bottom: 12px; /* Space below the entire rating line, before description */
+  font-family: var(--font-family-base);
+  order: -1; /* Moves rating display above description if both are direct children of .product-info */
 }
 
-.stars {
-  color: var(--star-color, #ffb800);
-  font-size: 14px;
+.stars-container {
+  display: inline-flex;
+  line-height: 1; /* Consistent vertical alignment for star characters */
 }
 
-.rating-count {
-  font-size: 13px;
-  color: var(--text-muted, #767676);
+.star-icon {
+  font-size: var(--star-font-size);
+  margin-right: 1px; /* Minimal space between stars */
+  line-height: 1; /* Helps prevent extra space around characters */
+  letter-spacing: -0.5px; /* Visually tighten star characters if needed */
+  cursor: default; /* Indicate they are not interactive */
+}
+
+.star-icon:last-child {
+  margin-right: 0;
+}
+
+.star-icon--filled {
+  color: var(--star-color-filled);
+}
+
+.star-icon--half-filled {
+  /* Defaulting to look like a filled star.
+     For a true visual half-star with a single '★' character, you'd need advanced CSS
+     like masking or pseudo-elements with overflow:hidden.
+     Example: color: var(--star-color-half-filled);
+     If you want a distinct color for half-filled, define --star-color-half-filled in :root.
+  */
+  color: var(--star-color-half-filled);
+}
+
+.star-icon--empty {
+  color: var(--star-color-empty);
+}
+
+.review-count {
+  font-size: var(--rating-text-font-size);
+  color: var(--text-color-muted);
+  line-height: 1; /* Align with stars */
+  padding-left: 2px; /* Small visual separation if gap isn't enough */
+  font-variant-numeric: tabular-nums; /* Ensures numbers align if counts vary widely */
 }
 
 /* ----------------
   8. PURCHASE AREA
   ---------------- */
-/* Purchase area (price + cart button) */
 .purchase-area {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: auto;
-  border-top: 1px solid var(--border-light, #f5f5f5);
-  padding-top: 14px;
+  margin-top: auto; /* Pushes to the bottom of the flex container (.product-details) */
+  border-top: var(--card-border-width) solid var(--border-color-light);
+  padding-top: 16px;
 }
 
-/* Price container */
 .product-price {
   display: flex;
   align-items: flex-end;
@@ -187,59 +252,56 @@
 }
 
 .current-price {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
-  color: var(--text-dark, #252525);
-  letter-spacing: -0.02em;
+  color: var(--text-color-dark);
+  letter-spacing: -0.01em;
+  font-family: var(--font-family-base);
 }
 
 .original-price {
-  font-size: 15px;
-  color: var(--text-light, #888);
+  font-size: 14.5px;
+  color: var(--text-color-light);
   text-decoration: line-through;
+  font-family: var(--font-family-base);
 }
 
 /* ----------------
   9. CART BUTTONS
   ---------------- */
-/* Cart button base styles */
 .cart-button,
 .add-to-cart {
   position: relative;
   overflow: hidden;
   cursor: pointer;
   border: none;
-  border-radius: 8px;
-  background: var(--button-bg, #f7f9fc);
-  box-shadow: var(--button-shadow, 0 1px 3px rgba(0, 0, 0, 0.05));
+  border-radius: 10px;
+  background: var(--button-bg-default);
+  box-shadow: var(--button-shadow-default);
   height: 42px;
   width: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-in-out;
 }
 
-/* Icon styling */
 .add-to-cart i {
   font-size: 16px;
-  color: var(--text-dark, #252525);
-  transition: all 0.3s ease;
+  color: var(--button-icon-color-default);
+  transition: all 0.25s ease;
 }
 
-/* Hover state */
 .cart-button:hover,
 .add-to-cart:hover {
-  background: var(
-    --gradient-button,
-    linear-gradient(90deg, #0d99ff 0%, #1a86e4 100%)
-  );
-  transform: translateY(-2px);
+  background: var(--button-bg-hover-gradient);
+  transform: translateY(-2.5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
 }
 
 .add-to-cart:hover i {
-  color: #ffffff;
-  transform: scale(1.1);
+  color: var(--button-icon-color-hover);
+  transform: scale(1.08);
 }
 
 /* ----------------
@@ -251,12 +313,13 @@
   align-items: center;
   justify-content: center;
   padding: 9px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 500;
   transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
   height: 100%;
   width: 100%;
+  font-family: var(--font-family-base);
 }
 
 .default-btn {
@@ -287,43 +350,43 @@
 /* ----------------
   11. ICON STYLING
   ---------------- */
-/* SVG icon colors */
 .cart-icon {
-  stroke: var(--icon-color, #252525);
-  transition: all 0.3s ease;
+  stroke: var(--icon-color-default);
+  transition: all 0.25s ease;
 }
 
 .cart-button:hover .cart-icon {
-  stroke: #ffffff;
+  stroke: var(--icon-color-hover);
 }
 
 .hover-btn svg path {
-  fill: #ffffff;
+  fill: var(--icon-color-hover);
 }
 
-/* Add a subtle pop effect on click */
 .cart-button:active,
 .add-to-cart:active {
-  transform: scale(0.96);
+  transform: scale(0.95) translateY(-1px);
 }
 
 /* ----------------
   12. RESPONSIVE STYLES
   ---------------- */
-/* Grid layout responsive properties moved to layout-fixes.css */
-
 @media screen and (max-width: 768px) {
-  .product-card {
-    min-height: 410px;
-  }
+  .product-card { min-height: 410px; }
+  .product-content { padding: 18px 20px; }
+  .product-title { font-size: 16px; }
+  .current-price { font-size: 18px; }
+  .rating-display { margin-bottom: 10px; }
+  .star-icon { font-size: calc(var(--star-font-size) - 2px); } /* Slightly smaller stars */
+  .review-count { font-size: calc(var(--rating-text-font-size) - 1px); }
 }
 
 @media screen and (max-width: 576px) {
-  .product-card {
-    min-height: 400px;
-  }
-
-  .product-image {
-    height: 240px;
-  }
+  .product-card { min-height: auto; }
+  .product-image { height: 220px; }
+  .product-title { font-size: 15px; min-height: calc(1.45em * 2); }
+  .product-description { font-size: 13.5px; }
+  .rating-display { gap: 6px; }
+  .star-icon { font-size: calc(var(--star-font-size) - 3px); }
+  .review-count { font-size: calc(var(--rating-text-font-size) - 2px); }
 }
