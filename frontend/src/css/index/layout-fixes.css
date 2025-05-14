@@ -1,0 +1,212 @@
+/* ====================================
+   LAYOUT & ALIGNMENT FIXES
+   ==================================== */
+/**
+ * This file serves as a central place to control all layout-related properties
+ * including margins, paddings, grid layouts and other spacing properties.
+ * 
+ * Any changes to layout should be made here rather than in component CSS files.
+ * This approach provides better maintainability and prevents unexpected overrides.
+ */
+
+/* ----------------
+   1. GLOBAL LAYOUT SETTINGS
+   ---------------- */
+/* Ensures consistent section alignment and prevents horizontal scrolling */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Maintain standard width for containers */
+.container,
+.section-container {
+  box-sizing: border-box;
+  max-width: 100%;
+  position: relative;
+}
+
+/* Ensure that all sections extend the full width of the page */
+section {
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: visible;
+}
+
+/* ----------------
+   2. SECTION CONTAINERS
+   ---------------- */
+.section-container,
+.hero-carousel-section,
+.faq-section,
+.featured-products-section,
+.categories-section,
+.popular-products-section {
+  margin: 10px var(--body-margin);
+  width: calc(100% - 2 * var(--body-margin));
+}
+
+.partners-section,
+.selling-section,
+.section-container,
+.hero-carousel-section,
+.faq-section,
+.featured-products-section,
+.categories-section,
+.popular-products-section {
+  box-sizing: border-box;
+  overflow-x: visible;
+}
+/* ----------------
+   3. SECTION SPACING & HEADERS
+   ---------------- */
+/* Standardized section spacing */
+section {
+  margin-top: 60px;
+  margin-bottom: 60px;
+  padding: 0;
+}
+
+/* First section should have less top margin */
+body > section:first-of-type {
+  margin-top: 30px;
+}
+
+/* Remove any section-specific margins that were previously applied */
+.hero-carousel-section,
+.featured-products-section,
+.popular-products-section,
+.categories-section,
+.selling-section,
+.faq-section,
+.partners-section {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+/* Header spacing for all sections */
+.featured-products-header,
+.popular-products-header,
+.categories-header {
+  margin-bottom: 40px;
+  margin-top: 0;
+}
+
+.categories-header-container {
+  margin-bottom: 40px;
+}
+
+/* ----------------
+   4. GRID LAYOUTS
+   ---------------- */
+/* Product grid layout */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--grid-gap, 20px);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Override any horizontal padding from section container for product grids */
+.section-container .products-grid {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+/* Categories grid layout */
+.categories {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Exactly 3 columns per row */
+  gap: 30px;
+  max-width: 100%;
+}
+
+/* ----------------
+   5. RESPONSIVE LAYOUTS
+   ---------------- */
+@media screen and (max-width: 992px) {
+  /* Tablet layouts */
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  section {
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  .featured-products-header,
+  .popular-products-header,
+  .categories-header,
+  .categories-header-container {
+    margin-bottom: 35px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  /* Small tablet layouts */
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  section {
+    margin-top: 45px;
+    margin-bottom: 45px;
+  }
+
+  .categories {
+    grid-template-columns: repeat(3, 1fr); /* Maintain 3 columns */
+    gap: 20px; /* Slightly reduced gap for medium screens */
+    padding: 0;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .featured-products-header,
+  .popular-products-header,
+  .categories-header {
+    margin-bottom: 30px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  /* Mobile layouts */
+  section {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    margin-left: var(--body-margin, 10px);
+    margin-right: var(--body-margin, 10px);
+    width: calc(100% - 2 * var(--body-margin, 10px));
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .categories {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+
+  /* First section should have less top margin on mobile too */
+  body > section:first-of-type {
+    margin-top: 20px;
+  }
+
+  .featured-products-header,
+  .popular-products-header,
+  .categories-header {
+    margin-bottom: 25px;
+  }
+}

@@ -1,0 +1,102 @@
+/* ====================================
+   FEATURED AND POPULAR PRODUCT SECTIONS
+   ==================================== */
+
+/* Section containers layout properties moved to layout-fixes.css */
+
+/* ----------------
+   2. SECTION HEADERS
+   ---------------- */
+.featured-products-header,
+.popular-products-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* margin-bottom moved to layout-fixes.css */
+  width: 100%;
+}
+
+.featured-products-header h2,
+.popular-products-header h2 {
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--black-color);
+  margin: 0 0 20px 0;
+  position: relative;
+  line-height: 1.2;
+}
+
+.featured-products-header h2::after,
+.popular-products-header h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 70px;
+  height: 4px;
+  background: var(
+    --gradient-primary,
+    linear-gradient(135deg, #005ade 0%, #0d99ff 100%)
+  );
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Header hover effects */
+.featured-products-header:hover h2::after,
+.popular-products-header:hover h2::after {
+  width: 100px;
+}
+
+/* Header paragraphs */
+.featured-products-header p,
+.popular-products-header p {
+  color: var(--text-muted, #666);
+  max-width: 600px;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Product grid layout properties moved to layout-fixes.css */
+
+/* ----------------
+   4. RESPONSIVE STYLES
+   ---------------- */
+/* ----------------
+   4. RESPONSIVE STYLES
+   ---------------- */
+@media screen and (max-width: 992px) {
+  /* Tablet view */
+  .featured-products-header h2,
+  .popular-products-header h2 {
+    font-size: 34px;
+  }
+
+  .featured-products-header p,
+  .popular-products-header p {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  /* Small tablet view */
+  .featured-products-header h2,
+  .popular-products-header h2 {
+    font-size: 30px;
+    margin-bottom: 15px;
+  }
+
+  .featured-products-header p,
+  .popular-products-header p {
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  /* Mobile view */
+  .featured-products-header h2,
+  .popular-products-header h2 {
+    font-size: 28px;
+  }
+}

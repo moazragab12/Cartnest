@@ -1,0 +1,186 @@
+/* ====================================
+   ADVANTAGES SECTION
+   ==================================== */
+.selling-section {
+  display: flex;
+  background-color: #d1e2f8;
+  width: 100vw;
+  height: 661px;
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+}
+
+.selling-section-container {
+  display: flex;
+  width: 70%;
+  height: 288px;
+  margin: 0 auto;
+  padding: 0;
+  position: absolute;
+  top: 195px;
+  left: 50%;
+  transform: translateX(-50%);
+  justify-content: space-between;
+}
+
+.left-side {
+  flex: 0 0 456px;
+  height: 244px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0;
+}
+
+.right-side {
+  flex: 0 0 616px;
+  height: 288px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+  gap: 32px;
+}
+
+.section-title {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 130%;
+  letter-spacing: 0%;
+  margin-bottom: 0;
+  color: #1ea1ff;
+}
+
+.description {
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 160%;
+  letter-spacing: 0%;
+  color: #1ea1ff;
+  margin-bottom: 0;
+  width: 616px;
+  height: 87px;
+}
+
+.stats-row {
+  display: flex;
+  gap: 24px;
+}
+
+.stat {
+  flex: 0 0 296px;
+  height: 153px;
+}
+
+.stat-value {
+  font-family: "Oxygen", sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 120%;
+  letter-spacing: 0%;
+  color: #1ea1ff;
+  margin-bottom: 8px;
+  height: 58px;
+}
+
+.stat-description {
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 160%;
+  letter-spacing: 0%;
+  color: #1ea1ff;
+  margin: 0;
+}
+
+.read-more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1ea1ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 160%;
+  letter-spacing: 0%;
+  padding: 10px 20px;
+  margin-top: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width:fit-content;
+  min-width: 120px;
+  height: 46px;
+  box-shadow: 0 4px 8px rgba(30, 161, 255, 0.2);
+}
+
+.read-more-btn:hover {
+  background-color: #0c8be8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(30, 161, 255, 0.3);
+}
+
+.read-more-btn i {
+  color: #ffffff;
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+/* Responsive styling for advantages section */
+@media screen and (max-width: 1280px) {
+  .selling-section-container {
+    width: 90%;
+    padding: 0 20px;
+  }
+  
+  .description {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .selling-section {
+    height: auto;
+    padding: 80px 0;
+  }
+  
+  .selling-section-container {
+    position: relative;
+    top: 0;
+    flex-direction: column;
+    height: auto;
+    gap: 40px;
+  }
+  
+  .left-side, .right-side {
+    flex: 1;
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .stats-row {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .stat {
+    flex: 1;
+    width: 100%;
+  }
+  
+  .section-title {
+    font-size: 32px;
+  }
+  
+  .description {
+    font-size: 16px;
+  }
+}

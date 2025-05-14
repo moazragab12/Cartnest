@@ -163,8 +163,8 @@ function createProductCard(product) {
  */
 async function fetchFeaturedProducts() {
     try {
-        // Limit to exactly 3 items for featured products
-        const limit = 3;
+        // Limit to exactly 4 items for featured products
+        const limit = 4;
         const response = await fetch(`${API_BASE_URL}/api/v0/items/featured?limit=${limit}`);
         const data = await response.json();
         return data || [];
@@ -180,8 +180,8 @@ async function fetchFeaturedProducts() {
  */
 async function fetchPopularProducts() {
     try {
-        // Limit to exactly 6 items for popular products
-        const limit = 6;
+        // Limit to exactly 8 items for popular products
+        const limit = 8;
         // Using the recent endpoint as a substitute for popular products
         const response = await fetch(`${API_BASE_URL}/api/v0/items/recent?limit=${limit}`);
         const data = await response.json();

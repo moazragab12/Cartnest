@@ -1,0 +1,176 @@
+/* ====================================
+   HERO CAROUSEL SECTION
+   ==================================== */
+.hero-carousel-section {
+  overflow: hidden;
+  /* Layout properties (width, padding) moved to layout-fixes.css */
+}
+
+#heroCarousel {
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  /* margin moved to layout-fixes.css */
+  width: 100%;
+}
+
+.carousel-inner {
+  border-radius: var(--border-radius-lg);
+  width: 100%;
+}
+
+.carousel-item {
+  background-color: transparent;
+}
+
+.hero-slide {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #accbee 0%, #e7f0fd 100%);
+  height: 522px;
+  position: relative;
+}
+
+.carousel-indicators [data-bs-target] {
+  background-color: rgba(
+    12,
+    152,
+    255,
+    0.5
+  ); /* Semi-transparent primary color */
+  width: 30px;
+  height: 4px;
+  border-radius: 0;
+  margin: 0 var(--spacing-xs);
+  opacity: 0.5;
+  transition: opacity var(--transition-fast), width var(--transition-fast);
+}
+
+.carousel-indicators .active {
+  background-color: var(--primary-color);
+  opacity: 1;
+  width: 40px; /* Active indicator is slightly wider */
+}
+
+/* Hide carousel arrows */
+.carousel-control-prev,
+.carousel-control-next {
+  display: none;
+}
+
+/* Hero text styling based on specifications */
+.carousel-item .hero-text {
+  width: 550px; /* Increased from 457px for more space */
+  height: auto; /* Changed from fixed height to auto for better responsiveness */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 96px; /* Left spacing */
+}
+
+.carousel-item .hero-text p {
+  color: var(--black-color);
+  margin-bottom: var(--spacing-md);
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s forwards;
+  animation-delay: 0.2s;
+}
+
+.carousel-item .hero-text h2 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  margin-bottom: var(--spacing-xl);
+  color: var(--black-color);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s forwards;
+  animation-delay: 0.4s;
+}
+
+.carousel-item .hero-image {
+  width: 495px;
+  height: 522px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0;
+}
+
+.carousel-item .hero-image img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* 192px space between text and image */
+.hero-slide {
+  padding-right: 0;
+  gap: 192px;
+}
+
+/* Enlarged button with better content spacing */
+.hero-button {
+  width: 150px; /* Exact Figma width */
+  height: 48px; /* Exact Figma height */
+  padding: 12px 24px; /* Exact Figma padding */
+  gap: 8px; /* Exact Figma gap */
+  border-radius: 8px; /* Exact Figma border-radius */
+  background-color: #0d99ff;
+  color: var(--tertiary-color);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", sans-serif;
+  font-size: 16px; /* Adjusted to better fit the width */
+  font-weight: 500;
+  white-space: nowrap; /* Ensure text stays on one line */
+  cursor: pointer;
+  transition: all 0.4s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s forwards;
+  animation-delay: 0.6s;
+}
+
+.hero-button:hover {
+  background-color: #f5f2f7;
+  color: #0d99ff;
+  border: 1px solid #0d99ff;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(13, 153, 255, 0.2);
+}
+
+/* Button icon animation */
+.hero-button i {
+  transition: transform 0.3s ease, color 0.3s ease;
+  color: var(--tertiary-color);
+}
+
+.hero-button:hover i {
+  transform: translateX(6px);
+  color: #0d99ff;
+}
+
+/* Override bootstrap button styles */
+.btn-primary {
+  background-color: #0d99ff;
+  border-color: #0d99ff;
+  width: 150px; /* Exact Figma width */
+  height: 48px; /* Exact Figma height */
+  padding: 12px 24px; /* Exact Figma padding */
+  gap: 8px; /* Exact Figma gap */
+  border-radius: 8px; /* Exact Figma border-radius */
+  font-size: 16px; /* Adjusted to better fit the width */
+  white-space: nowrap;
+}

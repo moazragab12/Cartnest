@@ -1,0 +1,18 @@
+/* Main index style file that imports all component styles */
+
+/* Import base styles */
+@import url("./base.css");
+
+/* Import shared component styles */
+@import url("./components/section-container.css");
+
+/* Import component styles */
+@import url("./components/hero-carousel.css");
+@import url("./components/featured-products.css");
+@import url("./components/categories.css");
+@import url("./components/advantages.css");
+@import url("./components/faq.css");
+@import url("./components/partners.css");
+
+/* Import layout fixes (always last to override other styles) */
+@import url("./layout-fixes.css");

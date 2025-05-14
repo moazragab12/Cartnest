@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="./src/css/shared/search.css" />
     <link rel="stylesheet" href="./src/css/shared/cart-badge.css" />
     <link rel="stylesheet" href="./src/css/shared/header-fixes.css" />
-    <link rel="stylesheet" href="./src/css/index/style.css" />
+    <link rel="stylesheet" href="./src/css/index/main.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -69,9 +69,10 @@
       defer
     ></script>
     <!-- Search Functionality JS -->
-    <script src="./src/js/shared/search.js" defer></script>
-    <!-- SVG Icon Fixer -->
+    <script src="./src/js/shared/search.js" defer></script>    <!-- SVG Icon Fixer -->
     <script src="./src/js/shared/svg-fixer.js" defer></script>
+    <!-- Category Button Init -->
+    <script src="./src/js/index/category-button-init.js" defer></script>
   </head>
 
   <body>
@@ -144,9 +145,8 @@
       ></a>
       <a href="#"
         >Premium Fruits <i class="fas fa-chevron-down dropdown-icon"></i
-      ></a>
-      <a href="#"
-        >Home & Kitchen <i class="fas fa-chevron-down dropdown-icon"></i
+      ></a>      <a href="#"
+        >Home &amp; Kitchen <i class="fas fa-chevron-down dropdown-icon"></i
       ></a>
       <a href="#">Fashion <i class="fas fa-chevron-down dropdown-icon"></i></a>
       <a href="#"
@@ -155,12 +155,10 @@
       <a href="#">Beauty <i class="fas fa-chevron-down dropdown-icon"></i></a>
       <a href="#"
         >Home Improvement <i class="fas fa-chevron-down dropdown-icon"></i
-      ></a>
-      <a href="#"
-        >Sports, Toys & Luggage <i class="fas fa-chevron-down dropdown-icon"></i
-      ></a>
+      ></a>      <a href="#"
+        >Sports, Toys &amp; Luggage <i class="fas fa-chevron-down dropdown-icon"></i></a>
     </nav>
-
+    
     <!-- Hero Section Carousel -->
     <section class="hero-carousel-section">
       <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -265,177 +263,181 @@
           type="button"
           data-bs-target="#heroCarousel"
           data-bs-slide="next"
-        >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        >          <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>
     </section>
-
+    
     <!-- Featured Products Section - Updated to fetch from API -->
     <section class="featured-products-section">
       <div class="featured-products-header">
-        <h2>Featured Products</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          fringilla nunc in molestie feugiat. Nunc auctor consectetur elit, quis
-          pulvina.
-        </p>
-      </div>
+          <h2>Featured Products</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+            fringilla nunc in molestie feugiat. Nunc auctor consectetur elit, quis
+            pulvina.
+          </p>
+        </div>
 
-      <!-- Products grid that will be populated by JavaScript -->
-      <div class="products-grid">
-        <!-- Products will be dynamically loaded here -->
-      </div>
+        <!-- Products grid that will be populated by JavaScript -->
+        <div class="products-grid">
+          <!-- Products will be dynamically loaded here -->
+        </div>
     </section>
 
-    <!-- Categories Section - Updated to show random categories dynamically -->
+      <!-- Categories Section - Updated to show random categories dynamically -->
     <section class="categories-section">
-      <div class="categories-header">
-        <h2>View Categories</h2>
-        <p>
-          Explore our wide range of product categories for all your shopping
-          needs.
-        </p>
-      </div>
+       <div class="categories-header-container">
+          <div class="categories-header">
+            <h2>View Categories</h2>
+            <p>
+              Explore our wide range of product categories for all your shopping
+              needs.
+            </p>
+          </div>
+          <button class="btn btn-primary view-all-categories-btn">
+            View All
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
 
-      <div class="categories">
-        <!-- Categories will be dynamically loaded here by random-categories.js -->
-      </div>
-    </section>
-
+        <div class="categories">
+          <!-- Categories will be dynamically loaded here by random-categories.js -->
+        </div>
+    </section>    
+    
     <!-- Most Popular Products Section - Updated to fetch from API -->
     <section class="popular-products-section">
       <div class="popular-products-header">
-        <h2>Most Popular Products</h2>
-        <p>
-          Our best-selling products loved by customers based on quality and
-          value.
-        </p>
-      </div>
+          <h2>Most Popular Products</h2>
+          <p>
+            Our best-selling products loved by customers based on quality and
+            value.
+          </p>
+        </div>
 
-      <!-- Products grid that will be populated by JavaScript -->
-      <div class="products-grid">
-        <!-- Products will be dynamically loaded here -->
-      </div>
-    </section>
-
-    <!-- Unique Selling Proportions Section -->
+        <!-- Products grid that will be populated by JavaScript -->
+        <div class="products-grid">
+          <!-- Products will be dynamically loaded here -->
+        </div>
+    </section>    <!-- Unique Selling Proportions Section -->    
+    
     <section class="selling-section">
       <div class="selling-section-container">
-        <div class="left-side">
-          <h2 class="section-title">
-            Have a Look at Our Unique Selling Proportions
-          </h2>
-          <button class="read-more-btn">
-            Read More <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
-        <div class="right-side">
-          <p class="description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            varius enim in eros elementum tristique. Duis cursus, mi quis
-            viverra ornare, eros dolor interdum nulla, ut commodo diam libero
-            vitae erat.
-          </p>
-          <div class="stats-row">
-            <div class="stat">
-              <div class="stat-value">99%</div>
-              <p class="stat-description">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse varius enim in eros.
-              </p>
-            </div>
-            <div class="stat">
-              <div class="stat-value">100%</div>
-              <p class="stat-description">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse varius enim in eros.
-              </p>
+          <div class="left-side">
+            <h2 class="section-title">
+              Have a Look at Our Unique Selling Proportions
+            </h2>
+            <button class="read-more-btn">
+              Read More <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+          <div class="right-side">
+            <p class="description">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+              varius enim in eros elementum tristique. Duis cursus, mi quis
+              viverra ornare, eros dolor interdum nulla, ut commodo diam libero
+              vitae erat.
+            </p>
+            <div class="stats-row">
+              <div class="stat">
+                <div class="stat-value">99%</div>
+                <p class="stat-description">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Suspendisse varius enim in eros.
+                </p>
+              </div>
+              <div class="stat">
+                <div class="stat-value">100%</div>
+                <p class="stat-description">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Suspendisse varius enim in eros.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
     </section>
-
+    
     <!-- FAQ Section -->
     <section class="faq-section">
       <div class="faq-container">
-        <div class="faq-left">
-          <h2>Frequently Asked Questions</h2>
-          <p>
-            Get answers to common questions about our marketplace, shipping
-            policies, and customer service.
-          </p>
-          <button class="ask-question-btn">
-            Ask A Question <i class="fas fa-angle-right"></i>
-          </button>
-        </div>
-        <div class="faq-right">
-          <div class="faq-item active">
-            <div class="faq-question">
-              <h3>How do I track my order?</h3>
-              <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+          <div class="faq-left">
+            <h2>Frequently Asked Questions</h2>
+            <p>
+              Get answers to common questions about our marketplace, shipping
+              policies, and customer service.
+            </p>
+            <button class="ask-question-btn">
+              Ask A Question <i class="fas fa-angle-right"></i>
+            </button>
+          </div>
+          <div class="faq-right">
+            <div class="faq-item active">
+              <div class="faq-question">
+                <h3>How do I track my order?</h3>
+                <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+              </div>
+              <div class="faq-answer">
+                <p>
+                  Once your order is shipped, you'll receive a tracking number via
+                  email. You can also track your order by logging into your
+                  account and visiting the "Track Order" section, or by clicking
+                  on the "Track your order" link in the top navigation bar.
+                </p>
+              </div>
             </div>
-            <div class="faq-answer">
-              <p>
-                Once your order is shipped, you'll receive a tracking number via
-                email. You can also track your order by logging into your
-                account and visiting the "Track Order" section, or by clicking
-                on the "Track your order" link in the top navigation bar.
-              </p>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <h3>What payment methods do you accept?</h3>
+                <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+              </div>
+              <div class="faq-answer">
+                <p>
+                  We accept all major credit cards, PayPal, Apple Pay, and Google
+                  Pay. For select regions, we also offer cash on delivery and bank
+                  transfers.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <h3>How can I return a product?</h3>
+                <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+              </div>
+              <div class="faq-answer">
+                <p>
+                  You can return products within 30 days of delivery. Visit your
+                  order history, select the item you wish to return, and follow
+                  the prompts to generate a return label.
+                </p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <h3>Do you ship internationally?</h3>
+                <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+              </div>
+              <div class="faq-answer">
+                <p>
+                  Yes, we ship to over 100 countries worldwide. Shipping costs and
+                  delivery times vary by location. You can check shipping rates
+                  during checkout.
+                </p>
+              </div>
             </div>
           </div>
-
-          <div class="faq-item">
-            <div class="faq-question">
-              <h3>What payment methods do you accept?</h3>
-              <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
-            </div>
-            <div class="faq-answer">
-              <p>
-                We accept all major credit cards, PayPal, Apple Pay, and Google
-                Pay. For select regions, we also offer cash on delivery and bank
-                transfers.
-              </p>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <div class="faq-question">
-              <h3>How can I return a product?</h3>
-              <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
-            </div>
-            <div class="faq-answer">
-              <p>
-                You can return products within 30 days of delivery. Visit your
-                order history, select the item you wish to return, and follow
-                the prompts to generate a return label.
-              </p>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <div class="faq-question">
-              <h3>Do you ship internationally?</h3>
-              <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
-            </div>
-            <div class="faq-answer">
-              <p>
-                Yes, we ship to over 100 countries worldwide. Shipping costs and
-                delivery times vary by location. You can check shipping rates
-                during checkout.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+        </div>  
+     </section>
+    
     <!-- Partners Section -->
     <section class="partners-section">
       <div class="partners-marquee">
-        <div class="partners-container">
+          <div class="partners-container">
           <!-- Fashion Partners (Randomized) -->
           <div class="partner-logo">
             <img
@@ -596,7 +598,6 @@
             />
           </div>
         </div>
-      </div>
     </section>
 
     <!-- Footer with full width and proper styling -->

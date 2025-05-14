@@ -1,0 +1,91 @@
+/* ====================================
+   PARTNERS SECTION
+   ==================================== */
+.partners-section {
+  padding: var(--spacing-section) 10px;
+  background-color: var(--tag-color);
+  overflow: hidden;
+  position: relative;
+  width: calc(100% - 20px);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.partners-marquee {
+  position: relative;
+  width: 100%;
+
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.partners-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0;
+  flex-wrap: nowrap;
+  width: max-content;
+  animation: scrollPartners 90s linear infinite; /* Slowed down to 90s for smoother animation */
+  gap: 60px; /* Fixed spacing between partners */
+  box-sizing: border-box;
+}
+
+.partner-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px; /* Fixed width for equal distribution */
+  height: 80px; /* Fixed height for consistent appearance */
+}
+
+.partner-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(0%); /* Display logos in color */
+}
+
+@keyframes scrollPartners {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50%));
+  }
+}
+
+/* Remove gradient overlays for clean edge-to-edge appearance */
+.partners-section::before,
+.partners-section::after {
+  content: none;
+}
+
+/* Responsive styling for partners section */
+@media screen and (max-width: 768px) {
+  .partners-section {
+    padding: var(--spacing-xl) 10px;
+    width: calc(100% - 20px);
+  }
+
+  .partners-container {
+    gap: 40px;
+  }
+
+  .partner-logo {
+    width: 100px;
+    height: 60px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .partners-container {
+    gap: 30px;
+  }
+
+  .partner-logo {
+    width: 80px;
+    height: 50px;
+  }
+}

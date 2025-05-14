@@ -1,5 +1,5 @@
 /* Import Google Fonts for Montserrat and Inter */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap");
 
 /* ====================================
    FOOTER - NEW Cartnest STYLE
@@ -7,12 +7,9 @@
 .Cartnest-footer {
   background-color: #2d3436;
   color: #ffffff;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
-  margin-bottom: 0;
+  width: 100%;
+  margin: var(--spacing-xxl) 0 0 0;
   padding: 0;
-  margin-top: var(--spacing-xxl);
   font-family: var(--font-main);
 }
 
@@ -39,7 +36,7 @@
 }
 
 .footer-logo span {
-  color: #0D99FF;
+  color: #0d99ff;
   font-size: 28px;
   font-weight: 700;
 }
@@ -68,23 +65,35 @@
 
 /* Social media brand colors */
 .facebook {
-  background-color: #4267B2;
+  background-color: #4267b2;
 }
 
 .twitter {
-  background-color: #1DA1F2;
+  background-color: #1da1f2;
 }
 
 .linkedin {
-  background-color: #0077B5;
+  background-color: #0077b5;
 }
 
 .instagram {
-  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80);
+  background: linear-gradient(
+    45deg,
+    #405de6,
+    #5851db,
+    #833ab4,
+    #c13584,
+    #e1306c,
+    #fd1d1d,
+    #f56040,
+    #f77737,
+    #fcaf45,
+    #ffdc80
+  );
 }
 
 .youtube {
-  background-color: #FF0000;
+  background-color: #ff0000;
 }
 
 .social-icon i {
@@ -94,7 +103,7 @@
 
 .social-icon:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .footer-links {
@@ -242,22 +251,28 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: radial-gradient(circle at center, rgba(13, 153, 255, 0.2) 0%, rgba(13, 153, 255, 0.05) 70%);
-  box-shadow: 
-    0 0 0 5px rgba(13, 153, 255, 0.1),
-    0 0 10px rgba(0, 0, 0, 0.15);
+  background: radial-gradient(
+    circle at center,
+    rgba(13, 153, 255, 0.2) 0%,
+    rgba(13, 153, 255, 0.05) 70%
+  );
+  box-shadow: 0 0 0 5px rgba(13, 153, 255, 0.1), 0 0 10px rgba(0, 0, 0, 0.15);
   margin-right: 12px;
   transition: all 0.3s ease;
 }
 
 .shop-bag-logo-container-footer::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -5px;
   left: -5px;
   right: -5px;
   bottom: -5px;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 70%);
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 70%
+  );
   border-radius: 50%;
   z-index: -1;
   opacity: 0.6;
@@ -266,9 +281,7 @@
 
 .shop-bag-logo-container-footer:hover {
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 
-    0 0 0 5px rgba(13, 153, 255, 0.2),
-    0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0 5px rgba(13, 153, 255, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .shop-bag-logo-dark {
@@ -282,17 +295,17 @@
   .footer-top-content {
     flex-direction: column;
   }
-  
+
   .footer-info {
     width: 100%;
     margin-bottom: 30px;
     padding-right: 0;
   }
-  
+
   .footer-links {
     flex-wrap: wrap;
   }
-  
+
   .footer-column {
     width: 50%;
     margin-bottom: 30px;
@@ -303,7 +316,7 @@
   .footer-column {
     width: 100%;
   }
-  
+
   .footer-bottom-content {
     flex-direction: column;
     gap: 15px;
