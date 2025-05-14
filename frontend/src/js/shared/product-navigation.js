@@ -14,7 +14,8 @@ export function navigateToProductDetail(productId) {
     }
     
     // Create the correct URL for the product detail page
-    const productDetailUrl = `./src/pages/product/product.html?id=${productId}`;
+    // Using absolute path from frontend root to ensure it works from any page
+    const productDetailUrl = `/frontend/src/pages/product/product.html?id=${productId}`;
     
     // Navigate to the product detail page
     window.location.href = productDetailUrl;
