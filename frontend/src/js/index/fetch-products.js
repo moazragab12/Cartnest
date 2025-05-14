@@ -1,9 +1,9 @@
 // homepage-controller.js
 
-// Import the main function from your product service
-import { loadAndDisplayProducts } from "./product.service.js"; 
-// Assuming initCartBadge is still relevant and in a separate util file
-import { initCartBadge } from "./cart-utils.js"; 
+// Import the main function from the shared products service
+import { loadAndDisplayProducts } from "../shared/products-service.js";
+// Import cart utilities from the shared directory
+import { initCartBadge } from "../shared/cart-utils.js";
 
 /**
  * Sets up the display of featured products on the homepage.
@@ -14,10 +14,15 @@ async function displayFeaturedProducts() {
   const limit = 4;
   const options = {
     loadingMessage: "Loading our top picks for you...",
-    noProductsMessage: "No featured items to show right now. Check back soon!"
+    noProductsMessage: "No featured items to show right now. Check back soon!",
   };
 
-  await loadAndDisplayProducts(containerSelector, apiEndpointPath, limit, options);
+  await loadAndDisplayProducts(
+    containerSelector,
+    apiEndpointPath,
+    limit,
+    options
+  );
 }
 
 /**
@@ -30,10 +35,15 @@ async function displayPopularProducts() {
   const limit = 8;
   const options = {
     loadingMessage: "Fetching what's popular...",
-    noProductsMessage: "Looks like nothing's trending at the moment."
+    noProductsMessage: "Looks like nothing's trending at the moment.",
   };
 
-  await loadAndDisplayProducts(containerSelector, apiEndpointPath, limit, options);
+  await loadAndDisplayProducts(
+    containerSelector,
+    apiEndpointPath,
+    limit,
+    options
+  );
 }
 
 /**
@@ -46,7 +56,7 @@ function initializeHomepage() {
   // Load and display the different product sections
   displayFeaturedProducts();
   displayPopularProducts();
-  
+
   // You could add more calls to loadAndDisplayProducts here for other sections
   // e.g., displayNewArrivals(), displayOnSaleItems(), etc.
 }

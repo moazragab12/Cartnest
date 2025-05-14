@@ -3,7 +3,7 @@
  * Uses the shared cart-manager for consistent cart management across all pages
  */
 
-import { cartManager } from '../shared/cart-manager.js';
+import { cartManager } from './cart-manager.js';
 
 /**
  * Add item to cart
