@@ -79,12 +79,15 @@ body > section:first-of-type {
 .popular-products-section,
 .categories-section,
 .selling-section,
-.faq-section,
 .partners-section {
   margin-top: 60px;
   margin-bottom: 60px;
 }
 
+.faq-section{
+  margin-top: 60px;
+  margin-bottom: 0px;
+}
 /* Header spacing for all sections */
 .featured-products-header,
 .popular-products-header,
