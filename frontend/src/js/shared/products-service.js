@@ -33,6 +33,8 @@ export async function loadAndDisplayProducts(
     noProductsMessage = "No products available.",
   } = options;
 
+  console.log(`Loading products from: ${apiEndpointPath} with limit: ${limit}`);
+
   const container = document.querySelector(containerSelector);
   if (!container) {
     console.error(`Product display container not found: ${containerSelector}`);
@@ -44,6 +46,9 @@ export async function loadAndDisplayProducts(
   try {
     // _fetchProductsFromAPI is defined later in this file
     const products = await _fetchProductsFromAPI(apiEndpointPath, limit);
+    console.log(
+      `Received ${products?.length || 0} products from ${apiEndpointPath}`
+    );
 
     container.innerHTML = ""; // Clear loading message
 
@@ -149,7 +154,17 @@ async function _fetchProductsFromAPI(endpointPath, limit) {
   const errorContext = `${descriptivePart} products`;
 
   try {
-    const url = `${API_BASE_URL}${endpointPath}?limit=${limit}`;
+    // Build URL with proper parameters depending on endpoint
+    let url = `${API_BASE_URL}${endpointPath}?limit=${limit}`;
+
+    // Special handling for the recent items endpoint which needs the days parameter
+    if (endpointPath.includes("/items/recent")) {
+      // Default to 30 days to get more items if nothing is specified
+      const days = 30;
+      url = `${API_BASE_URL}${endpointPath}?days=${days}&limit=${limit}`;
+      console.log(`Fetching recent items with URL: ${url}`);
+    }
+
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(
