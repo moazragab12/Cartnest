@@ -65,7 +65,7 @@ body {
   background-color: var(--background-color);
   margin-top: 90px;
   margin-bottom: 0;
-  padding: 20px 20px 0 20px; /* Remove bottom padding */
+
 }
 
 .container {
@@ -642,14 +642,11 @@ body {
   border-radius: 50%;
 }
 
-/* Fix super section spacing and styling */
 .super {
-  margin: var(--spacing-xl) auto;
-  background: linear-gradient(
-    135deg,
-    var(--primary-color) 50%,
-    var(--primary-dark) 50%
-  );
+  /* Use your desired larger spacing variable here for top/bottom margins */
+  margin: var(--spacing-xxl) auto; /* Example: using --spacing-xxl */
+
+  background: linear-gradient(135deg, #005ade 0%, #0d99ff 100%);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -659,34 +656,66 @@ body {
   border-radius: var(--border-radius-md);
   font-size: var(--font-size-lg);
   box-shadow: var(--shadow-md);
+  gap: var(--spacing-md);
+}
+
+.super p {
+  margin: 0;
 }
 
 .super button {
-  padding: 8px 20px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 22px; /* Slightly increased padding for a more comfortable click area */
+  background-color: rgba(255, 255, 255, 0.25); /* A bit more opaque for better definition */
+  border: 1px solid rgba(255, 255, 255, 0.4);   /* Slightly stronger border */
   color: white;
   font-weight: 600;
+  /* Assuming you have a font size variable for medium-sized text,
+     or adjust as needed. 'inherit' would take from .super's font-size. */
+  font-size: var(--font-size-md, 0.9em); /* Use a specific size or inherit */
   border-radius: var(--border-radius-md);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  /* Specify transitions for properties that change for smoother animations */
+  transition: background-color var(--transition-fast) ease-in-out,
+              border-color var(--transition-fast) ease-in-out,
+              transform var(--transition-fast) ease-in-out,
+              box-shadow var(--transition-fast) ease-in-out;
+  flex-shrink: 0; /* Keep this from your previous style */
+  text-transform: capitalize; /* Changes "shop now" to "Shop Now" - stylistic choice */
+  line-height: 1.2; /* Ensure text is vertically centered well within padding */
 }
 
 .super button:hover {
-  background-color: white;
-  color: var(--primary-color);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  background-color: rgb(255, 255, 255); /* Lighten button on hover */
+  border-color: rgba(255, 255, 255, 0.6);    /* Make border more prominent */
+  transform: translateY(-2px); /* Subtle lift effect */
 }
 
-.Cartnest-footer {
-  margin-top: 0; /* override the var(--spacing-xxl) if defined */
-  margin-bottom: 0;
+.super button:active {
+  background-color: rgba(255, 255, 255, 0.2); /* Slightly darker when pressed */
+  transform: translateY(0px); /* Reset lift, or press down slightly e.g. translateY(1px) */
+  transition-duration: 0.05s; /* Make active state feel quicker */
 }
 
-footer {
-  margin-bottom: 0;
-  margin-top: 0;
+/* Modern focus styling for accessibility - visible only when navigating with keyboard */
+.super button:focus-visible {
+  outline: 2px solid var(--primary-color); /* Or another distinct focus color */
+  outline-offset: 2px;
+  /* Optional: Add a subtle shadow to make focus more apparent if outline is not enough
+     You'll need the RGB version of your primary color for the rgba() value.
+     For example, if var(--primary-color) is #0D99FF, then its RGB is 13, 153, 255.
+     Let's assume you have a --primary-color-rgb variable like '13, 153, 255'.
+     If not, replace 'var(--primary-color-rgb)' with the actual RGB values.
+  */
+  /* box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb, 255, 255, 255), 0.3); */
+}
+
+/*
+  If you use :focus-visible, you might want to remove the default outline
+  for mouse :focus to avoid double indicators or less sightly default outlines.
+  However, ensure keyboard navigation remains clear.
+*/
+.super button:focus {
+   outline: none;
 }
 
 /* Loading and Error States */
