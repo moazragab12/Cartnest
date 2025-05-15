@@ -107,7 +107,7 @@ class ProductLoader {
     document.title = `${this.productData.name} - Cartnest`;
 
     // Update product title
-    const productTitle = document.querySelector('.product-title');
+    const productTitle = document.querySelector('.product-name');
     if (productTitle) {
       productTitle.textContent = this.productData.name;
     }

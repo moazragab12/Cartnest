@@ -143,37 +143,7 @@ async function fetchFeaturedProductsAsFallback(currentProductId, limit = 4) {
  * Kept for now if direct calls are needed, but ideally, cart interactions are centralized.
  * @param {string} productId - ID of the product to add.
  */
-function addToCart(productId) {
-  // This function might be entirely replaced by cartManager.js functionality
-  // that is triggered by the cart buttons created by products-service.js.
-  // If cartManager.js is the standard, this local addToCart is not ideal.
-  // console.log(`RelatedProducts: Attempting to add product ID ${productId} to cart (local function).`);
-  
-  // For demonstration, using localStorage as in your original:
-  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  const existingItemIndex = cart.findIndex(item => item.id === parseInt(productId));
-  
-  if (existingItemIndex >= 0) {
-    cart[existingItemIndex].quantity = (cart[existingItemIndex].quantity || 0) + 1;
-  } else {
-    cart.push({ id: parseInt(productId), quantity: 1 });
-  }
-  localStorage.setItem('cart', JSON.stringify(cart));
-  
-  updateCartBadge();
-  
-  if (window.notifications && typeof window.notifications.success === 'function') {
-    window.notifications.success('Product added to cart!');
-  } else {
-    // Fallback notification
-    const notificationEl = document.getElementById('notification'); // Assuming such an element exists
-    if (notificationEl) {
-      notificationEl.textContent = 'Product added to cart!';
-      notificationEl.style.display = 'block'; // Or add 'show' class
-      setTimeout(() => { notificationEl.style.display = 'none'; }, 3000);
-    }
-  }
-}
+
 
 /**
  * Updates the cart badge count in the UI.

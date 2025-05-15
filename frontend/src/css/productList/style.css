@@ -874,7 +874,7 @@ hr {
 }
 
 .view-btn.active {
-  background: #4a5568;
+  background: linear-gradient(135deg, #005ade 0%, #0d99ff 100%);;
   color: white;
   border-color: transparent;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);

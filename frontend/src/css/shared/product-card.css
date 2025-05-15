@@ -13,11 +13,15 @@
 
   /* Product Image */
   --image-bg: #f8f9fa;
+  --default-image-height: 240px;
+  --medium-image-height: 220px;
+  --small-image-height: 200px;
 
   /* Badges */
   --badge-text-color: #ffffff;
   --discount-badge-bg: #343a40;
-  --category-badge-bg: linear-gradient(135deg, #0052d4 0%, #0b8ce0 100%);
+  --category-badge-bg-gradient: linear-gradient(135deg, #0052d4 0%, #0b8ce0 100%);
+  --category-badge-bg-fallback: rgba(0, 82, 212, 0.85); /* Fallback for backdrop-filter */
 
   /* Text Content */
   --text-color-dark: #212529;
@@ -26,11 +30,11 @@
   --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* Rating (Character Stars Style) */
-  --star-font-size: 18px; /* Size of the ★ and ☆ characters */
-  --star-color-filled: #FFB700; /* Color for filled stars ★ */
-  --star-color-empty: #ced4da;  /* Color for empty stars ☆ - slightly darker for better visibility */
-  --star-color-half-filled: var(--star-color-filled); /* Default: half-filled looks like filled */
-  --rating-text-font-size: 14px; /* Font size for the (123) review count */
+  --star-font-size: 18px;
+  --star-color-filled: #FFB700;
+  --star-color-empty: #ced4da;
+  --star-color-half-filled: var(--star-color-filled);
+  --rating-text-font-size: 14px;
 
   /* Purchase Area & Borders */
   --border-color-light: #dee2e6;
@@ -41,14 +45,23 @@
   --button-bg-hover-gradient: linear-gradient(90deg, #0b8ce0 0%, #1a78c8 100%);
   --button-icon-color-default: #495057;
   --button-icon-color-hover: #ffffff;
+  --button-focus-outline-color: var(--category-badge-bg-fallback); /* Using a color from the theme for focus */
+
 
   /* General Iconography */
   --icon-color-default: var(--button-icon-color-default);
   --icon-color-hover: var(--button-icon-color-hover);
+
+  /* Transitions */
+  --transition-speed-fast: 0.2s;
+  --transition-speed-normal: 0.25s;
+  --transition-speed-image: 0.35s;
+  --transition-timing-function: ease-in-out;
+  --transition-timing-function-image: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 /* ----------------
-  1. PRODUCT GRID LAYOUT - moved to layout-fixes.css
+  1. PRODUCT GRID LAYOUT - (Assumed to be in layout-fixes.css)
   ---------------- */
 
 /* ----------------
@@ -56,22 +69,25 @@
   ---------------- */
 .product-card {
   width: 100%;
-  min-height: 430px;
+  min-height: auto;
   position: relative;
   background: var(--card-bg);
   border-radius: var(--card-radius);
   text-align: left;
   box-shadow: var(--card-shadow);
-  transition: all 0.25s ease-in-out;
-  overflow: hidden;
+  transition: transform var(--transition-speed-normal) var(--transition-timing-function),
+              box-shadow var(--transition-speed-normal) var(--transition-timing-function);
+  overflow: visible; /* Allows box-shadow to be fully visible */
   display: flex;
   flex-direction: column;
   border: var(--card-border-width) solid var(--card-border-color);
+  z-index: 1; /* Establishes a stacking context for children like badges and for potential hover effects if siblings also have z-index */
 }
 
 .product-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--card-shadow-hover);
+  /* z-index: 10; Optional: if you want hovered cards to definitively be above non-hovered siblings */
 }
 
 /* ----------------
@@ -79,9 +95,9 @@
   ---------------- */
 .product-image {
   width: 100%;
-  height: 280px;
+  height: var(--default-image-height);
   border-radius: var(--card-radius) var(--card-radius) 0 0;
-  overflow: hidden;
+  overflow: hidden; /* Essential for containing the scaled image */
   position: relative;
   background-color: var(--image-bg);
 }
@@ -90,7 +106,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: transform var(--transition-speed-image) var(--transition-timing-function-image);
 }
 
 .product-card:hover .product-image img {
@@ -106,11 +122,12 @@
   top: 16px;
   padding: 5px 14px;
   font-size: 11.5px;
-  border-radius: 20px;
+  border-radius: 20px; /* Pill shape */
   font-weight: 600;
-  z-index: 2;
+  z-index: 2; /* Above product image */
   color: var(--badge-text-color);
   font-family: var(--font-family-base);
+  line-height: 1.4; /* Ensure text fits well */
 }
 
 .discount-badge {
@@ -120,7 +137,10 @@
 
 .category-badge {
   right: 16px;
-  background: var(--category-badge-bg);
+  background: var(--category-badge-bg-fallback); /* Fallback for backdrop-filter */
+  background-image: var(--category-badge-bg-gradient); /* Modern gradient */
+  /* backdrop-filter is a progressive enhancement, if it fails, the background color/image will still show */
+  -webkit-backdrop-filter: blur(5px); /* For Safari */
   backdrop-filter: blur(5px);
 }
 
@@ -130,19 +150,19 @@
 .product-content {
   display: flex;
   flex-direction: column;
-  padding: 20px 24px;
-  flex-grow: 1;
+  padding: 20px 24px; /* Standard padding */
+  flex-grow: 1; /* Allows content to fill space and push purchase-area down */
 }
 
 .product-details {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  flex-grow: 1; /* Ensures this container also grows */
 }
 
 .product-info {
-  flex: 1;
-  margin-bottom: 16px; /* Space below the general info block (title, rating, description) */
+  flex: 1; /* Takes available space before purchase-area */
+  margin-bottom: 16px; /* Space before purchase-area if it's not pushed down by flex-grow */
 }
 
 /* ----------------
@@ -152,85 +172,76 @@
   font-size: 16.5px;
   font-weight: 600;
   color: var(--text-color-dark);
-  margin-bottom: 8px; /* Space between title and rating */
-  white-space: normal;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
+  margin-bottom: 8px;
   line-height: 1.45;
-  min-height: calc(1.45em * 2);
-  letter-spacing: -0.005em;
+  min-height: calc(1.45em * 2); /* Reserve space for 2 lines */
   font-family: var(--font-family-base);
+  letter-spacing: -0.005em;
+
+  /* Multi-line truncation */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Fallback for single line, or if line-clamp fails */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  /* Fallback max-height for browsers not supporting line-clamp */
+  max-height: calc(1.45em * 2); /* (line-height * number of lines) */
 }
 
 .product-description {
   font-size: 14px;
   color: var(--text-color-muted);
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
   line-height: 1.5;
-  /* margin-bottom is removed here, as .rating-display will handle its own bottom margin */
   font-family: var(--font-family-base);
+
+  /* Multi-line truncation */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  max-height: calc(1.5em * 2); /* Fallback: (line-height * number of lines) */
 }
 
 /* ----------------
-  7. PRODUCT RATING (Character Stars Style - Final)
+  7. PRODUCT RATING
   ---------------- */
 .rating-display {
   display: flex;
   align-items: center;
-  gap: 8px; /* Space between stars group and review count */
-  margin-bottom: 12px; /* Space below the entire rating line, before description */
+  gap: 8px;
+  margin-bottom: 12px;
   font-family: var(--font-family-base);
-  order: -1; /* Moves rating display above description if both are direct children of .product-info */
+  order: -1; /* Placed above description in .product-info due to flex order */
 }
 
 .stars-container {
-  display: inline-flex;
-  line-height: 1; /* Consistent vertical alignment for star characters */
+  display: inline-flex; /* Keeps stars on one line */
+  line-height: 1; /* For consistent vertical alignment of star characters */
 }
 
 .star-icon {
   font-size: var(--star-font-size);
   margin-right: 1px; /* Minimal space between stars */
-  line-height: 1; /* Helps prevent extra space around characters */
-  letter-spacing: -0.5px; /* Visually tighten star characters if needed */
-  cursor: default; /* Indicate they are not interactive */
+  line-height: 1;
+  letter-spacing: -0.5px; /* Visual tightening */
+  cursor: default; /* Not interactive */
 }
 
 .star-icon:last-child {
   margin-right: 0;
 }
 
-.star-icon--filled {
-  color: var(--star-color-filled);
-}
-
-.star-icon--half-filled {
-  /* Defaulting to look like a filled star.
-     For a true visual half-star with a single '★' character, you'd need advanced CSS
-     like masking or pseudo-elements with overflow:hidden.
-     Example: color: var(--star-color-half-filled);
-     If you want a distinct color for half-filled, define --star-color-half-filled in :root.
-  */
-  color: var(--star-color-half-filled);
-}
-
-.star-icon--empty {
-  color: var(--star-color-empty);
-}
+.star-icon--filled { color: var(--star-color-filled); }
+.star-icon--half-filled { color: var(--star-color-half-filled); } /* Ensure this var is defined if a distinct visual is needed */
+.star-icon--empty { color: var(--star-color-empty); }
 
 .review-count {
   font-size: var(--rating-text-font-size);
   color: var(--text-color-muted);
   line-height: 1; /* Align with stars */
-  padding-left: 2px; /* Small visual separation if gap isn't enough */
-  font-variant-numeric: tabular-nums; /* Ensures numbers align if counts vary widely */
+  padding-left: 2px; /* Small visual separation */
+  font-variant-numeric: tabular-nums; /* Ensures numbers align if counts vary */
 }
 
 /* ----------------
@@ -240,14 +251,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: auto; /* Pushes to the bottom of the flex container (.product-details) */
+  margin-top: auto; /* Pushes to the bottom of .product-details */
   border-top: var(--card-border-width) solid var(--border-color-light);
   padding-top: 16px;
 }
 
 .product-price {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-end; /* Aligns original and current price nicely if one is taller */
   gap: 8px;
 }
 
@@ -271,8 +282,8 @@
   ---------------- */
 .cart-button,
 .add-to-cart {
-  position: relative;
-  overflow: hidden;
+  position: relative; /* For absolute positioning of children like .default-btn/.hover-btn */
+  overflow: hidden;  /* For the slide animation of .default-btn/.hover-btn */
   cursor: pointer;
   border: none;
   border-radius: 10px;
@@ -283,13 +294,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease-in-out;
+  transition-property: background, transform, box-shadow;
+  transition-duration: var(--transition-speed-fast);
+  transition-timing-function: var(--transition-timing-function);
+  -webkit-tap-highlight-color: transparent; /* Removes tap highlight on mobile */
 }
 
-.add-to-cart i {
+.add-to-cart i { /* Assuming FontAwesome or similar icon font */
   font-size: 16px;
   color: var(--button-icon-color-default);
-  transition: all 0.25s ease;
+  transition: color var(--transition-speed-normal) var(--transition-timing-function),
+              transform var(--transition-speed-normal) var(--transition-timing-function);
 }
 
 .cart-button:hover,
@@ -304,89 +319,104 @@
   transform: scale(1.08);
 }
 
+/* Accessibility: Focus states for buttons */
+.cart-button:focus, .add-to-cart:focus {
+  outline: none; /* Remove default outline if using focus-visible */
+}
+.cart-button:focus-visible, .add-to-cart:focus-visible {
+  outline: 2px solid var(--button-focus-outline-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(var(--button-focus-outline-color), 0.3); /* Optional softer glow */
+}
+
+
 /* ----------------
-  10. CART BUTTON ANIMATIONS
+  10. CART BUTTON ANIMATIONS (For .cart-button with text swap)
   ---------------- */
 .default-btn,
 .hover-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 9px;
-  border-radius: 10px;
+  padding: 9px; /* Adjust as needed */
+  border-radius: 10px; /* Match parent */
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform var(--transition-speed-normal) cubic-bezier(0.25, 1, 0.5, 1);
   height: 100%;
   width: 100%;
   font-family: var(--font-family-base);
+  position: absolute; /* Crucial for the animation */
+  top: 0;
+  left: 0;
+  background: transparent; /* Ensure parent background shows or is managed */
 }
 
 .default-btn {
-  background: transparent;
-  position: absolute;
-  top: 0;
-  left: 0;
   transform: translateY(0);
+  /* color: var(--button-icon-color-default); /* If text is also in default state */
 }
 
 .hover-btn {
-  position: absolute;
-  top: 0;
-  left: 0;
-  text-align: center;
-  background: transparent;
-  transform: translateY(100%);
+  transform: translateY(100%); /* Start below */
+  /* color: var(--button-icon-color-hover); /* If text is also in hover state */
 }
 
 .cart-button:hover .default-btn {
-  transform: translateY(-100%);
+  transform: translateY(-100%); /* Move up and out */
 }
 
 .cart-button:hover .hover-btn {
-  transform: translateY(0);
+  transform: translateY(0); /* Move into view */
 }
 
 /* ----------------
-  11. ICON STYLING
+  11. ICON STYLING (Primarily for SVGs)
   ---------------- */
-.cart-icon {
-  stroke: var(--icon-color-default);
-  transition: all 0.25s ease;
+.cart-icon { /* Assuming this class is on an SVG element or its direct parent */
+  stroke: var(--icon-color-default); /* For SVGs using stroke for color */
+  fill: none; /* If it's an outline icon */
+  transition: stroke var(--transition-speed-normal) var(--transition-timing-function);
 }
 
 .cart-button:hover .cart-icon {
   stroke: var(--icon-color-hover);
 }
 
+/* If hover-btn contains an SVG, this handles its path fill */
 .hover-btn svg path {
   fill: var(--icon-color-hover);
+  transition: fill var(--transition-speed-normal) var(--transition-timing-function);
 }
 
+/* Active (pressed) state for buttons */
 .cart-button:active,
 .add-to-cart:active {
-  transform: scale(0.95) translateY(-1px);
+  transform: scale(0.95) translateY(-1px); /* Slight press down effect */
+  transition-duration: calc(var(--transition-speed-fast) / 2); /* Quicker active state */
 }
 
 /* ----------------
   12. RESPONSIVE STYLES
   ---------------- */
 @media screen and (max-width: 768px) {
-  .product-card { min-height: 410px; }
+  .product-image { height: var(--medium-image-height); }
   .product-content { padding: 18px 20px; }
   .product-title { font-size: 16px; }
   .current-price { font-size: 18px; }
   .rating-display { margin-bottom: 10px; }
-  .star-icon { font-size: calc(var(--star-font-size) - 2px); } /* Slightly smaller stars */
+  .star-icon { font-size: calc(var(--star-font-size) - 2px); }
   .review-count { font-size: calc(var(--rating-text-font-size) - 1px); }
 }
 
 @media screen and (max-width: 576px) {
-  .product-card { min-height: auto; }
-  .product-image { height: 220px; }
-  .product-title { font-size: 15px; min-height: calc(1.45em * 2); }
+  .product-image { height: var(--small-image-height); }
+  .product-title { font-size: 15px; /* min-height will adjust based on this font-size and line-height */ }
   .product-description { font-size: 13.5px; }
   .rating-display { gap: 6px; }
   .star-icon { font-size: calc(var(--star-font-size) - 3px); }
   .review-count { font-size: calc(var(--rating-text-font-size) - 2px); }
+  .product-content { padding: 16px 18px; } /* Slightly less padding on very small screens */
+  .purchase-area { flex-direction: column; align-items: flex-start; gap: 10px; } /* Stack price and button */
+  .add-to-cart, .cart-button { width: 100%; /* Make button full width in stacked layout */ }
 }

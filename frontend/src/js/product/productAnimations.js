@@ -184,22 +184,32 @@ class ProductAnimations {
 
   /**
    * Initialize quantity selector with plus/minus buttons
-   */
-  initQuantitySelector() {
+   */ initQuantitySelector() {
     const minusBtn = document.querySelector(".qty-btn.minus");
     const plusBtn = document.querySelector(".qty-btn.plus");
     const qtyInput = document.querySelector(".qty-input");
 
-    if (minusBtn && qtyInput) {
-      minusBtn.addEventListener("click", () => {
-        this.updateQuantity(-1, qtyInput);
-      });
+    // Remove existing event listeners by cloning and replacing the buttons
+    if (minusBtn) {
+      const newMinusBtn = minusBtn.cloneNode(true);
+      minusBtn.parentNode.replaceChild(newMinusBtn, minusBtn);
+
+      if (qtyInput) {
+        newMinusBtn.addEventListener("click", () => {
+          this.updateQuantity(-1, qtyInput);
+        });
+      }
     }
 
-    if (plusBtn && qtyInput) {
-      plusBtn.addEventListener("click", () => {
-        this.updateQuantity(1, qtyInput);
-      });
+    if (plusBtn) {
+      const newPlusBtn = plusBtn.cloneNode(true);
+      plusBtn.parentNode.replaceChild(newPlusBtn, plusBtn);
+
+      if (qtyInput) {
+        newPlusBtn.addEventListener("click", () => {
+          this.updateQuantity(1, qtyInput);
+        });
+      }
     }
 
     if (qtyInput) {
@@ -215,15 +225,24 @@ class ProductAnimations {
       });
     }
   }
-
   /**
    * Update quantity value
    * @param {number} change - Amount to change quantity by
    * @param {HTMLElement} input - Input element to update
    */
   updateQuantity(change, input) {
-    this.quantity = Math.max(1, this.quantity + change); // Ensure quantity is at least 1
-    input.value = this.quantity;
+    // Get current value directly from the input to avoid state desynchronization
+    let currentValue = parseInt(input.value, 10);
+    if (isNaN(currentValue)) {
+      currentValue = 1;
+    }
+
+    // Apply the change and ensure minimum is 1
+    const newValue = Math.max(1, currentValue + change);
+
+    // Update both the instance value and the input
+    this.quantity = newValue;
+    input.value = newValue;
   }
 
   /**
