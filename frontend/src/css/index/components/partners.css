@@ -3,7 +3,7 @@
    ==================================== */
 .partners-section {
   
-  background-color: var(--tag-color);
+  background-color: white;
   overflow: hidden;
   position: relative;
   width: calc(100% - 20px);
