@@ -1,4 +1,4 @@
-# MarketPlace
+# Cartnest
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.95.0-009688.svg?style=flat&logo=FastAPI&logoColor=white)](https://fastapi.tiangolo.com)
 [![Python](https://img.shields.io/badge/Python-3.13-blue.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
@@ -28,7 +28,7 @@ A marketplace application with FastAPI backend.
 ## Project Structure
 
 ```
-MarketPlace/
+Cartnest/
 ├── README.md                  # Project documentation
 ├── backend/                   # Backend service directory
 │   ├── __init__.py            # Python package indicator
@@ -160,7 +160,8 @@ class UserModel:
   - Follow Google-style docstring format
 ## Database
 
-The MarketPlace application uses a PostgreSQL database with a primary-replica setup for high availability. The database schema includes several key tables:
+The Cartnest application uses a PostgreSQL database with a primary-replica setup for high availability. The database schema includes several key tables:
+
 
 ### Database Structure
 
@@ -260,7 +261,7 @@ Default seeding will create:
 
 ### Adding a New Feature
 
-When adding a new feature to the MarketPlace project, follow these steps:
+When adding a new feature to the Cartnest project, follow these steps:
 
 1. Create a new directory in `backend/api/routers/` for your feature:
 
