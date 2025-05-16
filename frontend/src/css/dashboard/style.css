@@ -1217,7 +1217,7 @@ body {
   padding: 24px 20px;
   text-align: center;
   border-bottom: 1px solid var(--border-color);
-  background: linear-gradient(135deg, rgba(231, 240, 253, 0.8), rgba(172, 203, 238, 0.85));
+  background: linear-gradient(0deg, rgba(231, 240, 253, 0.8), rgba(172, 203, 238, 0.85));
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(10px);
