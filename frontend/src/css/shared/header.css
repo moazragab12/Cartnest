@@ -22,6 +22,7 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   background: linear-gradient(135deg, #005ade 0%, #0d99ff 100%);
   transition: all 0.3s ease; /* Smooth transition for scroll effects */
+  
 }
 
 /* Clear existing background styles */

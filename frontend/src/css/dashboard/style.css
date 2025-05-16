@@ -1182,15 +1182,15 @@ body {
 }
 
 .dashboard-container {
-  max-width: 1400px; /* Added explicit max-width */
-  margin: 20px auto;
+  max-width: 100%; /* Added explicit max-width */
+  margin: 0px;
   /* Reduced top/bottom margin from 40px to 20px */
   display: grid;
   grid-template-columns: 240px 1fr;
   /* Reduced sidebar width from 260px to 240px */
   gap: 20px;
   /* Reduced gap from 30px to 20px */
-  padding: 0 15px;
+  padding: 0 100px;
   /* Reduced side padding from 20px to 15px */
   align-items: start; /* Ensures all grid items are aligned to the start */
   min-height: calc(100vh - 120px); /* Gives the container minimum height */
@@ -1208,6 +1208,9 @@ body {
   position: sticky;
   top: 20px; /* Changed from 146px to better stick near the top of the page */
   align-self: start; /* Ensures the sidebar aligns at the start of its grid area */
+  padding-right: 6px; /* Added padding for content spacing */
+  scrollbar-gutter: stable; /* Prevents layout shift when scrollbar appears */
+  transition: padding 0.3s ease; /* Smooth transition for hover effect */
 }
 
 .user-profile {
@@ -1411,6 +1414,10 @@ body {
   /* Reduced from 30px */
   height: 100%;
   min-height: 50vh; /* Ensures minimum height for content area */
+  padding-right: 15px; /* Added padding for content spacing */
+  overflow-y: auto; /* Enable vertical scrolling */
+  scrollbar-gutter: stable both-edges; /* Reserves space for scrollbar to prevent layout shifts */
+  scroll-behavior: smooth; /* Adds smooth scrolling effect */
 }
 
 .dashboard-header {
