@@ -19,9 +19,9 @@
 
 .footer-top-content {
   display: flex;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: 100%;
+  margin: 0 100px;
+  
 }
 
 .footer-info {
@@ -205,9 +205,8 @@
 }
 
 .footer-bottom-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: 100%;
+  margin: 0 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
