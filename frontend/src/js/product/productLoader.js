@@ -6,10 +6,11 @@
 import apiClient from '../core/api/apiClient.js';
 import API_ENDPOINTS from '../core/api/endpoints.js';
 // Import the cart manager to properly handle cart operations
-import { cartManager } from '../shared/cart-manager.js';
+import { initCartBadge , addToCart } from '../shared/cart-utils.js';
 
 class ProductLoader {
   constructor() {
+    initCartBadge();
     this.productId = null;
     this.productData = null;
     this.isLoading = false;
@@ -289,40 +290,8 @@ class ProductLoader {
    * Handle the add to cart functionality
    * @param {number} quantity - Quantity to add to cart
    */
-  addToCart(quantity) {
-    if (!this.productData) return;
-    
-    try {
-      // Only record the product ID and quantity as required
-      const cartItem = {
-        id: this.productData.item_id,
-        name: this.productData.name // Used for display in notification, cartManager only saves ID and quantity
-      };
-      
-      // Use the cartManager to add the product to cart
-      const result = cartManager.addToCart(cartItem, quantity);
-      
-      // Update cart badge with animation
-      cartManager.updateCartBadge(true);
-      
-      // Show notification using global notifications
-      if (window.notifications) {
-        // Highlight product name in notification
-        window.notifications.success(`${this.productData.name} added to your cart!`, 5000, {
-          productName: this.productData.name
-        });
-      }
-      
-      // Dispatch event for other components to react
-      document.dispatchEvent(new CustomEvent('cart:updated'));
-      return result;
-    } catch (error) {
-      console.error('Error adding item to cart:', error);
-      if (window.notifications) {
-        window.notifications.error('Couldn\'t add item to cart. Please try again.');
-      }
-      return { success: false };
-    }
+  productAddToCart(quantity) {
+    addToCart(this.productData.item_id, quantity);
   }
   
   /**

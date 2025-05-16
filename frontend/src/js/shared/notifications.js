@@ -55,28 +55,28 @@ class NotificationSystem {
     
     // Highlight product name if provided
     const formattedMessage = options.productName 
-      ? message.replace(options.productName, `<span class="product-name">${options.productName}</span>`)
+      ? message.replace(options.productName, `<span class="product-name-notification">${options.productName}</span>`)
       : message;
     
     // Create notification content
     notification.innerHTML = `
-      <div class="notification-icon">
+      <div class="notification-icon-global">
         ${this.getIconForType(type)}
       </div>
-      <div class="notification-content">
+      <div class="notification-content-global">
         <p>${formattedMessage}</p>
       </div>
-      <button class="notification-close" aria-label="Close notification">
+      <button class="notification-close-global" aria-label="Close notification">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
-      <div class="notification-progress"></div>
+      <div class="notification-progress-global"></div>
     `;
     
     // Add close button functionality
-    notification.querySelector('.notification-close').addEventListener('click', () => {
+    notification.querySelector('.notification-close-global').addEventListener('click', () => {
       this.dismiss(notification);
     });
     
@@ -91,7 +91,7 @@ class NotificationSystem {
     // Auto-dismiss after duration (if not 0)
     if (duration > 0) {
       // Add progress bar animation
-      const progressBar = notification.querySelector('.notification-progress');
+      const progressBar = notification.querySelector('.notification-progress-global');
       progressBar.style.animationDuration = `${duration}ms`;
       progressBar.classList.add('animate');
       
@@ -102,7 +102,7 @@ class NotificationSystem {
     
     // Add click handler for the entire notification (except close button)
     notification.addEventListener('click', (event) => {
-      if (!event.target.closest('.notification-close')) {
+      if (!event.target.closest('.notification-close-global')) {
         if (options.onClick) options.onClick();
       }
     });
@@ -192,7 +192,7 @@ class NotificationSystem {
     
     // Replace icon with product image if available
     if (imageUrl) {
-      const iconContainer = notification.querySelector('.notification-icon');
+      const iconContainer = notification.querySelector('.notification-icon-global');
       iconContainer.innerHTML = `<img src="${imageUrl}" alt="Product" />`;
     }
     

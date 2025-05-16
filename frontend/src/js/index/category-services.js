@@ -8,6 +8,16 @@ import { apiClient } from '../core/api/index.js';
 const API_BASE_URL = 'http://localhost:8000';
 const PRODUCTS_LIST_URL = '/frontend/src/pages/productsList/productList.html';
 
+document.addEventListener("DOMContentLoaded", function () {
+  const viewAllButton = document.querySelector(".view-all-categories-btn");
+
+  if (viewAllButton) {
+    viewAllButton.addEventListener("click", function () {
+      window.location.href =
+        "/frontend/src/pages/productsList/productList.html";
+    });
+  }
+});
 /**
  * Fetch categories from the API
  * @returns {Promise<Array>} - Array of category objects
@@ -38,16 +48,7 @@ function navigateToCategory(categoryName) {
 }
 
 // Initialize the View All button in the categories section
-document.addEventListener("DOMContentLoaded", function () {
-  const viewAllButton = document.querySelector(".view-all-categories-btn");
 
-  if (viewAllButton) {
-    viewAllButton.addEventListener("click", function () {
-      window.location.href =
-        "/frontend/src/pages/productsList/productList.html";
-    });
-  }
-});
 
 
 export { fetchCategories, navigateToCategory };

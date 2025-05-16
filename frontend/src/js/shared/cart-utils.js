@@ -4,6 +4,7 @@
  */
 
 import { cartManager } from './cart-manager.js';
+import { fetchProductById } from '../core/productApiService.js';
 
 /**
  * Add item to cart
@@ -34,6 +35,8 @@ export async function addToCart(itemId, quantity = 1) {
         } catch (error) {
             console.error('Error fetching product details for notification', error);
         }
+
+        //let productDats = fetchProductById(itemId);
         
         // Create product object for cart manager
         const product = {

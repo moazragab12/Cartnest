@@ -31,7 +31,7 @@ async function renderViewedProductsUI(products) {
   }
   
   // Ensure the section is visible before rendering
-  viewedProductsSection.style.display = 'block';
+
 
   // Use the renderProductsFromArray function from products-service.js
   await renderProductsFromArray(

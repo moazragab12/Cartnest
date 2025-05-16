@@ -72,7 +72,7 @@
 }
 
 /* Enhanced Icon styling with GIF support */
-.notification-icon {
+.notification-icon-global {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,14 +81,14 @@
   flex-shrink: 0;
 }
 
-.notification-icon img {
+.notification-icon-global img {
   width: 36px;
   height: 36px;
   object-fit: cover;
   border-radius: 50%;
 }
 
-.notification-icon svg {
+.notification-icon-global svg {
   width: 24px;
   height: 24px;
 }
@@ -109,13 +109,13 @@
 }
 
 /* Product name styling */
-.notification-content .product-name {
+.notification-content .product-name-notification {
   font-weight: 600;
   color: #111;
 }
 
 /* Close button styling */
-.notification-close {
+.notification-close-global {
   background: none;
   border: none;
   color: #9ca3af;
@@ -131,14 +131,14 @@
   flex-shrink: 0;
 }
 
-.notification-close:hover {
+.notification-close-global:hover {
   color: #6b7280;
   background-color: #f3f4f6;
   transform: rotate(90deg);
 }
 
 /* Progress bar for auto-dismiss */
-.notification-progress {
+.notification-progress-global {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -148,19 +148,19 @@
   transform-origin: left;
 }
 
-.notification-success .notification-progress {
+.notification-success .notification-progress-global {
   background: linear-gradient(to right, #10b981, #059669);
 }
 
-.notification-error .notification-progress {
+.notification-error .notification-progress-global {
   background: linear-gradient(to right, #ef4444, #dc2626);
 }
 
-.notification-warning .notification-progress {
+.notification-warning .notification-progress-global {
   background: linear-gradient(to right, #f59e0b, #d97706);
 }
 
-.notification-info .notification-progress {
+.notification-info .notification-progress-global {
   background: linear-gradient(to right, #4cb5ff, #2d8dd8);
 }
 
@@ -197,14 +197,14 @@
   padding-left: 16px;
 }
 
-.notification-with-thumbnail .notification-icon {
+.notification-with-thumbnail .notification-icon-global {
   width: 48px;
   height: 48px;
   border-radius: 10px;
   overflow: hidden;
 }
 
-.notification-with-thumbnail .notification-icon img {
+.notification-with-thumbnail .notification-icon-global img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -217,7 +217,7 @@
   to { transform: scaleX(0); }
 }
 
-.notification-progress.animate {
+.notification-progress-global.animate {
   animation: progressShrink linear forwards;
 }
 

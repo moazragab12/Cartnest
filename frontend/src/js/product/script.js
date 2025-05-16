@@ -54,7 +54,7 @@ function setupAddToCartButton() {
     const quantity = parseInt(qtyInput?.value || '1', 10);
     
     // Add item to cart using productLoader
-    productLoader.addToCart(quantity);
+    productLoader.productAddToCart(quantity);
     
     // Add animation effect to button
     addToCartBtn.classList.add('added');

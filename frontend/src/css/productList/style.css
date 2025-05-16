@@ -34,11 +34,9 @@
 body {
   font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f7fafc;
-  margin: 0;
-  padding: 0;
   color: #1a202c;
   /* Add padding to body to account for fixed header */
-  padding-top: 76px;
+  padding-top: 80px;
 }
 
 a {

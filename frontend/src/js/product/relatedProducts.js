@@ -33,7 +33,7 @@ async function renderRelatedProductsUI(products) {
   }
 
   // Ensure the section is visible before rendering
-  relatedProductsSection.style.display = 'block';
+ 
 
   await renderProductsFromArray(
     relatedProductsSelector,

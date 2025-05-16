@@ -36,7 +36,7 @@ export async function fetchProductById(productId) {
  * @param {number} limit - Maximum number of products to return
  * @returns {Promise<Array>} - Array of related products
  */
-export async function fetchRelatedProducts(currentProductId, category, limit = 3) {
+export async function fetchRelatedProducts(currentProductId, category, limit = 4) {
   try {
     // Construct URL with category filter
     const url = `${API_BASE_URL}/search/items/search?category=${encodeURIComponent(category)}&status=for_sale`;
@@ -65,7 +65,7 @@ export async function fetchRelatedProducts(currentProductId, category, limit = 3
  * @param {number} limit - Maximum number of products to return
  * @returns {Promise<Array>} - Array of featured products
  */
-export async function fetchFeaturedProducts(currentProductId, limit = 3) {
+export async function fetchFeaturedProducts(currentProductId, limit = 4) {
   try {
     // For featured products, we might want to use different criteria
     // For now, let's just get products with status=for_sale
