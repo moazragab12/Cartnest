@@ -410,7 +410,60 @@
     </div>
     <div class="super">
       <p>Super discount on more than 100 USD</p>
-      <button>shop now</button>
+      <button class="super-shop-btn" onclick="window.location.href='../productsList/productList.html'">
+        <span>Shop now</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
+
+      <style>
+        .super-shop-btn {
+          padding: 10px 25px;
+          background-color: #0D99FF;
+          color: white;
+          border: 2px solid #0D99FF;
+          border-radius: 6px;
+          font-weight: bold;
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          transition: all 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .super-shop-btn i {
+          transform: translateX(0);
+          transition: transform 0.3s ease;
+        }
+
+        .super-shop-btn:hover {
+          background-color: white;
+          color: #0D99FF;
+          box-shadow: 0 5px 15px rgba(13, 153, 255, 0.3);
+          transform: translateY(-3px);
+        }
+
+        .super-shop-btn:hover i {
+          transform: translateX(5px);
+        }
+
+        .super-shop-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(255, 255, 255, 0.2);
+          transform: translateX(-100%);
+          transition: transform 0.4s ease;
+        }
+
+        .super-shop-btn:hover::before {
+          transform: translateX(100%);
+        }
+      </style>
     </div>
 
     <footer class="Cartnest-footer">
