@@ -996,7 +996,7 @@ body {
 .payment-result.success {
   color: var(--success-color);
   border-left: 4px solid var(--success-color);
-  background-color: rgba(0, 181, 23, 0.05);
+  background-color: white;
 }
 
 .payment-result.error {
