@@ -55,7 +55,6 @@ a {
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
-  gap: 2rem;
   background-color: #f7fafc;
   background-image: radial-gradient(#e2e8f0 1px, transparent 1px),
     radial-gradient(#d1dbe8 1px, transparent 1px);
@@ -1466,7 +1465,7 @@ input[type="checkbox"]:checked {
   -webkit-backdrop-filter: blur(5px);
   border-radius: var(--sidebar-border-radius, 16px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
-  padding: 2rem 1.5rem;
+  padding: 1.5rem 1rem;
   overflow: visible;
 }
 
