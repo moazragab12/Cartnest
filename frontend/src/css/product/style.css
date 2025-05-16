@@ -15,11 +15,7 @@
   --font-heading: "Montserrat", sans-serif;
 }
 
-
-
 /* Adjust main content to account for sticky header */
-
-
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
@@ -519,7 +515,6 @@ main {
   align-items: center;
   gap: 30px;
   margin: 20px auto;
-  
 }
 
 .availability {
@@ -649,7 +644,6 @@ main {
 }
 
 .payment-options {
-
   display: flex;
   gap: 30px;
   align-items: center;
@@ -1174,12 +1168,21 @@ main {
 }
 
 /* Related Products Section */
-.related-products, .viewed-products {
+.related-products,
+.viewed-products {
   margin-bottom: 40px;
   padding-bottom: 40px;
   border-bottom: 1px solid #eee;
   opacity: 0;
   overflow: visible;
+}
+
+/* Ensure related and viewed products always show 4 columns */
+.related-products .products-grid,
+.viewed-products .products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 15px;
 }
 
 /* Override specific styles for product page cards to prevent clipping */
@@ -1188,9 +1191,23 @@ main {
   overflow: visible !important;
   height: auto;
   z-index: auto;
+  max-width: 100%; /* Ensure cards don't overflow */
+  transition: transform 0.3s ease-in-out;
 }
 
-.related-products h2, .viewed-products h2 {
+.related-products .product-card:hover,
+.viewed-products .product-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Adjust product image container height for better fit with 4 cards */
+.related-products .product-image-container,
+.viewed-products .product-image-container {
+  height: 180px; /* Slightly reduced height to fit 4 cards nicely */
+}
+
+.related-products h2,
+.viewed-products h2 {
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 30px;
@@ -1256,8 +1273,6 @@ main {
   transition: transform 0.3s ease;
 }
 
-
-
 .discount-tag {
   position: absolute;
   top: 10px;
@@ -1281,8 +1296,6 @@ main {
   padding: 3px 8px;
   border-radius: 3px;
 }
-
-
 
 .carousel-nav {
   position: absolute;
@@ -1312,7 +1325,8 @@ main {
 }
 
 /* Viewed Products Section */
-.related-products, .viewed-products {
+.related-products,
+.viewed-products {
   margin-bottom: 40px;
   opacity: 0;
   transform: translateY(20px);
@@ -1320,7 +1334,8 @@ main {
   animation-delay: 0.8s;
 }
 
-.related-products h2, .viewed-products h2 {
+.related-products h2,
+.viewed-products h2 {
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 30px;
@@ -1328,8 +1343,6 @@ main {
   border-bottom: 1px solid #eee;
   padding-bottom: 15px;
 }
-
-
 
 /* Animations */
 @keyframes fadeIn {
@@ -1414,9 +1427,6 @@ main {
 
 /* Product Card as Link */
 
-
-
-
 .card-product-link {
   position: absolute;
   top: 0;
@@ -1477,8 +1487,6 @@ main {
     margin-right: 20px;
   }
 
-  
-
   .footer-top-content {
     flex-direction: column;
   }
@@ -1496,6 +1504,11 @@ main {
   .footer-column {
     width: 50%;
     margin-bottom: 30px;
+  }
+
+  .related-products .products-grid,
+  .viewed-products .products-grid {
+    gap: 10px; /* Smaller gap on tablets */
   }
 }
 
@@ -1558,7 +1571,13 @@ main {
     grid-row: 1 / span 2;
   }
 
-  
+  .related-products .products-grid,
+  .viewed-products .products-grid {
+    grid-template-columns: repeat(
+      2,
+      1fr
+    ) !important; /* 2 columns on mobile screens */
+  }
 }
 
 @media (max-width: 576px) {
@@ -1630,5 +1649,13 @@ main {
   .footer-bottom-content {
     flex-direction: column;
     gap: 15px;
+  }
+
+  .related-products .products-grid,
+  .viewed-products .products-grid {
+    grid-template-columns: repeat(
+      1,
+      1fr
+    ) !important; /* Single column on very small screens */
   }
 }
