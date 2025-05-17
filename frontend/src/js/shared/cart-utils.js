@@ -25,7 +25,7 @@ export async function addToCart(itemId, quantity = 1) {
         let productPrice = 0;
         
         try {
-            const response = await fetch(`http://localhost:8000/api/v0/items/${itemId}`);
+            const response = await fetch(`http://localhost:8000/api/v0/search/items/${itemId}`);
             if (response.ok) {
                 const productDetails = await response.json();
                 productName = productDetails.name || 'Product';

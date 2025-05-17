@@ -3,7 +3,7 @@
  * Handles all product-related API calls
  */
 
-const API_BASE_URL = '/api/v0';
+const API_BASE_URL = 'http://localhost:8000/api/v0'; // Changed to absolute URL
 
 /**
  * Fetches a specific product by ID
@@ -22,6 +22,7 @@ export async function fetchProductById(productId) {
     }
     
     const data = await response.json();
+    
     return data[0]; // The API returns an array with one item when using item_id
   } catch (error) {
     console.error('Error in fetchProductById:', error);
@@ -69,6 +70,7 @@ export async function fetchFeaturedProducts(currentProductId, limit = 4) {
   try {
     // For featured products, we might want to use different criteria
     // For now, let's just get products with status=for_sale
+    // The API_BASE_URL now includes /api/v0, so the path here is just the specific part
     const url = `${API_BASE_URL}/search/items/search?status=for_sale`;
     
     const response = await fetch(url);
@@ -80,8 +82,11 @@ export async function fetchFeaturedProducts(currentProductId, limit = 4) {
     const data = await response.json();
     
     // Filter out current product, shuffle the array for variety, and limit results
+    // Ensure currentProductId is treated as a number if it exists
+    const numCurrentProductId = currentProductId !== undefined ? parseInt(currentProductId) : undefined;
+
     return data
-      .filter(product => product.item_id !== parseInt(currentProductId))
+      .filter(product => numCurrentProductId === undefined || product.item_id !== numCurrentProductId)
       .sort(() => 0.5 - Math.random()) // Simple shuffle
       .slice(0, limit);
   } catch (error) {
@@ -96,9 +101,11 @@ export async function fetchFeaturedProducts(currentProductId, limit = 4) {
  * @param {string} [searchParams.name] - Search by product name
  * @param {string} [searchParams.category] - Filter by category
  * @param {number} [searchParams.min_price] - Minimum price
- * @param {number} [searchParams.max_price] - Maximum price
+ * @param {number} [search_params.max_price] - Maximum price
  * @param {string} [searchParams.status='for_sale'] - Product status
  * @param {number} [searchParams.seller_id] - Filter by seller
+ * @param {number} [searchParams.days] - For recent items, number of days
+ * @param {number} [searchParams.limit] - Limit number of results for search
  * @returns {Promise<Array>} - Search results
  */
 export async function searchProducts(searchParams) {
@@ -113,7 +120,7 @@ export async function searchProducts(searchParams) {
     }
     
     // If no status specified, default to for_sale
-    if (!searchParams.status) {
+    if (!searchParams.status && !params.has('status')) {
       params.append('status', 'for_sale');
     }
     
