@@ -2,24 +2,25 @@
    FAQ SECTION
    ==================================== */
 .faq-section {
-  padding: var(--spacing-section) 0;
-  background-color: transparent; /* Removed background color */
-  padding: 0;
+  background-color: transparent;
   position: relative;
-  overflow: visible;
   width: 100%;
   max-width: 100%;
   min-height: 458px;
   box-sizing: border-box;
   overflow: visible;
+  padding: var(--spacing-section) 0;
+  margin: var(--spacing-xl) 0;
 }
 
 .faq-container {
   display: flex;
   width: 100%;
+  max-width: 1320px;
   margin: 0 auto;
   gap: var(--spacing-xxl);
   height: 100%;
+  padding: 0 var(--spacing-lg);
 }
 
 .faq-left {
@@ -103,16 +104,26 @@
 
 .faq-item {
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   background-color: var(--tertiary-color);
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+}
+
+.faq-item:last-child {
+  margin-bottom: 0;
 }
 
 .faq-item:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-color: #ccc;
+}
+
+.faq-item.active {
+  border-color: var(--primary-color);
+  box-shadow: 0 6px 16px rgba(13, 153, 255, 0.15);
 }
 
 .faq-question {
@@ -178,24 +189,55 @@
   .faq-section {
     height: auto;
     max-width: 100%;
-    padding: var(--spacing-xxl) var(--spacing-lg);
+    padding: var(--spacing-xxl) 0;
   }
 
   .faq-container {
     flex-direction: column;
     gap: 40px;
+    padding: 0 var(--spacing-lg);
   }
 
   .faq-left,
   .faq-right {
     flex: 1;
     width: 100%;
+    padding-right: 0;
+  }
+  
+  .faq-left {
+    align-items: center;
+    text-align: center;
+  }
+  
+  .faq-left h2::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .ask-question-btn {
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .faq-section {
+    padding: var(--spacing-xl) 0;
+    margin: var(--spacing-lg) 0;
+  }
+  
+  .faq-container {
+    padding: 0 var(--spacing-md);
   }
 }
 
 @media screen and (max-width: 576px) {
   .faq-section {
-    padding: var(--spacing-xl) 20px;
+    padding: var(--spacing-lg) 0;
+  }
+  
+  .faq-container {
+    padding: 0 var(--spacing-sm);
   }
 
   .faq-left h2 {
