@@ -37,7 +37,7 @@
   color: #ffffff;
   font-weight: 700;
   margin: 0;
-  font-family: var(--font-heading);
+  font-family: var(--font-heading,"Montserrat"), sans-serif;
   letter-spacing: -1px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -211,7 +211,7 @@
   border-radius: 100px;
   border: none;
   background-color: rgba(255, 255, 255, 0.9);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-md,14px);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
@@ -242,14 +242,14 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-md,14px);
   font-weight: 500;
   color: #ffffff;
   text-decoration: none;
   transition: all 0.3s ease;
   white-space: nowrap;
   padding: 10px 16px;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--border-radius-md,5px);
   position: relative;
   background-color: rgba(255, 255, 255, 0.15);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);

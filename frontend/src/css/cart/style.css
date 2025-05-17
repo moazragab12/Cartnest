@@ -69,9 +69,9 @@ body {
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: 100%;
+  margin: 0 100px;
+  padding: 20px 20px;
 }
 
 /* Cart Title */
@@ -461,6 +461,7 @@ body {
 .estimated-delivery {
   display: flex;
   align-items: center;
+  margin: var(--spacing-md) 0px;
   margin-top: var(--spacing-md);
   padding: var(--spacing-md);
   background-color: #f0fff4;
@@ -625,7 +626,7 @@ body {
   display: flex;
   align-items: center;
   gap: 15px;
-  max-width: 250px;
+  max-width: 100%;
   padding: 10px;
   transition: transform var(--transition-fast);
 }
@@ -644,14 +645,14 @@ body {
 
 .super {
   /* Use your desired larger spacing variable here for top/bottom margins */
-  margin: var(--spacing-xxl) auto; /* Example: using --spacing-xxl */
-
+  margin: 0px 100px; /* Example: using --spacing-xxl */
+  margin-bottom: 50px;
   background: linear-gradient(135deg, #005ade 0%, #0d99ff 100%);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-lg) var(--spacing-xl);
-  max-width: 1200px;
+  max-width: 100%;
   color: white;
   border-radius: var(--border-radius-md);
   font-size: var(--font-size-lg);

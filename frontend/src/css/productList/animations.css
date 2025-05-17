@@ -450,7 +450,7 @@ input[type="checkbox"]:hover {
 
 /* Sidebar container for proper layout and animation */
 .sidebar-container {
-  display: block;
+  display: contents;
   
   position: relative;
 }
