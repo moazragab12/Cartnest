@@ -191,10 +191,9 @@ class ProductLoader {
     // Total number of available product thumbnail images (1 to 27)
     const totalImages = 27;
     
-    // Use product ID to get a consistent "random" selection
+    // Use product ID to get a consistent "random" selection for the first image
     // Convert itemId to a number and get a value between 1 and totalImages (inclusive)
-    const imageNumber = ((Number(itemId) || 0) % totalImages) + 1;
-    const imageUrl = `${basePath}${imageNumber}-thumbnail.jpg`;
+    const baseImageNumber = ((Number(itemId) || 0) % totalImages) + 1;
     
     // Get all main image elements
     const mainImages = document.querySelectorAll('.image-container img');
@@ -202,13 +201,27 @@ class ProductLoader {
     const thumbnails = document.querySelectorAll('.thumbnail img');
     
     if (mainImages.length > 0 && thumbnails.length > 0) {
-      // Update all images with the same selected image for consistency
-      for (let i = 0; i < Math.min(mainImages.length, 6); i++) {
+      // Generate 5 different image numbers for variety
+      const imageNumbers = [];
+      imageNumbers.push(baseImageNumber); // First image is based on product ID
+      
+      // Generate 4 more unique image numbers
+      for (let i = 1; i < 5; i++) {
+        // Use a simple algorithm to generate different but deterministic image numbers
+        let nextNumber = ((baseImageNumber + i * 5) % totalImages) + 1;
+        imageNumbers.push(nextNumber);
+      }
+      
+      // Update each image with a different product image
+      for (let i = 0; i < Math.min(mainImages.length, thumbnails.length, 5); i++) {
+        const imageUrl = `${basePath}${imageNumbers[i]}-thumbnail.jpg`;
+        
         // Update main image
         if (mainImages[i]) {
           mainImages[i].src = imageUrl;
           mainImages[i].alt = `${this.productData.name} view ${i+1}`;
-            // Add error handling for missing images
+          
+          // Add error handling for missing images
           mainImages[i].onerror = function() {
             this.src = `/frontend/public/resources/images/products/smartwatch.jpg`;
           };
@@ -225,6 +238,14 @@ class ProductLoader {
           };
         }
       }
+      
+      // Initialize product animations after images are loaded
+      // This ensures the carousel works properly with the new images
+      document.addEventListener('DOMContentLoaded', () => {
+        if (window.productAnimations) {
+          window.productAnimations.initImageGallery();
+        }
+      });
     }
   }
 

@@ -11,6 +11,7 @@ class ProductAnimations {
     this.selectedColor = "blue";
     this.selectedStorage = "128 GB";
     this.isWishlisted = false;
+    this.selectedShippingOption = null; // Added shipping option tracking
   }
 
   /**
@@ -34,11 +35,13 @@ class ProductAnimations {
 
     // Initialize wishlist heart button
     this.initWishlistButton();
+    
+    // Initialize shipping option selection
+    this.initShippingOptions();
 
     // Add fade-in effect when page loads
     document.body.classList.add("fade-in");
   }
-
   /**
    * Initialize product image gallery with navigation and thumbnails
    */ initImageGallery() {
@@ -49,7 +52,7 @@ class ProductAnimations {
     const thumbnails = document.querySelectorAll(".thumbnail");
     const prevBtn = document.querySelector(".nav-btn.prev");
     const nextBtn = document.querySelector(".nav-btn.next");
-
+    
     // Set total images count
     this.totalImages = mainImages.length;
 
@@ -69,9 +72,13 @@ class ProductAnimations {
       });
     });
 
-    // Add click event listeners to navigation buttons
+    // Add click event listeners to navigation buttons with proper event handling
     if (prevBtn) {
-      prevBtn.addEventListener("click", (e) => {
+      // Remove existing event listeners by cloning and replacing
+      const newPrevBtn = prevBtn.cloneNode(true);
+      prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
+      
+      newPrevBtn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
         console.log("Previous button clicked");
@@ -80,13 +87,26 @@ class ProductAnimations {
     }
 
     if (nextBtn) {
-      nextBtn.addEventListener("click", (e) => {
+      // Remove existing event listeners by cloning and replacing
+      const newNextBtn = nextBtn.cloneNode(true);
+      nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
+      
+      newNextBtn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
         console.log("Next button clicked");
         this.changeImage(this.currentImageIndex + 1);
       });
     }
+
+    // Enable keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        this.changeImage(this.currentImageIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        this.changeImage(this.currentImageIndex + 1);
+      }
+    });
 
     // Initialize with first image
     this.changeImage(0);
@@ -224,9 +244,8 @@ class ProductAnimations {
         }
       });
     }
-  }
-  /**
-   * Update quantity value
+  }  /**
+   * Update quantity value with max limit based on product stock
    * @param {number} change - Amount to change quantity by
    * @param {HTMLElement} input - Input element to update
    */
@@ -236,13 +255,54 @@ class ProductAnimations {
     if (isNaN(currentValue)) {
       currentValue = 1;
     }
-
-    // Apply the change and ensure minimum is 1
-    const newValue = Math.max(1, currentValue + change);
-
+    
+    // Get available stock from the DOM
+    const stockText = document.querySelector('.remaining-quantity')?.innerText;
+    let availableStock = 100; // Default high number if we can't find the stock
+    
+    if (stockText) {
+      // Parse the stock from text like "Only 12 left in stock"
+      const matches = stockText.match(/(\d+)/);
+      if (matches && matches[1]) {
+        availableStock = parseInt(matches[1], 10);
+      }
+    }
+    
+    // Check cart for existing quantity of this product
+    const productId = new URLSearchParams(window.location.search).get('id');
+    let cartQuantity = 0;
+    
+    try {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const cartItem = cart.find(item => item.id === productId);
+      if (cartItem) {
+        cartQuantity = cartItem.quantity;
+      }
+    } catch (e) {
+      console.warn('Could not parse cart data', e);
+    }
+    
+    // Calculate max allowed quantity (stock minus what's already in cart)
+    const maxAllowed = Math.max(0, availableStock - cartQuantity);
+    
+    // Apply the change and ensure it's within bounds (min 1, max available)
+    const newValue = Math.min(maxAllowed, Math.max(1, currentValue + change));
+    
     // Update both the instance value and the input
     this.quantity = newValue;
     input.value = newValue;
+    
+    // If we hit the max, add a visual indicator
+    const plusBtn = document.querySelector('.qty-btn.plus');
+    if (plusBtn) {
+      if (newValue >= maxAllowed) {
+        plusBtn.classList.add('disabled');
+        plusBtn.title = 'Maximum available quantity reached';
+      } else {
+        plusBtn.classList.remove('disabled');
+        plusBtn.title = '';
+      }
+    }
   }
 
   /**
@@ -299,7 +359,6 @@ class ProductAnimations {
       });
     });
   }
-
   /**
    * Initialize wishlist button with animation
    */
@@ -307,60 +366,83 @@ class ProductAnimations {
     const wishlistBtn = document.querySelector(".wishlist-btn");
     if (!wishlistBtn) return;
 
-    // Check localStorage for wishlist status of this product
-    const productId = new URLSearchParams(window.location.search).get("id");
-    const wishlisted = localStorage.getItem(`wishlist_${productId}`) === "true";
+    // Check if product is already in wishlist
+    try {
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '{}');
+      const productId = new URLSearchParams(window.location.search).get('id') || 'default-product';
+      this.isWishlisted = !!wishlist[productId];
+    } catch (e) {
+      console.warn('Could not retrieve wishlist state', e);
+      this.isWishlisted = false;
+    }
 
-    // Set initial state
-    this.isWishlisted = wishlisted;
-    if (this.isWishlisted) {
-      wishlistBtn.querySelector("i").classList.remove("far");
-      wishlistBtn.querySelector("i").classList.add("fas", "wishlisted");
+    // Set initial state based on wishlist
+    const heartIcon = wishlistBtn.querySelector("i");
+    
+    if (heartIcon) {
+      // Set proper icon based on wishlist state
+      if (this.isWishlisted) {
+        heartIcon.className = "fas fa-heart";
+        wishlistBtn.classList.add("active");
+      } else {
+        heartIcon.className = "far fa-heart";
+        wishlistBtn.classList.remove("active");
+      }
     }
 
     // Add click event listener
     wishlistBtn.addEventListener("click", () => {
-      this.toggleWishlistStatus(wishlistBtn, productId);
+      this.toggleWishlistAnimation(wishlistBtn);
     });
-  }
-
-  /**
-   * Toggle wishlist status and animate the button
+  }  /**
+   * Toggle wishlist animation for visual feedback only
    * @param {HTMLElement} button - Wishlist button element
-   * @param {string} productId - Product ID
    */
-  toggleWishlistStatus(button, productId) {
+  toggleWishlistAnimation(button) {
     const heartIcon = button.querySelector("i");
+    if (!heartIcon) return;
 
-    // Toggle wishlist state
+    // Toggle visual state only
     this.isWishlisted = !this.isWishlisted;
 
-    // Save to localStorage
-    localStorage.setItem(`wishlist_${productId}`, this.isWishlisted);
-
-    // Animate the heart icon
+    // Animate the heart icon - with more stable behavior
     if (this.isWishlisted) {
-      // Add to wishlist animation
-      heartIcon.classList.remove("far");
-      heartIcon.classList.add("fas", "wishlisted");
-
-      // Add pulse animation
+      // Fill heart with solid color - using direct class replacement for stability
+      heartIcon.className = "fas fa-heart"; // Complete class replacement
+      button.classList.add("active"); // Add active class to button for CSS targeting
+      
+      // Add small pulse animation
       button.classList.add("pulse");
       setTimeout(() => {
         button.classList.remove("pulse");
       }, 700);
+      
+      // Show notification
+      this.showNotification("Added to your wishlist!");
     } else {
-      // Remove from wishlist animation
-      heartIcon.classList.remove("fas", "wishlisted");
-      heartIcon.classList.add("far");
+      // Unfill heart animation
+      heartIcon.className = "far fa-heart"; // Complete class replacement
+      button.classList.remove("active"); // Remove active class
+      
+      // Show notification
+      this.showNotification("Removed from your wishlist");
     }
 
-    // Show notification
-    this.showNotification(
-      this.isWishlisted
-        ? "Added to your wishlist!"
-        : "Removed from your wishlist"
-    );
+    // Store state in localStorage for persistence
+    try {
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '{}');
+      const productId = new URLSearchParams(window.location.search).get('id') || 'default-product';
+      
+      if (this.isWishlisted) {
+        wishlist[productId] = true;
+      } else {
+        delete wishlist[productId];
+      }
+      
+      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    } catch (e) {
+      console.warn('Could not save wishlist state', e);
+    }
   }
 
   /**
@@ -379,6 +461,155 @@ class ProductAnimations {
     setTimeout(() => {
       notification.style.display = "none";
     }, 3000);
+  }
+  /**
+   * Initialize shipping option selection with animation
+   */
+  initShippingOptions() {
+    const shippingOptions = document.querySelectorAll('.shipping-option');
+    const radioInputs = document.querySelectorAll('.shipping-radio');
+    const shippingContainer = document.querySelector('.shipping-options');
+    
+    // Create the selection indicator once
+    if (shippingContainer && !shippingContainer.querySelector('.shipping-selection-indicator')) {
+      const indicator = document.createElement('div');
+      indicator.className = 'shipping-selection-indicator';
+      shippingContainer.appendChild(indicator);
+    }
+    
+    // Add event listeners to each shipping option
+    shippingOptions.forEach((option, index) => {
+      option.addEventListener('click', (e) => {
+        // Prevent firing this event multiple times
+        if (option.classList.contains('selected')) return;
+        
+        // Find the radio input and check it
+        const radioInput = option.querySelector('input[type="radio"]');
+        if (radioInput) {
+          radioInput.checked = true;
+          
+          // Trigger a change event to ensure any listeners are notified
+          const changeEvent = new Event('change', { bubbles: true });
+          radioInput.dispatchEvent(changeEvent);
+        }
+        
+        // Remove selected class from all options
+        shippingOptions.forEach(opt => opt.classList.remove('selected'));
+        
+        // Add selected class to clicked option
+        option.classList.add('selected');
+        
+        // Store selected option index
+        this.selectedShippingOption = index;
+        
+        // Show temporary notification with a more descriptive message
+        const shippingMethod = option.querySelector('.option-details p').textContent.trim();
+        const shippingPrice = option.querySelector('.option-price p').textContent.trim();
+        this.showNotification(`Shipping updated: ${shippingMethod} (${shippingPrice})`);
+        
+        // Animate the selection with enhanced smooth slide
+        this.animateShippingSelection(option);
+      });
+    });
+    
+    // Handle radio button changes directly with improved synchronization
+    radioInputs.forEach((radio, index) => {
+      radio.addEventListener('change', () => {
+        if (radio.checked) {
+          // Remove selected class from all options
+          shippingOptions.forEach(opt => opt.classList.remove('selected'));
+          
+          // Add selected class to parent option
+          const option = radio.closest('.shipping-option');
+          if (option) {
+            option.classList.add('selected');
+            
+            // Store selected option index
+            this.selectedShippingOption = index;
+            
+            // Animate the selection with a smooth slide
+            this.animateShippingSelection(option);
+          }
+        }
+      });
+    });
+      
+    // Select first option by default if available
+    if (shippingOptions.length > 0) {
+      // Set the first radio as checked
+      const firstRadio = shippingOptions[0].querySelector('input[type="radio"]');
+      if (firstRadio) {
+        firstRadio.checked = true;
+      }
+      
+      // Add selected class
+      shippingOptions[0].classList.add('selected');
+      this.selectedShippingOption = 0;
+      
+      // Initialize the indicator on the first option with a slight delay for visual appeal
+      setTimeout(() => {
+        this.animateShippingSelection(shippingOptions[0]);
+      }, 650); // Slightly longer delay for a better visual effect when page loads
+    }
+  }
+  /**
+   * Animate shipping selection with a smooth slide effect
+   * @param {HTMLElement} selectedOption - The selected shipping option element
+   */
+  animateShippingSelection(selectedOption) {
+    // Get the shipping options container
+    const container = selectedOption.parentElement;
+    
+    // Get or create the indicator
+    let indicator = container.querySelector('.shipping-selection-indicator');
+    if (!indicator) {
+      indicator = document.createElement('div');
+      indicator.className = 'shipping-selection-indicator';
+      container.appendChild(indicator);
+    }
+    
+    // Add animation class to the selected option for a subtle pulse effect
+    selectedOption.classList.add('selected-animate');
+    setTimeout(() => {
+      selectedOption.classList.remove('selected-animate');
+    }, 500);
+    
+    // Calculate position relative to container - more precise calculation
+    const top = selectedOption.offsetTop;
+    const height = selectedOption.offsetHeight;
+    
+    // Make sure any radio button inside is checked (for better sync)
+    const radioInput = selectedOption.querySelector('input[type="radio"]');
+    if (radioInput && !radioInput.checked) {
+      radioInput.checked = true;
+    }
+    
+    // Ensure the radio visual indicator shows correctly
+    const radioLabel = selectedOption.querySelector('.shipping-option-radio');
+    if (radioLabel) {
+      // Force a DOM reflow to ensure CSS transitions work properly
+      radioLabel.offsetHeight;
+    }
+    
+    // More sophisticated animation sequence
+    // 1. First make the indicator invisible by setting opacity to 0 (while keeping its position)
+    indicator.style.opacity = '0';
+    
+    // 2. After a short delay, move to the new position
+    setTimeout(() => {
+      indicator.style.top = `${top}px`;
+      indicator.style.height = '0';
+      
+      // 3. Force browser reflow to ensure the new position is applied
+      indicator.offsetHeight;
+      
+      // 4. Make the indicator visible again and animate height
+      indicator.style.opacity = '1';
+      indicator.style.height = `${height}px`;
+      
+      // 5. Add a subtle shadow to make the indicator stand out
+      indicator.style.boxShadow = '0 0 8px rgba(13, 153, 255, 0.4)';
+    }, 50);
   }
 }
 
