@@ -11,17 +11,6 @@ const API_BASE_URL = "http://localhost:8000"; // Consider making this configurab
 // === MAIN PUBLIC INTERFACE / EXPORTABLE FUNCTIONS                            ===
 // =================================================================================
 
-/**
- * Fetches products from a given API endpoint and renders them into the specified container.
- * This is the primary function to be used by other parts of the application.
- * @param {string} containerSelector - CSS selector for the DOM element where products will be rendered.
- * @param {string} apiEndpointPath - The API path to fetch products from (e.g., "/api/v0/items/featured").
- * @param {number} limit - The maximum number of products to fetch and display.
- * @param {object} [options={}] - Optional parameters.
- * @param {string} [options.loadingMessage="Loading products..."] - Message shown while fetching.
- * @param {string} [options.noProductsMessage="No products available."] - Message shown if no products are found.
- * @returns {Promise<void>}
- */
 export async function loadAndDisplayProducts(
   containerSelector,
   apiEndpointPath,
@@ -31,9 +20,10 @@ export async function loadAndDisplayProducts(
   const {
     loadingMessage = "Loading products...",
     noProductsMessage = "No products available.",
+    errorMessage = "Oops! Something went wrong while loading products.", // Added for consistency
   } = options;
 
-  console.log(`Loading products from: ${apiEndpointPath} with limit: ${limit}`);
+  // console.log(`Loading products from: ${apiEndpointPath} with limit: ${limit}`);
 
   const container = document.querySelector(containerSelector);
   if (!container) {
@@ -41,50 +31,47 @@ export async function loadAndDisplayProducts(
     return;
   }
 
-  container.innerHTML = `<p class="product-loading-message">${loadingMessage}</p>`; // Display loading message
+  const showMessage = (message, className) => {
+    container.innerHTML = `<p class="${className}">${message}</p>`;
+  };
+
+  showMessage(loadingMessage, "product-loading-message");
 
   try {
-    // _fetchProductsFromAPI is defined later in this file
     const products = await _fetchProductsFromAPI(apiEndpointPath, limit);
-    console.log(
-      `Received ${products?.length || 0} products from ${apiEndpointPath}`
-    );
+    // console.log(
+    //   `Received ${products?.length || 0} products from ${apiEndpointPath}`
+    // );
 
-    container.innerHTML = ""; // Clear loading message
+    // Clear previous content (loading message or old products) using a loop for robustness
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
 
     if (!products || products.length === 0) {
-      container.innerHTML = `<p class="product-no-results-message">${noProductsMessage}</p>`;
+      showMessage(noProductsMessage, "product-no-results-message");
       return;
     }
 
+    // Use a DocumentFragment for performance when appending multiple elements
+    const fragment = document.createDocumentFragment();
     products.forEach((product) => {
-      // _createProductCardElement is defined later in this file
       const productCardElement = _createProductCardElement(product);
       if (productCardElement instanceof HTMLElement) {
-        container.appendChild(productCardElement);
+        fragment.appendChild(productCardElement);
       }
     });
+    container.appendChild(fragment);
+
   } catch (error) {
     console.error(
       "An unexpected error occurred in loadAndDisplayProducts:",
       error
     );
-    container.innerHTML = `<p class="product-error-message">Oops! Something went wrong while loading products.</p>`;
+    showMessage(errorMessage, "product-error-message");
   }
 }
 
-/**
- * Renders an array of products into the specified container.
- * This is used primarily for rendering pre-fetched product data.
- * @param {string} containerSelector - CSS selector for the DOM element where products will be rendered.
- * @param {Array<object>} productsArray - Array of product objects to render.
- * @param {number} totalCount - Total count of products (might be more than array length if paginated)
- * @param {object} [options={}] - Optional parameters.
- * @param {string} [options.loadingMessage="Loading products..."] - Message shown while rendering.
- * @param {string} [options.noProductsMessage="No products available."] - Message shown if no products are found.
- * @param {function} [options.onRenderComplete] - Callback after rendering is complete.
- * @returns {Promise<void>}
- */
 export async function renderProductsFromArray(
   containerSelector,
   productsArray,
@@ -92,49 +79,56 @@ export async function renderProductsFromArray(
   options = {}
 ) {
   const {
-    loadingMessage = "Loading products...",
+    loadingMessage = "Rendering products...",
     noProductsMessage = "No products available.",
+    errorMessage = "Oops! Something went wrong while rendering products.", // Added for consistency
     onRenderComplete = () => {},
   } = options;
 
   const container = document.querySelector(containerSelector);
   if (!container) {
     console.error(`Product display container not found: ${containerSelector}`);
+    if (onRenderComplete) onRenderComplete(0, totalCount, true); // Indicate error
     return;
   }
 
-  // Show loading message
-  container.innerHTML = `<p class="product-loading-message">${loadingMessage}</p>`;
+  const showMessage = (message, className) => {
+    container.innerHTML = `<p class="${className}">${message}</p>`;
+  };
 
-  // Small delay to ensure loading message is rendered before proceeding
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  showMessage(loadingMessage, "product-loading-message");
+
+  // Removed artificial delay: await new Promise((resolve) => setTimeout(resolve, 100));
+  // The rendering itself should be fast enough.
 
   try {
-    // Clear loading message
-    container.innerHTML = "";
+    // Clear previous content (loading message or old products)
+     while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
 
     if (!productsArray || productsArray.length === 0) {
-      container.innerHTML = `<p class="product-no-results-message">${noProductsMessage}</p>`;
+      showMessage(noProductsMessage, "product-no-results-message");
       if (onRenderComplete) onRenderComplete(0, totalCount);
       return;
     }
 
-    // Render each product
+    const fragment = document.createDocumentFragment();
     productsArray.forEach((product) => {
       const productCardElement = _createProductCardElement(product);
       if (productCardElement instanceof HTMLElement) {
-        container.appendChild(productCardElement);
+        fragment.appendChild(productCardElement);
       }
     });
+    container.appendChild(fragment);
 
-    // Call the callback with the count of rendered products
     if (onRenderComplete) {
       onRenderComplete(productsArray.length, totalCount);
     }
   } catch (error) {
     console.error("Error in renderProductsFromArray:", error);
-    container.innerHTML = `<p class="product-error-message">Oops! Something went wrong while rendering products.</p>`;
-    if (onRenderComplete) onRenderComplete(0, totalCount);
+    showMessage(errorMessage, "product-error-message");
+    if (onRenderComplete) onRenderComplete(0, totalCount, true); // Indicate error
   }
 }
 
@@ -142,40 +136,41 @@ export async function renderProductsFromArray(
 // === INTERNAL DATA FETCHING HELPERS                                          ===
 // =================================================================================
 
-/**
- * Fetches product data from the API. (Internal helper for loadAndDisplayProducts)
- * @param {string} endpointPath - The specific API endpoint path.
- * @param {number} limit - The number of products to limit.
- * @returns {Promise<Array<object>>} A promise that resolves to an array of product objects.
- */
 async function _fetchProductsFromAPI(endpointPath, limit) {
   const pathParts = endpointPath.split("/");
   const descriptivePart = pathParts[pathParts.length - 1] || "unknown_endpoint";
   const errorContext = `${descriptivePart} products`;
 
   try {
-    // Build URL with proper parameters depending on endpoint
-    let url = `${API_BASE_URL}${endpointPath}?limit=${limit}`;
+    const urlObj = new URL(`${API_BASE_URL}${endpointPath}`);
+    urlObj.searchParams.set('limit', String(limit)); // Ensure limit is a string
 
-    // Special handling for the recent items endpoint which needs the days parameter
     if (endpointPath.includes("/items/recent")) {
-      // Default to 30 days to get more items if nothing is specified
-      const days = 30;
-      url = `${API_BASE_URL}${endpointPath}?days=${days}&limit=${limit}`;
-      console.log(`Fetching recent items with URL: ${url}`);
+      const days = 30; // Default to 30 days
+      urlObj.searchParams.set('days', String(days)); // Ensure days is a string
+    //   console.log(`Fetching recent items with URL: ${urlObj.toString()}`);
+    // } else {
+    //   console.log(`Fetching items with URL: ${urlObj.toString()}`);
     }
 
-    const response = await fetch(url);
+    const response = await fetch(urlObj.toString());
     if (!response.ok) {
+      // Try to get more error details from response if possible
+      let errorDetails = response.statusText;
+      try {
+        const errorData = await response.json();
+        errorDetails = errorData.detail || errorData.message || errorDetails;
+      } catch (e) { /* Ignore if response is not JSON */ }
       throw new Error(
-        `HTTP error! status: ${response.status} while fetching ${errorContext}`
+        `HTTP error! status: ${response.status} (${errorDetails}) while fetching ${errorContext}`
       );
     }
     const data = await response.json();
-    return data || [];
+    return data || []; // Ensure it returns an array
   } catch (error) {
     console.error(`Error fetching ${errorContext}:`, error);
-    return []; // Return empty array to allow UI to show "no products" message
+    // Propagate the error so the caller can handle it (e.g., show specific error message)
+    throw error;
   }
 }
 
@@ -183,30 +178,12 @@ async function _fetchProductsFromAPI(endpointPath, limit) {
 // === GENERAL INTERNAL UTILITY FUNCTIONS                                      ===
 // =================================================================================
 
-/**
- * Calculates the discount percentage between an original price and a current price.
- * @param {number} currentPrice - The current (potentially discounted) price.
- * @param {number} originalPrice - The original price.
- * @returns {number} The discount percentage, or 0 if no discount.
- */
 function _calculateDiscount(currentPrice, originalPrice) {
-  if (!originalPrice || !currentPrice || originalPrice <= currentPrice)
+  if (!originalPrice || !currentPrice || Number(originalPrice) <= Number(currentPrice))
     return 0;
-  return Math.round(((originalPrice - currentPrice) / originalPrice) * 100);
+  return Math.round(((Number(originalPrice) - Number(currentPrice)) / Number(originalPrice)) * 100);
 }
 
-/**
- * Creates an HTML element with specified properties and appends it to a parent element.
- * This is a general utility for DOM manipulation within this service.
- * @param {HTMLElement} parentElement - The DOM element to append the new element to.
- * @param {object} [options={}] - Configuration options for the new element.
- * @param {string} [options.tag="div"] - The HTML tag for the new element.
- * @param {string} [options.className=""] - CSS class(es) for the new element.
- * @param {string} [options.textContent=""] - Text content for the new element.
- * @param {object} [options.attributes={}] - HTML attributes to set on the new element.
- * @param {object} [options.eventListeners={}] - Event listeners to add to the new element.
- * @returns {HTMLElement|null} The created element, or null if parentElement is invalid.
- */
 function _createAndAppendElement(
   parentElement,
   {
@@ -249,12 +226,6 @@ function _createAndAppendElement(
 // === PRODUCT CARD CREATION LOGIC (IMPLEMENTATION DETAILS)                     ===
 // =================================================================================
 
-/**
- * Creates a product card DOM element.
- * This orchestrates the various parts of the product card.
- * @param {object} product - The product data object.
- * @returns {HTMLElement|null} The created product card element or null if product data is invalid.
- */
 export function _createProductCardElement(product) {
   if (!product || typeof product !== "object") {
     console.error(
@@ -272,13 +243,9 @@ export function _createProductCardElement(product) {
     productCard.dataset.itemId = product.item_id;
   }
 
-  // 1. Add Badges
   _createProductBadges(productCard, product, discount);
+  _createProductImageWithFallback(productCard, product); // Uses the refined image loading
 
-  // 2. Add Product Image
-  _createProductImageWithFallback(productCard, product);
-
-  // 3. Create Content Structure
   const productContent = _createAndAppendElement(productCard, {
     className: "product-content",
   });
@@ -294,17 +261,14 @@ export function _createProductCardElement(product) {
   });
   if (!productInfo) return productCard;
 
-  // 3a. Add Title
   _createAndAppendElement(productInfo, {
     tag: "h3",
     className: "product-title",
     textContent: product.name || "Unnamed Product",
   });
 
-  // 3b. Add Rating Display
   _createProductRatingDisplay(productInfo, product);
 
-  // 3c. Add Description
   if (product.description) {
     _createAndAppendElement(productInfo, {
       className: "product-description",
@@ -314,10 +278,8 @@ export function _createProductCardElement(product) {
     });
   }
 
-  // 4. Add Purchase Area
   _createProductPurchaseArea(productDetails, product, discount);
 
-  // 5. Make card clickable (if applicable and function is available)
   if (product.item_id && typeof makeProductCardClickable === "function") {
     makeProductCardClickable(productCard, product.item_id);
   }
@@ -327,12 +289,6 @@ export function _createProductCardElement(product) {
 
 // --- Helper Functions for _createProductCardElement ---
 
-/**
- * Creates and appends product badges (discount and category) to the parent element.
- * @param {HTMLElement} parentElement - The parent element to append badges to.
- * @param {object} product - The product data object.
- * @param {number} discount - The calculated discount percentage.
- */
 function _createProductBadges(parentElement, product, discount) {
   if (discount > 0) {
     _createAndAppendElement(parentElement, {
@@ -341,7 +297,6 @@ function _createProductBadges(parentElement, product, discount) {
       textContent: `-${discount}%`,
     });
   }
-
   if (product.category) {
     _createAndAppendElement(parentElement, {
       tag: "span",
@@ -352,51 +307,127 @@ function _createProductBadges(parentElement, product, discount) {
 }
 
 /**
- * Creates and appends the product image with a fallback mechanism.
+ * REFINED: Creates and appends the product image with a placeholder, spinner,
+ * native lazy loading, and robust error handling.
  * @param {HTMLElement} parentElement - The parent element to append the image to.
  * @param {object} product - The product data object.
  */
 function _createProductImageWithFallback(parentElement, product) {
   const productImageWrapper = _createAndAppendElement(parentElement, {
-    className: "product-image",
+    className: "product-image", // This wrapper helps contain the absolute positioned image and placeholder
   });
   if (!productImageWrapper) return;
 
-  const totalImages = 27; // Define or fetch this configuration appropriately
-  const imageNumber = ((Number(product.item_id) || 0) % totalImages) + 1;
+  const totalImages = 27;
+  const imageNumber = ((Number(product.item_id) || Date.now()) % totalImages) + 1; // Fallback for item_id for unique image
 
-  // Use absolute path from the root of the project
-  // This will work both in index page and productList page
-  const imagePath = window.location.pathname.includes("/pages")
-    ? "../../../public/resources/images/products/"
-    : "./public/resources/images/products/";
+  // Standardize image path determination
+  let imagePathPrefix = "./public/resources/images/products/"; // Default for root
+  if (window.location.pathname.includes("/pages/")) { // More general check for pages subdirectory
+    imagePathPrefix = "../../../public/resources/images/products/";
+  }
+  
+  const imgSrc = `${imagePathPrefix}${imageNumber}-thumbnail.jpg`;
+  const imageId = `product-img-${product.item_id || Math.random().toString(36).substring(2, 9)}`;
 
-  _createAndAppendElement(productImageWrapper, {
-    tag: "img",
-    attributes: {
-      src: `${imagePath}${imageNumber}-thumbnail.jpg`,
-      alt: product.name || "Product image",
-      loading: "lazy", // Added for performance
-    },
-    eventListeners: {
-      error: function () {
-        const fallbackPath = window.location.pathname.includes(
-          "/pages/productsList"
-        )
-          ? "../../../public/resources/images/products/smartwatch.jpg"
-          : "./public/resources/images/products/smartwatch.jpg";
-        this.src = fallbackPath; // Fallback image with correct path
-        this.alt = "Fallback product image";
-      },
-    },
-  });
+  // 1. Create Placeholder (serves as a background and sizing element)
+  const placeholder = document.createElement('div');
+  placeholder.className = 'product-image-placeholder';
+  // Basic styling for placeholder, can be enhanced via CSS for better visual integration
+  placeholder.style.backgroundColor = '#f0f0f0'; // Light grey placeholder
+  placeholder.style.width = '100%';
+  placeholder.style.paddingBottom = '100%'; // Creates a square aspect ratio; adjust if images are not square
+  placeholder.style.position = 'relative';  // For positioning spinner and image absolutely within it
+  placeholder.style.overflow = 'hidden';    // Ensures spinner animation doesn't overflow
+  productImageWrapper.appendChild(placeholder);
+
+  // 2. Create Image Element
+  const img = document.createElement('img');
+  img.alt = product.name || "Product image";
+  img.id = imageId;
+  // Styling for the image to fit within the placeholder
+  img.style.position = 'absolute';
+  img.style.top = '0';
+  img.style.left = '0';
+  img.style.width = '100%';
+  img.style.height = '100%';
+  img.style.objectFit = 'cover';   // Ensures the image covers the area, might crop
+  img.style.opacity = '0';         // Start invisible, fade in on load
+  img.style.transition = 'opacity 0.4s ease-in-out'; // Smooth fade-in
+  
+  img.setAttribute('loading', 'lazy');   // Native browser lazy loading
+  img.setAttribute('decoding', 'async'); // Hint for browser to decode off main thread
+
+  // 3. Create Loading Indicator (Spinner)
+  const loadingIndicator = document.createElement('div');
+  loadingIndicator.className = 'image-loading-indicator';
+  // Styling for the spinner
+  loadingIndicator.style.position = 'absolute';
+  loadingIndicator.style.top = '50%';
+  loadingIndicator.style.left = '50%';
+  loadingIndicator.style.width = '30px'; // Adjust size as needed
+  loadingIndicator.style.height = '30px';
+  loadingIndicator.style.border = '3px solid rgba(0,0,0,0.1)'; // Light track
+  loadingIndicator.style.borderTopColor = '#0b8ce0'; // Spinner color (theme color)
+  loadingIndicator.style.borderRadius = '50%';
+  loadingIndicator.style.animation = 'spin 1s linear infinite';
+  loadingIndicator.style.transform = 'translate(-50%, -50%)'; // Center the spinner
+  placeholder.appendChild(loadingIndicator); // Add spinner to placeholder
+
+  // Ensure spinner CSS animation is defined (once per page load)
+  if (!document.getElementById('image-loading-animation-style')) {
+    const style = document.createElement('style');
+    style.id = 'image-loading-animation-style';
+    style.textContent = `
+      @keyframes spin {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+      }
+      .image-loading-indicator { /* Ensures transform-origin for rotation if not in keyframes */
+         transform-origin: center center;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // 4. Define onload and onerror handlers for the image
+  img.onload = function() {
+    this.style.opacity = '1'; // Fade in the loaded image
+    if (loadingIndicator.parentNode) { // Remove spinner if it's still there
+      loadingIndicator.parentNode.removeChild(loadingIndicator);
+    }
+    // Clear fallback attribute if it was set (e.g. original now loaded after a fallback attempt)
+    this.removeAttribute('data-fallback-loaded');
+  };
+
+  img.onerror = function() {
+    // Prevent an infinite loop if the fallback image also fails
+    if (this.getAttribute('data-fallback-loaded')) {
+      if (loadingIndicator.parentNode) {
+        loadingIndicator.parentNode.removeChild(loadingIndicator);
+      }
+      placeholder.innerHTML = '<p style="text-align:center;padding-top:40%;font-size:11px;color:#777;">Image unavailable</p>';
+      console.error(`Fallback image also failed to load for: ${this.alt}`);
+      return;
+    }
+
+    // Determine fallback image path (ensure this logic is robust for your actual file structure)
+    const fallbackSrc = `${imagePathPrefix}smartwatch.jpg`; // Ensure 'smartwatch.jpg' exists at this path
+
+    this.src = fallbackSrc; // Attempt to load the fallback image
+    this.alt = "Fallback product image"; // Update alt text
+    this.setAttribute('data-fallback-loaded', 'true'); // Mark that fallback is being attempted
+    // The `onload` (if fallback loads) or this `onerror` (if fallback also fails) will handle UI.
+  };
+  
+  // 5. Set the image source. Native lazy loading will handle when to load.
+  img.src = imgSrc;
+  
+  // 6. Append the image to the placeholder. It will sit on top due to absolute positioning.
+  placeholder.appendChild(img);
 }
 
-/**
- * Creates and appends the product rating display (stars and review count).
- * @param {HTMLElement} parentElement - The parent element to append the rating display to.
- * @param {object} product - The product data object.
- */
+
 function _createProductRatingDisplay(parentElement, product) {
   let ratingValue;
   let ratingCountValue;
@@ -407,8 +438,9 @@ function _createProductRatingDisplay(parentElement, product) {
       ? product.rating_count
       : parseInt(product.rating_count, 10) || 0;
   } else {
-    ratingValue = Math.floor(Math.random() * 9) / 2.0 + 1.0; // Generates 1.0 to 5.0
-    ratingCountValue = Math.floor(Math.random() * 1001); // Random count 0-1000
+    // More controlled random fallback
+    ratingValue = Math.max(3.0, Math.min(5.0, (Math.floor(Math.random() * 5) / 2.0) + 3.0)); // 3.0 to 5.0 in 0.5 increments
+    ratingCountValue = Math.floor(Math.random() * 200) + 10; // Random count 10-209
   }
 
   const ratingDisplayWrapper = _createAndAppendElement(parentElement, {
@@ -421,22 +453,22 @@ function _createProductRatingDisplay(parentElement, product) {
   });
   if (starsContainer) {
     const fullStars = Math.floor(ratingValue);
-    const hasHalfStar = ratingValue % 1 >= 0.45 && ratingValue % 1 < 0.95;
+    const hasHalfStar = (ratingValue % 1) >= 0.45 && (ratingValue % 1) < 0.95; // Check for half star
 
     for (let i = 0; i < 5; i++) {
       const starSpan = _createAndAppendElement(starsContainer, {
         tag: "span",
-        className: "star-icon",
+        className: "star-icon", // General class for all stars
       });
       if (starSpan) {
         if (i < fullStars) {
-          starSpan.textContent = "★";
+          starSpan.textContent = "★"; // Filled star character
           starSpan.classList.add("star-icon--filled");
         } else if (i === fullStars && hasHalfStar) {
-          starSpan.textContent = "★"; // Character for half, styled by class
+          starSpan.textContent = "★"; // Use filled star, CSS will handle half appearance
           starSpan.classList.add("star-icon--half-filled");
         } else {
-          starSpan.textContent = "☆";
+          starSpan.textContent = "☆"; // Empty star character
           starSpan.classList.add("star-icon--empty");
         }
       }
@@ -452,12 +484,6 @@ function _createProductRatingDisplay(parentElement, product) {
   }
 }
 
-/**
- * Creates and appends the purchase area (price and cart button).
- * @param {HTMLElement} parentElement - The parent element to append the purchase area to.
- * @param {object} product - The product data object.
- * @param {number} discount - The calculated discount percentage.
- */
 function _createProductPurchaseArea(parentElement, product, discount) {
   const purchaseArea = _createAndAppendElement(parentElement, {
     className: "purchase-area",
@@ -471,26 +497,30 @@ function _createProductPurchaseArea(parentElement, product, discount) {
     _createAndAppendElement(productPrice, {
       tag: "span",
       className: "current-price",
-      textContent: `$${(product.price || 0).toFixed(2)}`,
+      textContent: `$${(Number(product.price) || 0).toFixed(2)}`,
     });
     if (discount > 0 && product.original_price) {
       _createAndAppendElement(productPrice, {
         tag: "span",
         className: "original-price",
-        textContent: `$${product.original_price.toFixed(2)}`,
+        textContent: `$${(Number(product.original_price) || 0).toFixed(2)}`,
       });
     }
   }
 
   if (product.item_id && typeof createCartButton === "function") {
-    const cartButton = createCartButton(product.item_id);
-    if (cartButton instanceof HTMLElement) {
-      purchaseArea.appendChild(cartButton);
-    } else {
-      console.warn(
-        "createCartButton did not return an HTMLElement for product:",
-        product.item_id
-      );
+    try {
+      const cartButton = createCartButton(product.item_id);
+      if (cartButton instanceof HTMLElement) {
+        purchaseArea.appendChild(cartButton);
+      } else {
+        console.warn(
+          "createCartButton did not return an HTMLElement for product:",
+          product.item_id
+        );
+      }
+    } catch (e) {
+       console.error("Error calling createCartButton for product:", product.item_id, e);
     }
   }
 }
