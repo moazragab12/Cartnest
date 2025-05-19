@@ -1,4 +1,4 @@
-# MarketPlace
+# Cartnset
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.95.0-009688.svg?style=flat&logo=FastAPI&logoColor=white)](https://fastapi.tiangolo.com)
 [![Python](https://img.shields.io/badge/Python-3.13-blue.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
@@ -7,7 +7,7 @@
 [![Docker](https://img.shields.io/badge/Docker-24.0+-2496ED.svg?style=flat&logo=docker&logoColor=white)](https://www.docker.com)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A marketplace application with FastAPI backend.
+A Cartnset application with FastAPI backend.
 
 ## Table of Contents
 - [Project Structure](#project-structure)
@@ -28,7 +28,7 @@ A marketplace application with FastAPI backend.
 ## Project Structure
 
 ```
-MarketPlace/
+Cartnset/
 ├── README.md                  # Project documentation
 ├── backend/                   # Backend service directory
 │   ├── __init__.py            # Python package indicator
@@ -63,8 +63,8 @@ MarketPlace/
 ### Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/MarketPlace.git
-cd MarketPlace
+git clone https://github.com/moazragab12/Cartnset.git
+cd Cartnset
 ```
 
 ### Backend Setup
@@ -160,7 +160,7 @@ class UserModel:
   - Follow Google-style docstring format
 ## Database
 
-The MarketPlace application uses a PostgreSQL database with a primary-replica setup for high availability. The database schema includes several key tables:
+The Cartnset application uses a PostgreSQL database with a primary-replica setup for high availability. The database schema includes several key tables:
 
 ### Database Structure
 
@@ -260,7 +260,7 @@ Default seeding will create:
 
 ### Adding a New Feature
 
-When adding a new feature to the MarketPlace project, follow these steps:
+When adding a new feature to the Cartnset project, follow these steps:
 
 1. Create a new directory in `backend/api/routers/` for your feature:
 
